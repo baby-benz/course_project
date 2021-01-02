@@ -1,12 +1,18 @@
 <resources>
-    <string name="app_name">course_project</string>
+    <string name="app_name">Столовая ИТМО</string>
     <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
+    <string name="prompt_username">Табельный номер</string>
+    <string name="prompt_password">Пароль</string>
+    <string name="action_sign_in">Войти</string>
+    <string name="action_sign_in_short">Войти</string>
+    <string name="welcome">"Добро пожаловать !"</string>
+    <string name="invalid_username">Неправильный табельный номер</string>
+    <string name="invalid_password">Пароль должен состоять из >5 символов</string>
+    <string name="login_failed">"Не удалось войти"</string>
+    <!-- Strings related to menu -->
+    <string name="action_novelties">Новинки</string>
+    <string name="action_popular">Популярное</string>
+    <string name="action_breakfast">Завтраки</string>
+    <string name="action_starter">Первые</string>
+    <string name="action_second">Вторые</string>
 </resources>

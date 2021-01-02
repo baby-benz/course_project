@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent"
+                                                   android:scrollbars="none"
+                                                   android:scrollbarThumbHorizontal="@null"
+>
+
+    <HorizontalScrollView
+            android:layout_width="318dp"
+            android:layout_height="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="200dp"
+            style="@android:style/Widget.Material.HorizontalScrollView" android:id="@+id/horizontal_menu"
+            android:overScrollMode="never">
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="match_parent"
+                      android:orientation="horizontal" android:background="#00FFFFFF">
+            <Button
+                    android:text="@string/action_novelties"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" android:id="@+id/novelties"
+                    style="@style/Widget.AppCompat.Button.Borderless"/>
+            <Button
+                    android:text="@string/action_popular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" android:id="@+id/popular"
+                    style="@style/Widget.AppCompat.Button.Borderless"/>
+            <Button
+                    android:text="@string/action_breakfast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" android:id="@+id/breakfast"
+                    style="@style/Widget.AppCompat.Button.Borderless"/>
+            <Button
+                    android:text="@string/action_starter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" android:id="@+id/starter"
+                    style="@style/Widget.AppCompat.Button.Borderless"/>
+            <Button
+                    android:text="@string/action_second"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" android:id="@+id/second"
+                    style="@style/Widget.AppCompat.Button.Borderless"/>
+        </LinearLayout>
+    </HorizontalScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
