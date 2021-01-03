@@ -1,48 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                   xmlns:tools="http://schemas.android.com/tools"
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent"
                                                    android:scrollbars="none"
                                                    android:scrollbarThumbHorizontal="@null"
 >
 
-    <HorizontalScrollView
-            android:layout_width="318dp"
-            android:layout_height="40dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="200dp"
-            style="@android:style/Widget.Material.HorizontalScrollView" android:id="@+id/horizontal_menu"
-            android:overScrollMode="never">
-        <LinearLayout android:layout_width="wrap_content" android:layout_height="match_parent"
-                      android:orientation="horizontal" android:background="#00FFFFFF">
-            <Button
-                    android:text="@string/action_novelties"
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:overScrollMode="never" android:id="@+id/menu_scroll_view"
+            android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="vertical">
+            <androidx.fragment.app.FragmentContainerView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent" android:id="@+id/novelties"
-                    style="@style/Widget.AppCompat.Button.Borderless"/>
-            <Button
-                    android:text="@string/action_popular"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent" android:id="@+id/popular"
-                    style="@style/Widget.AppCompat.Button.Borderless"/>
-            <Button
-                    android:text="@string/action_breakfast"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent" android:id="@+id/breakfast"
-                    style="@style/Widget.AppCompat.Button.Borderless"/>
-            <Button
-                    android:text="@string/action_starter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent" android:id="@+id/starter"
-                    style="@style/Widget.AppCompat.Button.Borderless"/>
-            <Button
-                    android:text="@string/action_second"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent" android:id="@+id/second"
-                    style="@style/Widget.AppCompat.Button.Borderless"/>
+                    android:layout_height="wrap_content"
+                    android:id="@+id/top_container_view">
+            </androidx.fragment.app.FragmentContainerView>
+            <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    style="@android:style/Widget.Material.HorizontalScrollView" android:id="@+id/horizontal_menu"
+                    android:overScrollMode="never">
+                <LinearLayout android:layout_width="wrap_content" android:layout_height="match_parent"
+                              android:orientation="horizontal" android:background="#00FFFFFF"
+                >
+                    <Button
+                            android:text="@string/action_novelties"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent" android:id="@+id/novelties"
+                            style="@style/Widget.AppCompat.Button.Borderless"/>
+                    <Button
+                            android:text="@string/action_popular"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent" android:id="@+id/popular"
+                            style="@style/Widget.AppCompat.Button.Borderless"/>
+                    <Button
+                            android:text="@string/action_breakfast"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent" android:id="@+id/breakfast"
+                            style="@style/Widget.AppCompat.Button.Borderless"/>
+                    <Button
+                            android:text="@string/action_starter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent" android:id="@+id/starter"
+                            style="@style/Widget.AppCompat.Button.Borderless"/>
+                    <Button
+                            android:text="@string/action_second"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent" android:id="@+id/second"
+                            style="@style/Widget.AppCompat.Button.Borderless"/>
+                </LinearLayout>
+            </HorizontalScrollView>
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/horizontal_menu_underline"
+                    android:background="@drawable/textline"/>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:layout_marginTop="15dp">
+                <TextView
+                        android:text="@string/action_novelties"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/novelties_title" android:textSize="24sp"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:fontFamily="sans-serif-black" android:textColor="#000000"/>
+                <androidx.fragment.app.FragmentContainerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/novelties_list_container_view"
+                />
+                <TextView
+                        android:text="@string/action_popular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/popular_title"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:fontFamily="sans-serif-black" android:textSize="24sp" android:textColor="#000000"/>
+                <androidx.fragment.app.FragmentContainerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/popular_list_container_view"/>
+                <TextView
+                        android:text="@string/action_breakfast"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/breakfast_title"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:fontFamily="sans-serif-black" android:textSize="24sp" android:textColor="#000000"/>
+                <androidx.fragment.app.FragmentContainerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/breakfast_list_container_view"/>
+                <TextView
+                        android:text="@string/action_starter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/starter_title"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:fontFamily="sans-serif-black" android:textSize="24sp" android:textColor="#000000"/>
+                <androidx.fragment.app.FragmentContainerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/starter_list_container_view"/>
+                <TextView
+                        android:text="@string/action_second"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/second_title"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:fontFamily="sans-serif-black" android:textSize="24sp" android:textColor="#000000"/>
+                <androidx.fragment.app.FragmentContainerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/second_list_container_view"/>
+            </LinearLayout>
+            <androidx.fragment.app.FragmentContainerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/bottom_container_view"/>
         </LinearLayout>
-    </HorizontalScrollView>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
