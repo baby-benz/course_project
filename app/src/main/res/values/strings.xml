@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">WorkerInterface</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_order">Order</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="add_edit_text">Add order</string>
+    <string name="some_text">Some order </string>
+    <string name="x">X</string>
+    <string name="done">Done</string>
+    <string name="refused">Cancel</string>
+</resources>
