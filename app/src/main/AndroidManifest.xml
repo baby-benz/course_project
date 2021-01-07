@@ -3,13 +3,15 @@
     package="com.example.workerinterface">
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:screenOrientation="landscape"
         android:supportsRtl="true"
         android:theme="@style/Theme.WorkerInterface">
+        <activity android:name=".ui.menu.MenuActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

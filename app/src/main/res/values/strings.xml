@@ -10,8 +10,13 @@
     <string name="menu_order">Order</string>
     <string name="menu_food_menu">Menu</string>
     <string name="add_edit_text">Add order</string>
+    <string name="test_add_product_menu">Test: Add menu</string>
     <string name="some_text">Some order </string>
     <string name="x">X</string>
     <string name="done">Done</string>
     <string name="refused">Cancel</string>
+    <string name="test_text">Test text!</string>
+    <string name="description_food_item">description_food_item</string>
+    <string name="image_of_food_item">Image of food item</string>
+    <string name="info_about_order">Info about order</string>
 </resources>

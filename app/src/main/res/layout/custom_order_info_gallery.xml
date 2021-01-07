@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent">
 
 <EditText
     android:layout_width="wrap_content"
@@ -8,28 +8,27 @@ android:layout_width="match_parent" android:layout_height="match_parent">
     android:id="@+id/editText"
     android:layout_alignParentTop="true"
     android:layout_alignParentStart="true"
-    android:layout_toStartOf="@+id/button2"
-    android:layout_toEndOf="@+id/button3"
-    android:text="@string/some_text" />
+    android:layout_toStartOf="@+id/order_button_done"
+    android:layout_toEndOf="@+id/order_button_cancel"
+    android:text="@string/some_text"
+    android:autofillHints=""
+    android:inputType="text"
+    android:hint="@string/info_about_order" />
 
 <Button
     android:layout_width="40dp"
     android:layout_height="wrap_content"
-    android:id="@+id/button2"
+    android:id="@+id/order_button_done"
     android:background="@drawable/ic_status_done"
     android:layout_alignBottom="@+id/editText"
     android:layout_marginEnd="50dp"
     android:layout_alignParentEnd="true" />
-    <!--    android:textSize="12sp"-->
-    <!--    android:text="@string/done"-->
 
 <Button
     android:layout_width="40dp"
     android:layout_height="wrap_content"
-    android:id="@+id/button3"
+    android:id="@+id/order_button_cancel"
     android:background="@drawable/ic_status_clear"
     android:layout_alignBottom="@+id/editText"
     android:layout_alignParentEnd="true" />
-    <!--    android:textSize="12sp"-->
-    <!--    android:text="@string/refused"-->
 </RelativeLayout>
