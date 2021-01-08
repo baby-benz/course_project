@@ -3,7 +3,7 @@ package ru.cafeteriaitmo.server.controller.rest;
 import org.springframework.web.bind.annotation.*;
 import ru.cafeteriaitmo.server.domain.entity.User;
 
-@RestController("/api/user")
+//@RestController("/userss")
 public class UserController {
 
     @GetMapping

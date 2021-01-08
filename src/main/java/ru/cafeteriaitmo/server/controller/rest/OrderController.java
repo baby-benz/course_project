@@ -10,7 +10,7 @@ import ru.cafeteriaitmo.server.controller.exception.NoEntityException;
 import ru.cafeteriaitmo.server.domain.entity.Order;
 import ru.cafeteriaitmo.server.service.OrderService;
 
-@RestController("/api/order")
+@RestController("/orders")
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
