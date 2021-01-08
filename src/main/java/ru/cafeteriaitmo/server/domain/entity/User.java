@@ -22,6 +22,6 @@ public class User {
     @Column
     private String surname;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "building")
     private List<Order> orders;
 }

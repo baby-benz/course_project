@@ -18,12 +18,12 @@ public class Building {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @MapsId
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @MapsId
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "building")
     private Collection<Product> products;
 
-    @MapsId
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @MapsId
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "building")
     private Collection<Order> orders;
 
     @Column(columnDefinition = "varchar(32)")

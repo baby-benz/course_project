@@ -40,7 +40,8 @@ public class Product {
     @Column
     private String type;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "building_id")
     @NotNull
     private Building building;
 

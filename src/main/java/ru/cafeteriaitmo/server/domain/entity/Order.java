@@ -26,12 +26,14 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @JoinColumn(name = "user_id")
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "building")
     private Collection<Product> productsOrdered;
 
+    @JoinColumn(name = "building_id")
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Building building;
 }
