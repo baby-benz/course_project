@@ -3,25 +3,21 @@ package ru.cafeteriaitmo.server.domain.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
+@Entity
 @Getter
 @Setter
-@ToString
-@Entity
 @NoArgsConstructor
-@AllArgsConstructor
-public class User {
+public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String name;
+    @MapsId
+    @OneToOne
+    private Product product;
 
-    @Column
-    private String surname;
-
-    @OneToMany
-    private List<Order> orders;
+    @Lob
+    @Column(columnDefinition="BYTEA")
+    private byte[] image;
 }
