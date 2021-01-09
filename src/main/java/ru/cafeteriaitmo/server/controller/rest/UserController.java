@@ -1,9 +1,11 @@
 package ru.cafeteriaitmo.server.controller.rest;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.cafeteriaitmo.server.domain.entity.User;
 
-//@RestController("/userss")
+@RestController
+@RequestMapping("/api/user")
 public class UserController {
 
     @GetMapping
@@ -11,7 +13,7 @@ public class UserController {
         return null;
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public void registerUser(User user) {
 
     }
