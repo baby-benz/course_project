@@ -4,9 +4,8 @@ package com.example.course_project.data.model;
  * Data class that captures user information for logged in users retrieved from LoginRepository
  */
 public class LoggedInUser {
-
-    private String userId;
-    private String displayName;
+    private final String userId;
+    private final String displayName;
 
     public LoggedInUser(String userId, String displayName) {
         this.userId = userId;
