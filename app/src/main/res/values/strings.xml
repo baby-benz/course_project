@@ -15,7 +15,17 @@
     <string name="action_breakfast">Завтраки</string>
     <string name="action_starter">Первые</string>
     <string name="action_second">Вторые</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fragment_change_canteen">Другая</string>
+    <!-- Strings related to product row -->
+    <string name="action_add_to_cart">+</string>
+    <!-- Strings related to header -->
+    <string name="header_text_description">Меню ближайшей столовой</string>
+    <string name="header_text_default_address">Кронверкский пр., 49</string>
+    <!-- Strings related to footer -->
+    <string name="footer_button_menu">Меню</string>
+    <string name="footer_button_profile">Профиль</string>
+    <string name="footer_button_more">Ещё</string>
+    <!-- Menu image description -->
     <string name="default_image_description">Default product display image</string>
+    <string name="itmo_logo_image_description">ITMO University logo</string>
 </resources>
