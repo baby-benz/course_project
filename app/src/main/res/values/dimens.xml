@@ -4,4 +4,5 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="activity_menu_top_margin">200dp</dimen>
+    <dimen name="menu_number_button_end_margin">50dp</dimen>
 </resources>
