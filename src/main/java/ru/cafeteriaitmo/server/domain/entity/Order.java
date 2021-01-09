@@ -10,6 +10,7 @@ import java.util.Collection;
 
 @Getter
 @Setter
+@Builder
 @ToString
 @Entity
 @NoArgsConstructor
@@ -22,6 +23,10 @@ public class Order {
     @NotNull
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime dateAdded;
+
+    @NotNull
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime dateTimeOrderedOn;
 
     @Enumerated(EnumType.STRING)
     private Status status;
