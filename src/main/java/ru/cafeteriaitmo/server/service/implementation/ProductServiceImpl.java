@@ -13,6 +13,8 @@ import ru.cafeteriaitmo.server.repository.ProductRepository;
 import ru.cafeteriaitmo.server.service.BuildingService;
 import ru.cafeteriaitmo.server.service.ProductService;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -38,5 +40,13 @@ public class ProductServiceImpl implements ProductService {
 
     public Product addProduct(JSONObject productJson) {
         return null;
+    }
+
+    public Product createProduct(Product product) {
+        return productRepository.save(product);
+    }
+
+    public List<Product> getAll(){
+        return productRepository.findAll();
     }
 }

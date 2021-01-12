@@ -22,4 +22,8 @@ public class BuildingServiceImpl implements BuildingService {
         return buildingRepository.findBuildingByName(buildingName).orElseThrow( () ->
                 NoEntityException.createWith(Building.class.getSimpleName().toLowerCase(),  -1L));
     }
+
+    public Building add(Building building) {
+        return buildingRepository.save(building);
+    }
 }

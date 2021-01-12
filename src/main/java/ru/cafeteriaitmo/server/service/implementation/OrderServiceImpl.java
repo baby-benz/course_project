@@ -81,7 +81,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = Order.builder()
                 .user(user)
                 .dateAdded(dateAdded)
-                .productsOrdered(products)
+                .products(products)
                 .dateTimeOrderedOn(dateTimeOrderedOn)
                 .building(building)
                 .status(Status.Created)
