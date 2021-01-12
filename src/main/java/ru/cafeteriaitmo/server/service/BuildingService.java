@@ -8,4 +8,5 @@ import java.util.List;
 public interface BuildingService {
     List<Building> getAll();
     Building getBuildingByName(String buildingName) throws NoEntityException;
+    Building add(Building building);
 }
