@@ -83,8 +83,7 @@ public class Filler {
     }
 
     private void saveStock() {
-        productService.createProduct(product);
-//        buildingService.add(building);
+        buildingService.add(building);
     }
 
     private void showStock() {
