@@ -13,6 +13,7 @@ import java.util.Collection;
 @Builder
 @ToString
 @Entity
+@Table(name = "orders")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
@@ -31,14 +32,27 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @JoinColumn(name = "user_id")
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "user_orders",
+            joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private User user;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "building")
-    private Collection<Product> productsOrdered;
+    @OneToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "order_products",
+            joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
+    private Collection<Product> products;
 
-    @JoinColumn(name = "building_id")
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "building_orders",
+            joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "building_id", referencedColumnName = "id"))
     private Building building;
 }

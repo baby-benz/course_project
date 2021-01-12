@@ -16,7 +16,7 @@ public class Product {
     /** поле id - уникальный номер */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
     /** поле name - название продукции */
     @Column(columnDefinition = "varchar(64)")
@@ -40,11 +40,22 @@ public class Product {
     @Column
     private String type;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "building_id")
-    @NotNull
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "building_products",
+            joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "building_id", referencedColumnName = "id"))
+//    @NotNull
     private Building building;
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Setter
+    @OneToOne(fetch = FetchType.LAZY,
+            cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "product_image",
+            joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id", referencedColumnName = "id"))
     private Image image;
 }

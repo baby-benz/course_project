@@ -9,6 +9,7 @@ import java.util.List;
 @Setter
 @ToString
 @Entity
+@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -22,6 +23,11 @@ public class User {
     @Column
     private String surname;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "building")
+    @OneToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "user_orders",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"))
     private List<Order> orders;
 }
