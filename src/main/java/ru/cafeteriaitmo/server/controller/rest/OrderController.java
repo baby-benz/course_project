@@ -29,9 +29,9 @@ public class OrderController {
     }
 
     @ResponseStatus(value = HttpStatus.CREATED)
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Order doOrder(@RequestBody JSONObject valuesToCreateOrder) throws NoEntityException {
-        return orderService.createOrder(valuesToCreateOrder);
+    @PostMapping
+    public Order doOrder(Order order) {
+        return orderService.addOrder(order);
     }
 
     @PatchMapping("{id}")

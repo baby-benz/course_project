@@ -38,11 +38,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAllProductsByBuilding(building, pageable);
     }
 
-    public Product addProduct(JSONObject productJson) {
-        return null;
-    }
-
-    public Product createProduct(Product product) {
+    public Product addProduct(Product product) {
         return productRepository.save(product);
     }
 

@@ -23,7 +23,7 @@ public class BuildingServiceImpl implements BuildingService {
                 NoEntityException.createWith(Building.class.getSimpleName().toLowerCase(),  -1L));
     }
 
-    public Building add(Building building) {
+    public Building addBuilding(Building building) {
         return buildingRepository.save(building);
     }
 }

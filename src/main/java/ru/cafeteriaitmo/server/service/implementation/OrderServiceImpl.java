@@ -49,20 +49,12 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findAll();
     }
 
-    /**
-     *
-     * @param valuesToCreateOrder (example) -> JSONObject
-     *        products : [id : 1, id : 2, id : 5],
-     *        user_id : Long id,
-     *        building_name : String name
-     *        time : timeOrderedOn
-     *
-     */
-    public Order createOrder(JSONObject valuesToCreateOrder) throws NoEntityException {
-        Order order = parseJsonOrderToCreate(valuesToCreateOrder);
+    public Order addOrder(Order order) {
         return orderRepository.save(order);
     }
 
+
+    @Deprecated
     private Order parseJsonOrderToCreate(JSONObject values) throws NoEntityException {
         User user;
         LocalDateTime dateAdded;

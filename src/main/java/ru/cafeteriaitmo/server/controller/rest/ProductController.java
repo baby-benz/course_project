@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import ru.cafeteriaitmo.server.controller.exception.NoEntityException;
 import ru.cafeteriaitmo.server.domain.entity.Product;
+import ru.cafeteriaitmo.server.dto.ProductDto;
 import ru.cafeteriaitmo.server.service.ProductService;
 
 @RestController
@@ -26,7 +27,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product addProduct(@RequestBody JSONObject productJson) {
-        return productService.addProduct(productJson);
+    public Product addProduct(ProductDto productDto) {
+        return null;
     }
 }
