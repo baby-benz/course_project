@@ -15,9 +15,8 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Lob
     @Column
-    private Blob image;
+    private byte[] image;
 
     @OneToOne(fetch = FetchType.EAGER,
             cascade = {CascadeType.ALL})
