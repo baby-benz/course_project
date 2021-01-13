@@ -7,7 +7,6 @@ import javax.persistence.*;
 
 /** Класс Product - продукция (блюдо или напиток) */
 @Getter
-@ToString
 @Entity
 @Builder
 @NoArgsConstructor
@@ -41,13 +40,11 @@ public class Product {
     private String type;
 
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY,
-            cascade = {CascadeType.ALL})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(
             name = "building_products",
             joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "building_id", referencedColumnName = "id"))
-//    @NotNull
     private Building building;
 
     @Setter
@@ -58,4 +55,21 @@ public class Product {
             joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "image_id", referencedColumnName = "id"))
     private Image image;
+
+    @Override
+    public String toString() {
+        return new StringBuilder()
+                .append("Продукт: ")
+                .append(name)
+                .append(" Цена: ")
+                .append(price)
+                .append(" В наличии: ")
+                .append(available)
+                .append(" Тип: ")
+                .append(type)
+                .append(" Корпус: ")
+                .append(building.getName())
+                .append("\n")
+                .toString();
+    }
 }

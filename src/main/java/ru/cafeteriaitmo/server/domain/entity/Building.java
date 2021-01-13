@@ -36,9 +36,13 @@ public class Building {
 
     @Column(columnDefinition = "varchar(32)")
     @NotNull
-    @ToString.Include
     private String name;
 
     @Column(columnDefinition = "varchar(64)")
     private String address;
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
