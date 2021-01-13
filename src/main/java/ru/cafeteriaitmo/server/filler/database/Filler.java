@@ -133,15 +133,15 @@ public class Filler {
     private void createBuidlings() {
         String address = "Кронверкский проспект, 49, Санкт-Петербург";
         String name = "Кронверкский";
-        buildingService.add(Building.builder().address(address).name(name).build());
+        buildingService.addBuilding(Building.builder().address(address).name(name).build());
 
         String address2 = "улица Ломоносова, 9, Санкт-Петербург";
         String name2 = "Ломо";
-        buildingService.add(Building.builder().address(address2).name(name2).build());
+        buildingService.addBuilding(Building.builder().address(address2).name(name2).build());
 
         String address1 = "пер. Гривцова, 14, Санкт-Петербург";
         String name1 = "Гривцова";
-        buildingService.add(Building.builder().address(address1).name(name1).build());
+        buildingService.addBuilding(Building.builder().address(address1).name(name1).build());
     }
 
     private Product createProducts(Boolean available, String description, String name, String type) {
@@ -161,7 +161,7 @@ public class Filler {
     private void setDependencies(Product product, Image image, Building building) {
         product.setImage(image);
         product.setBuilding(building);
-        productService.createProduct(product);
+        productService.addProduct(product);
     }
 
     private void showStock() {
