@@ -1,6 +1,7 @@
 package ru.cafeteriaitmo.server.domain.entity;
 
 import com.sun.istack.NotNull;
+import com.sun.istack.Nullable;
 import lombok.*;
 import ru.cafeteriaitmo.server.domain.enums.Status;
 
@@ -31,6 +32,9 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @Column(columnDefinition = "varchar(8)")
+    private String monitorCode;
 
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {CascadeType.ALL})
