@@ -232,7 +232,7 @@ public class Filler {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
-            ImageIO.write(bufferedImage, "jpg", baos);
+            ImageIO.write(after, "jpg", baos);
         } catch (IOException e) {
             log.error("meh image io");
         }
