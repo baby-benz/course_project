@@ -12,6 +12,8 @@ import ru.cafeteriaitmo.server.service.ProductService;
 
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -124,7 +126,8 @@ public class Filler {
     }
 
     private Image createImage(Integer number) {
-        Blob imageBytes = toByteArray("/images/item_" + number + ".jpg");
+        byte[] imageBytes = toByteArray("/images/item_" + number + ".jpg");
+
         Image image = new Image();
         image.setImage(imageBytes);
         return image;
@@ -172,7 +175,7 @@ public class Filler {
         System.out.println(buildingService.getAll());
     }
 
-    private Blob toByteArray(String path) {
+    private byte[] toByteArray(String path) {
         BufferedImage bufferedImage = null;
         try {
             bufferedImage = ImageIO.read(getClass().getResource(path));
@@ -183,6 +186,50 @@ public class Filler {
             log.warn("meh, there is something gonna wrong.");
             return null;
         }
+
+        //масштабирование
+        int w = bufferedImage.getWidth();
+        int h = bufferedImage.getHeight();
+        BufferedImage after = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        AffineTransform at = new AffineTransform();
+        at.scale(0.2, 0.2);
+        AffineTransformOp scaleOp =
+                new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+        after = scaleOp.filter(bufferedImage, after);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(after, "jpg", baos);
+        } catch (IOException e) {
+            log.error("meh image io");
+        }
+
+        return baos.toByteArray();
+    }
+
+    @Deprecated
+    private Blob toBlob(String path) {
+        BufferedImage bufferedImage = null;
+        try {
+            bufferedImage = ImageIO.read(getClass().getResource(path));
+        } catch (IOException e) {
+            log.error("Cannot read image!!!");
+        }
+        if (bufferedImage == null) {
+            log.warn("meh, there is something gonna wrong.");
+            return null;
+        }
+
+        //масштабирование
+        int w = bufferedImage.getWidth();
+        int h = bufferedImage.getHeight();
+        BufferedImage after = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        AffineTransform at = new AffineTransform();
+        at.scale(0.2, 0.2);
+        AffineTransformOp scaleOp =
+                new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+        after = scaleOp.filter(bufferedImage, after);
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             ImageIO.write(bufferedImage, "jpg", baos);
