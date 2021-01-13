@@ -17,9 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 
 @Slf4j
 @Component
@@ -27,44 +25,129 @@ import java.util.Collection;
 public class Filler {
     private final ProductService productService;
     private final BuildingService buildingService;
-    Image image;
-    Product product;
-    Building building;
+
+    String descr1 = "Сочная картошка поджаренная на растительном масле с оливками и " +
+            "с яблочным соусом в мундире из отборных плодов картофеля. " +
+            "Очень привлекательное блюдо со специфическим запахом детства и студенчества. " +
+            "Не спеши - попробуй текст много текста, тестовая версия описания " +
+            "ван лав)))))) Вкусно, попробуйте, не пожалеете, отвечаю. Всего за 99 рублей и немного монет";
+    String descr2 = "Ммммм, салатик, свеженький";
+    String descr3 = "Какой-то сок с лимоном, честно не пробовал и вам не советую";
+    String descr4 = "Это вообще какой-то чупа чупс, чуитс";
+    String descr5 = "Еееее, куриный супчик!!! А БУЛЬЙОН-то какой, сказка! во!";
+    String descr6 = "Борщ. Всё как дома.";
+    String descr7 = "Макарошки, с фаршиком, будешь?";
+    String descr8 = "Греча или гречка? а может перловку?";
+    String descr9 = "寿司か何？";
+    String descr10 = "Какие-то беллые роллы или суши";
+    String descr11 = "У нас сегодня пюрешка, с котлеткой";
+    String descr12 = "Котлетки каждый день ням ням";
+    String descr13 = "Суперские пирожки с картошкой";
+    String descr14 = "Что-то из рязрядка пирожных";
+    String descr15 = "Что-то там по пирожным, но сладкого не хочется? тогда попробуйте ежевику " +
+            "или малину в обертке из под теста (уверяю вас, не сладкое) " +
+            "(кому сладко - лайк)";
+    String descr16 = "Хлеб всему дом";
+    String descr17 = "Дарагой, падхади, вазьми шаверму. Шаурма от Кержа. Всё по 100";
+    String descr18 = "Компот как дома, хорошо помогает в летний знойный день.";
+
+    String name1 = "Жареный картофель";
+    String name2 = "Салат Летний";
+    String name3 = "Лимонный сок";
+    String name4 = "Напиток газированыый Чупс";
+    String name5 = "Суп куриный";
+    String name6 = "Борщ";
+    String name7 = "Макароны по нефлотски";
+    String name8 = "Греча";
+    String name9 = "Роллы дефолт";
+    String name10 = "Суши премиум";
+    String name11 = "Картофельное пюре";
+    String name12 = "Котлета";
+    String name13 = "Пирожки";
+    String name14 = "Пирожное со сливками";
+    String name15 = "Пирожное с ежевикой";
+    String name16 = "Хлеб с отрубями";
+    String name17 = "Шаверма";
+    String name18 = "Компот";
+
+    String type1 = "Первое";
+    String type2 = "Салат";
+    String type3 = "Напиток";
+    String type4 = "Напиток";
+    String type5 = "Первое";
+    String type6 = "Первое";
+    String type7 = "Второе";
+    String type8 = "Второе";
+    String type9 = "Закуска";
+    String type10 = "Закуска";
+    String type11 = "Второе";
+    String type12 = "Гарнир";
+    String type13 = "Закуска";
+    String type14 = "Сладкое";
+    String type15 = "Сладкое";
+    String type16 = "Гарнир";
+    String type17 = "Второе";
+    String type18 = "Напиток";
+
 
     @Autowired
     private void createDailyMenuExample() {
-        image = new Image();
-        product = new Product();
-        building = new Building();
-        createImage();
+        List<Product> products = new ArrayList<>();
         createBuidlings();
-        createProducts();
-        setDependencies();
-        saveStock();
+
+        //TODO: тестово же ыъъы
+        products.add(createProducts(true, descr1, name1, type1));
+        products.add(createProducts(true, descr2, name2, type2));
+        products.add(createProducts(true, descr3, name3, type3));
+        products.add(createProducts(true, descr4, name4, type4));
+        products.add(createProducts(true, descr5, name5, type5));
+        products.add(createProducts(true, descr6, name6, type6));
+        products.add(createProducts(false, descr7, name7, type7));
+        products.add(createProducts(false, descr8, name8, type8));
+        products.add(createProducts(true, descr9, name9, type9));
+        products.add(createProducts(true, descr10, name10, type10));
+        products.add(createProducts(true, descr11, name11, type11));
+        products.add(createProducts(true, descr12, name12, type12));
+        products.add(createProducts(true, descr13, name13, type13));
+        products.add(createProducts(false, descr14, name14, type14));
+        products.add(createProducts(true, descr15, name15, type15));
+        products.add(createProducts(true, descr16, name16, type16));
+        products.add(createProducts(true, descr17, name17, type17));
+        products.add(createProducts(true, descr18, name18, type18));
+
+        List<Building> buildings = buildingService.getAll();
+        for (int i = 0; i < products.size(); i++) {
+            setDependencies(products.get(i), createImage(i+1), buildings.get(i % 3));
+        }
+
         showStock();
     }
 
-    private void createImage() {
-        Blob imageBytes = toByteArray("/images/item_1.jpg");
-        this.image.setImage(imageBytes);
+    private Image createImage(Integer number) {
+        Blob imageBytes = toByteArray("/images/item_" + number + ".jpg");
+        Image image = new Image();
+        image.setImage(imageBytes);
+        return image;
     }
 
     private void createBuidlings() {
-        String address = "Кронверкский пр., 49, Санкт-Петербург";
+        String address = "Кронверкский проспект, 49, Санкт-Петербург";
         String name = "Кронверкский";
-        building = Building.builder().address(address).name(name).build();
+        buildingService.add(Building.builder().address(address).name(name).build());
+
+        String address2 = "улица Ломоносова, 9, Санкт-Петербург";
+        String name2 = "Ломо";
+        buildingService.add(Building.builder().address(address2).name(name2).build());
+
+        String address1 = "пер. Гривцова, 14, Санкт-Петербург";
+        String name1 = "Гривцова";
+        buildingService.add(Building.builder().address(address1).name(name1).build());
     }
 
-    private void createProducts() {
-        Boolean available = true;
-        String description = "Сочная картошка поджаренная на растительном масле с оливками и " +
-                "с яблочным соусом в мундире из отборных плодов картофеля. " +
-                "Очень привлекательное блюдо со специфическим запахом детства и студенчества. " +
-                "Не спеши - попробуй текст много текста, тестовая версия описания " +
-                "ван лав)))))) Вкусно, попробуйте, не пожалеете, отвечаю. Всего за 99 рублей и немного монет";
-        String name = "Жаренный картофель соломкой";
-        Float price = 99.99F;
-        String type = "Гарнир";
+    private Product createProducts(Boolean available, String description, String name, String type) {
+        Product product;
+        Random r = new Random();
+        Float price = 20.21F + r.nextFloat() * 213F;
         product = Product.builder()
                 .available(available)
                 .description(description)
@@ -72,17 +155,15 @@ public class Filler {
                 .price(price)
                 .type(type)
                 .build();
+        return product;
     }
 
-    private void setDependencies() {
+    private void setDependencies(Product product, Image image, Building building) {
         product.setImage(image);
 
-        Collection<Product> productInStock = new ArrayList<>();
+        Collection<Product> productInStock = building.getProducts();
         productInStock.add(product);
         building.setProducts(productInStock);
-    }
-
-    private void saveStock() {
         buildingService.add(building);
     }
 
