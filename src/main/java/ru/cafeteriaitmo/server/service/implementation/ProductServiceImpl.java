@@ -1,30 +1,43 @@
 package ru.cafeteriaitmo.server.service.implementation;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.cafeteriaitmo.server.controller.exception.NoEntityException;
 import ru.cafeteriaitmo.server.domain.entity.Building;
+import ru.cafeteriaitmo.server.domain.entity.Order;
 import ru.cafeteriaitmo.server.domain.entity.Product;
+import ru.cafeteriaitmo.server.dto.ProductDto;
 import ru.cafeteriaitmo.server.repository.ProductRepository;
 import ru.cafeteriaitmo.server.service.BuildingService;
 import ru.cafeteriaitmo.server.service.ProductService;
 
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final BuildingService buildingService;
 
-    public Page<Product> getProductPage(Long pageNumber) {
+    private Integer pageSize = 5;
+
+    public Page<ProductDto> getProductPage(Long pageNumber) {
         if (pageNumber < 0L) return null;
-        Pageable pageable = PageRequest.of(pageNumber.intValue(), 5);
-        return productRepository.findAll(pageable);
+        Pageable pageable = PageRequest.of(pageNumber.intValue(), pageSize);
+        Page<Product> productPage = productRepository.findAll(pageable);
+        return changePageToDtoPage(productPage);
     }
 
     public Product getProduct(Long id) throws NoEntityException {
@@ -32,10 +45,19 @@ public class ProductServiceImpl implements ProductService {
                 new NoEntityException(Product.class.getSimpleName().toLowerCase(), id));
     }
 
-    public Page<Product> getPageFromBuilding(String buildingName, Integer page) throws NoEntityException {
+    public ProductDto getProductDto(Long id) throws NoEntityException {
+        ProductDto productDto;
+        Product product = productRepository.findById(id).orElseThrow(() ->
+                new NoEntityException(Product.class.getSimpleName().toLowerCase(), id));
+        productDto = convertProductToProductDto(product);
+        return productDto;
+    }
+
+    public Page<ProductDto> getProductDtoPageFromBuilding(String buildingName, Integer page) throws NoEntityException {
         Building building = buildingService.getBuildingByName(buildingName);
-        Pageable pageable = PageRequest.of(page, 15);
-        return productRepository.findAllProductsByBuilding(building, pageable);
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Product> productPage = productRepository.findAllProductsByBuilding(building, pageable);
+        return changePageToDtoPage(productPage);
     }
 
     public Product addProduct(Product product) {
@@ -44,5 +66,43 @@ public class ProductServiceImpl implements ProductService {
 
     public List<Product> getAll(){
         return productRepository.findAll();
+    }
+
+    private Page<ProductDto> changePageToDtoPage(Page<Product> productPage) {
+        log.info("convert {} products from page to dto", productPage.getSize());
+
+        Page<ProductDto> productDtoPage;
+        List<ProductDto> productDtos = new ArrayList<>();
+        List<Product> products = productPage.toList();
+        for (Product product : products) {
+            productDtos.add(convertProductToProductDto(product));
+        }
+        productDtoPage = new PageImpl<>(productDtos);
+        return productDtoPage;
+    }
+
+    private ProductDto convertProductToProductDto(Product product) {
+        ProductDto productDto = new ProductDto();
+        productDto.setId(product.getId());
+        productDto.setName(product.getName());
+        productDto.setAvailable(product.getAvailable());
+        productDto.setDescription(product.getDescription());
+
+//        Blob blobImage = product.getImage().getImage();
+//        int myblobLength = 0;
+//        byte[] myblobAsBytes = null;
+//        try {
+//            myblobLength = (int) blobImage.length();
+//            myblobAsBytes = blobImage.getBytes(1, myblobLength);
+//        } catch (SQLException throwables) {
+//            log.error("Cannot convert blob to byte array");
+//        }
+        byte[] myblobAsBytes = product.getImage().getImage();
+
+        productDto.setImage(myblobAsBytes);
+        productDto.setNameBuilding(product.getBuilding().getName());
+        productDto.setPrice(product.getPrice());
+        productDto.setType(product.getType());
+        return productDto;
     }
 }
