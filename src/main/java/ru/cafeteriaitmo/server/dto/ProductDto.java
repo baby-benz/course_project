@@ -12,4 +12,5 @@ public class ProductDto implements Serializable {
     private Boolean available;
     private String description;
     private String type;
+    private byte[] image;
 }
