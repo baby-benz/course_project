@@ -160,11 +160,8 @@ public class Filler {
 
     private void setDependencies(Product product, Image image, Building building) {
         product.setImage(image);
-
-        Collection<Product> productInStock = building.getProducts();
-        productInStock.add(product);
-        building.setProducts(productInStock);
-        buildingService.add(building);
+        product.setBuilding(building);
+        productService.createProduct(product);
     }
 
     private void showStock() {
