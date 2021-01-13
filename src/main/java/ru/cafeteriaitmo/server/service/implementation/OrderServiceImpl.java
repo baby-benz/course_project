@@ -50,6 +50,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Order addOrder(Order order) {
+        order.setDateAdded(LocalDateTime.now(ZoneId.of("Europe/Moscow")));
         return orderRepository.save(order);
     }
 
@@ -81,15 +82,18 @@ public class OrderServiceImpl implements OrderService {
         return null;
     }
 
+    @Deprecated
     private User getUserWithId(Long id) throws NoEntityException {
         return userRepository.findById(id).orElseThrow( () ->
                 new NoEntityException(User.class.getSimpleName().toLowerCase(), id));
     }
 
+    @Deprecated
     private Building getBuildingWithName(String buildingName) throws NoEntityException {
         return buildingService.getBuildingByName(buildingName);
     }
 
+    @Deprecated
     private Collection<Product> parseProductsFromJson(JSONArray productsJsonArray) throws NoEntityException {
         Collection<Product> products = new ArrayList<>();
         for (Object productId : productsJsonArray) {
