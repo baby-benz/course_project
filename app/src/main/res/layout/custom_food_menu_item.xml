@@ -14,16 +14,16 @@
         android:src="@drawable/ic_device_unknown_24"
         android:contentDescription="@string/image_of_food_item" />
 
-    <EditText
+    <TextView
         android:id="@+id/test_text"
         android:layout_width="100dp"
-        android:layout_height="20dp"
+        android:layout_height="50dp"
         android:layout_below="@+id/icon"
         android:layout_alignEnd="@+id/icon"
         android:layout_alignStart="@+id/icon"
         android:background="@color/cardview_shadow_start_color"
         android:text="@string/test_text"
-        android:inputType="text"
         android:hint="@string/description_food_item"
+        android:autoSizeTextType="uniform"
         android:importantForAutofill="no" />
 </RelativeLayout>

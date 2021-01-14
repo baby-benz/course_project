@@ -4,14 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 
-import android.net.http.HttpResponseCache;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
 import com.example.workerinterface.R;
+import com.example.workerinterface.productdto.ProductDTO;
 
 
 import org.json.JSONArray;
@@ -24,10 +25,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -42,6 +43,7 @@ public class MenuActivity extends AppCompatActivity {
         Button addButton = (Button) findViewById(R.id.test_product_button);
         //инициализировали наш массив с edittext.aьи
         allItems = new ArrayList<>();
+        ArrayList<ProductDTO> productDTOS = new ArrayList<>();
 
         //находим наш linear который у нас под кнопкой add edittext в activity_main.xml
         final GridLayout table = (GridLayout) findViewById(R.id.table);
@@ -53,15 +55,17 @@ public class MenuActivity extends AppCompatActivity {
                 try  {
                     String IP = "192.168.1.130:8080";
                     URL url = null;
+                    URL producturl = null;
                     try {
-                        url = new URL(new URL("http",IP, "/api/product/0").toString().replace("[","").replace("]",""));
-                        System.out.println(url);
+                        url = new URL(new URL("http",IP, "/api/filler").toString().replace("[","").replace("]",""));
+                        producturl = new URL(new URL("http",IP, "/api/product/0").toString().replace("[","").replace("]",""));
+                        System.out.println(producturl);
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
                     HttpURLConnection connection = null;
                     try {
-                        connection = (HttpURLConnection)url.openConnection();
+                        connection = (HttpURLConnection)producturl.openConnection();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -72,19 +76,15 @@ public class MenuActivity extends AppCompatActivity {
                                 BufferedReader r = new BufferedReader(new InputStreamReader(in));
                                 StringBuilder total = new StringBuilder();
                                 for (String line; (line = r.readLine()) != null; ) {
-                                    System.out.println(line);
                                     total.append(line).append('\n');
                                 }
                                 JSONObject jsonObj = new JSONObject(total.toString());
-                                System.out.println(jsonObj);
-                                System.out.println(jsonObj.getJSONArray("content"));
+
                                 JSONArray jsonarray = jsonObj.getJSONArray("content");
                                 for (int i = 0; i < jsonarray.length(); i++) {
-                                    System.out.println(jsonarray.getJSONObject(i).get("id"));
-                                    System.out.println(jsonarray.getJSONObject(i).get("name"));
-                                    System.out.println(jsonarray.getJSONObject(i).get("price"));
-                                    System.out.println(jsonarray.getJSONObject(i).get("available"));
-                                    System.out.println(jsonarray.getJSONObject(i).get("description"));
+                                    productDTOS.add(new ProductDTO(jsonarray.getJSONObject(i).get("name").toString(), (double)jsonarray.getJSONObject(i).get("price"),
+                                            (Boolean)jsonarray.getJSONObject(i).get("available"), jsonarray.getJSONObject(i).get("description").toString(),
+                                            jsonarray.getJSONObject(i).get("type").toString(), jsonarray.getJSONObject(i).get("image").toString().getBytes()));
                                 }
                             } finally {
                                 connection.disconnect();
@@ -106,7 +106,7 @@ public class MenuActivity extends AppCompatActivity {
             }
         }).start();
 
-
+        AtomicInteger counter = new AtomicInteger();
         addButton.setOnClickListener(v -> {
             //берем наш кастомный лейаут находим через него все наши кнопки и едит тексты, задаем нужные данные
             @SuppressLint("InflateParams") final View view = getLayoutInflater().inflate(R.layout.custom_food_menu_item, null);
@@ -115,6 +115,18 @@ public class MenuActivity extends AppCompatActivity {
             allItems.add(view);
             //добавляем елементы в linearlayout
             table.addView(view);
+
+
+
+// Load and use views afterwards
+            if (counter.get() < productDTOS.size()) {
+                TextView tv1 = (TextView) findViewById(R.id.test_text);
+                tv1.setId(counter.get());
+                tv1.setText(productDTOS.get(counter.get()).getName());
+                tv1.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+                counter.getAndIncrement();
+            }
+
         });
     }
 
