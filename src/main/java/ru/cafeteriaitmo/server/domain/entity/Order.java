@@ -61,6 +61,6 @@ public class Order {
 
     @Override
     public String toString() {
-        return "order: " + id + "; on: " + dateTimeOrderedOn + " " + monitorCode;
+        return "Заказ: " + id + "; время: " + dateTimeOrderedOn + "; код: " + monitorCode + " статус: " + status;
     }
 }
