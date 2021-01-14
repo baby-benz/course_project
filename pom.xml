@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>ru.cafeteriaitmo</groupId>
 	<artifactId>server</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>server</name>
 	<description>server layer for 4th course project</description>
 
