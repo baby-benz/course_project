@@ -30,7 +30,7 @@ public class OrderDataFiller {
     private final ProductService productService;
 
     String names[] = {"Вася", "Коля", "Леха", "Стас", "Никита"};
-    String surnames[] = {"Иргизович","Никитич","Лехич","Стасич","Иванов"};
+    String surnames[] = {"Иргизович","БогПрограммирования","Лехич","Стасич","Иванов"};
 
 
     public void createUsersOrdering() {
