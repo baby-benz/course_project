@@ -48,7 +48,7 @@ public class Product {
     private Building building;
 
     @Setter
-    @OneToOne(fetch = FetchType.LAZY,
+    @OneToOne(fetch = FetchType.EAGER,
             cascade = {CascadeType.ALL})
     @JoinTable(
             name = "product_image",

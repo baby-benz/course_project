@@ -92,18 +92,9 @@ public class ProductServiceImpl implements ProductService {
         productDto.setAvailable(product.getAvailable());
         productDto.setDescription(product.getDescription());
 
-//        Blob blobImage = product.getImage().getImage();
-//        int myblobLength = 0;
-//        byte[] myblobAsBytes = null;
-//        try {
-//            myblobLength = (int) blobImage.length();
-//            myblobAsBytes = blobImage.getBytes(1, myblobLength);
-//        } catch (SQLException throwables) {
-//            log.error("Cannot convert blob to byte array");
-//        }
-        byte[] myblobAsBytes = product.getImage().getImage();
+        byte[] imageByte = product.getImage().getImage();
 
-        productDto.setImage(myblobAsBytes);
+        productDto.setImage(imageByte);
         productDto.setNameBuilding(product.getBuilding().getName());
         productDto.setPrice(product.getPrice());
         productDto.setType(product.getType());

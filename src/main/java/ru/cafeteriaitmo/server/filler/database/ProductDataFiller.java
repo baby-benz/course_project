@@ -197,7 +197,7 @@ public class ProductDataFiller {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
-            ImageIO.write(after, "jpg", baos);
+            ImageIO.write(bufferedImage, "jpg", baos);
         } catch (IOException e) {
             log.error("meh image io");
         }

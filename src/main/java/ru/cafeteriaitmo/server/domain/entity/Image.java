@@ -15,7 +15,9 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Lob
     @Column
+    @Type(type="org.hibernate.type.BinaryType")
     private byte[] image;
 
     @OneToOne(fetch = FetchType.EAGER,
