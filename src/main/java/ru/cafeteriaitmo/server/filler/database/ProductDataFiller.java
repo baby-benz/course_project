@@ -12,6 +12,7 @@ import ru.cafeteriaitmo.server.service.ProductService;
 
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -185,15 +187,7 @@ public class ProductDataFiller {
             return null;
         }
 
-        //масштабирование
-        int w = bufferedImage.getWidth();
-        int h = bufferedImage.getHeight();
-        BufferedImage after = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-        AffineTransform at = new AffineTransform();
-        at.scale(0.2, 0.2);
-        AffineTransformOp scaleOp =
-                new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-        after = scaleOp.filter(bufferedImage, after);
+        bufferedImage = scale(bufferedImage, 100, 60);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
@@ -203,6 +197,60 @@ public class ProductDataFiller {
         }
 
         return baos.toByteArray();
+    }
+
+    public BufferedImage scale(BufferedImage img, int targetWidth, int targetHeight) {
+
+        int type = (img.getTransparency() == Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+        BufferedImage ret = img;
+        BufferedImage scratchImage = null;
+        Graphics2D g2 = null;
+
+        int w = img.getWidth();
+        int h = img.getHeight();
+
+        int prevW = w;
+        int prevH = h;
+
+        do {
+            if (w > targetWidth) {
+                w /= 2;
+                w = (w < targetWidth) ? targetWidth : w;
+            }
+
+            if (h > targetHeight) {
+                h /= 2;
+                h = (h < targetHeight) ? targetHeight : h;
+            }
+
+            if (scratchImage == null) {
+                scratchImage = new BufferedImage(w, h, type);
+                g2 = scratchImage.createGraphics();
+            }
+
+            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                    RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g2.drawImage(ret, 0, 0, w, h, 0, 0, prevW, prevH, null);
+
+            prevW = w;
+            prevH = h;
+            ret = scratchImage;
+        } while (w != targetWidth || h != targetHeight);
+
+        if (g2 != null) {
+            g2.dispose();
+        }
+
+        if (targetWidth != ret.getWidth() || targetHeight != ret.getHeight()) {
+            scratchImage = new BufferedImage(targetWidth, targetHeight, type);
+            g2 = scratchImage.createGraphics();
+            g2.drawImage(ret, 0, 0, null);
+            g2.dispose();
+            ret = scratchImage;
+        }
+
+        return ret;
+
     }
 
     @Deprecated
