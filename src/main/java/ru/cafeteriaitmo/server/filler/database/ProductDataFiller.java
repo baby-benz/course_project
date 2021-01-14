@@ -24,7 +24,7 @@ import java.util.*;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class Filler {
+public class ProductDataFiller {
     private final ProductService productService;
     private final BuildingService buildingService;
 
@@ -91,9 +91,7 @@ public class Filler {
     String type17 = "Второе";
     String type18 = "Напиток";
 
-
-    @Autowired
-    private void createDailyMenuExample() {
+    public void createDailyMenuExample() {
         List<Product> products = new ArrayList<>();
         createBuidlings();
 
