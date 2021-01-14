@@ -3,6 +3,7 @@ package ru.cafeteriaitmo.server.service.implementation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -32,11 +33,12 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final BuildingService buildingService;
 
-    private Integer pageSize = 5;
+    @Value("${cafeteria.api.pages.size}")
+    private Integer pagesSize;
 
     public Page<ProductDto> getProductPage(Long pageNumber) {
         if (pageNumber < 0L) return null;
-        Pageable pageable = PageRequest.of(pageNumber.intValue(), pageSize);
+        Pageable pageable = PageRequest.of(pageNumber.intValue(), pagesSize);
         Page<Product> productPage = productRepository.findAll(pageable);
         return changePageToDtoPage(productPage);
     }
@@ -56,7 +58,7 @@ public class ProductServiceImpl implements ProductService {
 
     public Page<ProductDto> getProductDtoPageFromBuilding(String buildingName, Integer page) throws NoEntityException {
         Building building = buildingService.getBuildingByName(buildingName);
-        Pageable pageable = PageRequest.of(page, pageSize);
+        Pageable pageable = PageRequest.of(page, pagesSize);
         Page<Product> productPage = productRepository.findAllProductsByBuilding(building, pageable);
         return changePageToDtoPage(productPage);
     }

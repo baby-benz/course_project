@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.weaver.ast.Or;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -41,9 +42,12 @@ public class OrderServiceImpl implements OrderService {
     private final BuildingService buildingService;
     private  final ProductService productService;
 
+    @Value("${cafeteria.api.pages.size}")
+    private Integer pagesSize;
+
     public Page<OrderDto> getOrderPage(Long pageNumber) {
         if (pageNumber < 0L) return null;
-        Pageable pageable = PageRequest.of(pageNumber.intValue(), 5);
+        Pageable pageable = PageRequest.of(pageNumber.intValue(), pagesSize);
         Page<Order> orderPage = orderRepository.findAll(pageable);
         return changePageToDtoPage(orderPage);
     }

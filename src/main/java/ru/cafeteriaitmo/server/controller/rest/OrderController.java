@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +21,9 @@ import ru.cafeteriaitmo.server.service.OrderService;
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
+
+    @Value("${cafeteria.api.pages.size}")
+    private Integer pagesSize;
 
     @GetMapping("/{page}")
     public Page<OrderDto> getOrderPage(@PathVariable long page) {
@@ -50,4 +54,13 @@ public class OrderController {
         orderService.changeStatusString(id, status);
     }
 
+    //TODO: убрать в сервис (пока проверяю)
+    @GetMapping("/pages")
+    public Integer getNumberOfPages() {
+        int partial = 0;
+        int totalFields = orderService.getAll().size();
+        if (totalFields % pagesSize > 0)
+            partial += 1;
+        return (totalFields/pagesSize) + partial;
+    }
 }

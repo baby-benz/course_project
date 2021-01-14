@@ -2,6 +2,7 @@ package ru.cafeteriaitmo.server.controller.rest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import ru.cafeteriaitmo.server.controller.exception.NoEntityException;
@@ -15,6 +16,9 @@ import ru.cafeteriaitmo.server.service.ProductService;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
+
+    @Value("${cafeteria.api.pages.size}")
+    private Integer pagesSize;
 
     @GetMapping
     public ProductDto getProduct(@RequestParam Long id) throws NoEntityException {
@@ -40,5 +44,14 @@ public class ProductController {
         log.info("Post request to add product");
         productService.addProductFromDto(productDto);
         return "Product added into server";
+    }
+
+    @GetMapping("/pages")
+    public Integer getNumberOfPages() {
+        int partial = 0;
+        int totalFields = productService.getAll().size();
+        if (totalFields % pagesSize > 0)
+            partial += 1;
+        return (totalFields/pagesSize) + partial;
     }
 }
