@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.cafeteriaitmo.server.controller.exception.NoEntityException;
 import ru.cafeteriaitmo.server.domain.entity.Building;
+import ru.cafeteriaitmo.server.domain.entity.Image;
 import ru.cafeteriaitmo.server.domain.entity.Order;
 import ru.cafeteriaitmo.server.domain.entity.Product;
 import ru.cafeteriaitmo.server.dto.ProductDto;
@@ -64,12 +65,29 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(product);
     }
 
-    public Product addProductFromDto(ProductDto productDto) {
-        return null;
+    public Product addProductFromDto(ProductDto productDto) throws NoEntityException {
+        return productRepository.save(dtoToProduct(productDto));
     }
 
     public List<Product> getAll(){
         return productRepository.findAll();
+    }
+
+    public Product dtoToProduct(ProductDto productDto) throws NoEntityException {
+        Building building = buildingService.getBuildingByName(productDto.getNameBuilding());
+        Image image = new Image();
+        image.setImage(productDto.getImage());
+
+        Product product = Product.builder()
+                .available(productDto.getAvailable())
+                .building(building)
+                .image(image)
+                .description(productDto.getDescription())
+                .name(productDto.getName())
+                .price(productDto.getPrice())
+                .type(productDto.getType())
+                .build();
+        return product;
     }
 
     private Page<ProductDto> changePageToDtoPage(Page<Product> productPage) {

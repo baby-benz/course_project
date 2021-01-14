@@ -36,9 +36,9 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product addProduct(ProductDto productDto) {
+    public String addProduct(ProductDto productDto) throws NoEntityException {
         log.info("Post request to add product");
         productService.addProductFromDto(productDto);
-        return null;
+        return "Product added into server";
     }
 }

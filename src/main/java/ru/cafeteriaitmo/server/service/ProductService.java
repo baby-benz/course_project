@@ -16,5 +16,5 @@ public interface ProductService {
     List<Product> getAll();
 
     Product addProduct(Product product);
-    Product addProductFromDto(ProductDto productDto);
+    Product addProductFromDto(ProductDto productDto) throws NoEntityException;
 }
