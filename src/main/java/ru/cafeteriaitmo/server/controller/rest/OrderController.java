@@ -35,16 +35,19 @@ public class OrderController {
 
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
-    public Order createOrder(OrderDto order) {
+    public Order createOrder(OrderDto order) throws NoEntityException {
         log.info("Post request for adding order");
         return orderService.addOrderDto(order);
     }
 
     @PatchMapping("{id}")
-    public Order changeStatus(@RequestBody JSONObject statusJson) {
-        String statusName = (String) statusJson.get("status");
-        Status status =  Status.Created;
-        return null;
+    public Order changeStatus(@PathVariable Long id, Status status) throws NoEntityException {
+        return orderService.changeStatus(id, status);
+    }
+
+    @PatchMapping("{id}/status")
+    public void changeStatusString(@PathVariable Long id, @RequestParam String status) throws NoEntityException {
+        orderService.changeStatusString(id, status);
     }
 
 }

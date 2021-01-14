@@ -68,8 +68,69 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
-    public Order addOrderDto(OrderDto order) {
-        return null;
+    public Order addOrderDto(OrderDto orderDto) throws NoEntityException {
+        Order order = new Order();
+        order.setDateTimeOrderedOn(orderDto.getOrderedOn());
+        order.setMonitorCode(orderDto.getMonitorCode());
+        try {
+            order.setStatus(Status.valueOf(orderDto.getStatus()));
+        } catch (Exception ex) {
+            log.warn("Cannot parse Status value -> Status = created for " + orderDto.getMonitorCode());
+            order.setStatus(Status.Created);
+        }
+        order.setBuilding(buildingService.getBuildingByName(orderDto.getBuildingName()));
+        order.setProducts(getProductListById(orderDto.getProductIds()));
+        order.setUser(getUserFromRepository(orderDto.getUserId()));
+        return orderRepository.save(order);
+    }
+
+    public Order changeStatus(Long id, Status status) throws NoEntityException {
+        Order order = getOrder(id);
+        order.setStatus(status);
+        return addOrder(order);
+    }
+
+    public OrderDto changeStatusString(Long id, String statusAsString) throws NoEntityException {
+        Status status;
+        try{
+            status = Status.valueOf(statusAsString);
+        } catch (Exception ex) {
+            log.warn("Cannot parse \"{}\" Status value -> Status = created", statusAsString);
+            status = Status.Created;
+        }
+        Order order = getOrder(id);
+        order.setStatus(status);
+        return orderToDto(addOrder(order));
+}
+
+    private List<Product> getProductListById(List<Long> productIds) throws NoEntityException {
+        List<Product> products = new ArrayList<>();
+        for (Long productId : productIds) {
+            products.add(productService.getProduct(productId));
+        }
+        return products;
+    }
+
+    private User getUserFromRepository(Long id) throws NoEntityException {
+        return userRepository.findById(id).orElseThrow(() ->
+                new NoEntityException(User.class.getSimpleName().toLowerCase(), id));
+    }
+
+    private OrderDto orderToDto(Order order) {
+        ArrayList<Long> productIds = new ArrayList<>();
+        List<Product> products = (ArrayList<Product>) order.getProducts();
+        for (Product product : products) {
+            productIds.add(product.getId());
+        }
+
+        OrderDto dto = new OrderDto();
+        dto.setStatus(order.getStatus().toString());
+        dto.setOrderedOn(order.getDateTimeOrderedOn());
+        dto.setBuildingName(order.getBuilding().getName());
+        dto.setMonitorCode(order.getMonitorCode());
+        dto.setProductIds(productIds);
+        dto.setUserId(order.getUser().getId());
+        return dto;
     }
 
     public Page<OrderDto> changePageToDtoPage(Page<Order> orderPage) {
@@ -91,7 +152,7 @@ public class OrderServiceImpl implements OrderService {
         orderDto.setMonitorCode(order.getMonitorCode());
         orderDto.setBuildingName(order.getBuilding().getName());
         orderDto.setStatus(order.getStatus().toString());
-        orderDto.setUserId(order.getUser().getId().toString());
+        orderDto.setUserId(order.getUser().getId());
 
         Collection<Product> products = order.getProducts();
         ArrayList<Long> productsIds = new ArrayList<>();

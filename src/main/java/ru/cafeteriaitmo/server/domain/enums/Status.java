@@ -5,7 +5,7 @@ public enum Status {
     Prepairing,
     Payment,
     Ready,
-    Canceled;
+    Cancelled;
 
     Status() {
     }
