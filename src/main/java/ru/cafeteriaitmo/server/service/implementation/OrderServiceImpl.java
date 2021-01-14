@@ -76,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
             order.setStatus(Status.valueOf(orderDto.getStatus()));
         } catch (Exception ex) {
             log.warn("Cannot parse Status value -> Status = created for " + orderDto.getMonitorCode());
-            order.setStatus(Status.Created);
+            order.setStatus(Status.CREATED);
         }
         order.setBuilding(buildingService.getBuildingByName(orderDto.getBuildingName()));
         order.setProducts(getProductListById(orderDto.getProductIds()));
@@ -96,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
             status = Status.valueOf(statusAsString);
         } catch (Exception ex) {
             log.warn("Cannot parse \"{}\" Status value -> Status = created", statusAsString);
-            status = Status.Created;
+            status = Status.CREATED;
         }
         Order order = getOrder(id);
         order.setStatus(status);
