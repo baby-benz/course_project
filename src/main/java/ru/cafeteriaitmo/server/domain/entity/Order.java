@@ -12,7 +12,6 @@ import java.util.Collection;
 @Getter
 @Setter
 @Builder
-@ToString
 @Entity
 @Table(name = "orders")
 @NoArgsConstructor
@@ -33,7 +32,7 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column(columnDefinition = "varchar(8)")
+    @Column(columnDefinition = "varchar(64)")
     private String monitorCode;
 
     @ManyToOne(fetch = FetchType.LAZY,
@@ -44,7 +43,7 @@ public class Order {
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private User user;
 
-    @OneToMany(fetch = FetchType.LAZY,
+    @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.ALL})
     @JoinTable(
             name = "order_products",
@@ -59,4 +58,9 @@ public class Order {
             joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "building_id", referencedColumnName = "id"))
     private Building building;
+
+    @Override
+    public String toString() {
+        return "order: " + id + "; on: " + dateTimeOrderedOn + " " + monitorCode;
+    }
 }
