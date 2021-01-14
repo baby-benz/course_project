@@ -64,6 +64,10 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(product);
     }
 
+    public Product addProductFromDto(ProductDto productDto) {
+        return null;
+    }
+
     public List<Product> getAll(){
         return productRepository.findAll();
     }

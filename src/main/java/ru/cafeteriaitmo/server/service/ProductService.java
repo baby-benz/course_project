@@ -10,8 +10,11 @@ import java.util.List;
 public interface ProductService {
     Page<ProductDto> getProductDtoPageFromBuilding(String building, Integer page) throws NoEntityException;
     Page<ProductDto> getProductPage(Long page);
+
     Product getProduct(Long id) throws NoEntityException;
     ProductDto getProductDto(Long id) throws NoEntityException;
     List<Product> getAll();
+
     Product addProduct(Product product);
+    Product addProductFromDto(ProductDto productDto);
 }
