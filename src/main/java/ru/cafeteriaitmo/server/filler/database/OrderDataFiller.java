@@ -48,7 +48,7 @@ public class OrderDataFiller {
             for (int j=i*2; j<menu.size(); j++) {
                 if (menu.get(j).getBuilding().getName().equals(building.getName()) && menu.get(j).getAvailable())
                     productsOrdering.add(menu.get(j));
-                if (productsOrdering.size() >= 1) break;
+                if (productsOrdering.size() >= 3) break;
             }
 
             user.setOrders(createOrder(building, productsOrdering, i));
@@ -72,7 +72,7 @@ public class OrderDataFiller {
         order.setBuilding(building);
         order.setDateTimeOrderedOn(LocalDateTime.now(ZoneId.of("Europe/Moscow")));
         order.setMonitorCode("Test 10" + id_monitor);
-        order.setStatus(Status.Created);
+        order.setStatus(Status.CREATED);
         order.setProducts(products);
         List<Order> orders = new ArrayList<>();
         orders.add(order);

@@ -11,7 +11,6 @@ import ru.cafeteriaitmo.server.domain.enums.Status;
 import ru.cafeteriaitmo.server.service.BuildingService;
 import ru.cafeteriaitmo.server.service.OrderService;
 import ru.cafeteriaitmo.server.service.ProductService;
-import ru.cafeteriaitmo.server.service.UserService;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -49,7 +48,7 @@ public class OneOrderDataFiller {
     private Order createOrder(Building building, List<Product> products, User user) {
         Order order = new Order();
 
-        order.setStatus(Status.Prepairing);
+        order.setStatus(Status.PREPARING);
         order.setBuilding(building);
         order.setProducts(products);
         order.setDateTimeOrderedOn(LocalDateTime.now(ZoneId.of("Europe/Moscow")));
