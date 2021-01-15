@@ -87,9 +87,9 @@ public class MenuFragment extends Fragment {
             }
         }).start();
 
-        Menu.MenuItem item;
         ProductDto productDto;
-        List<Menu.MenuItem> menuItems = new ArrayList<>();
+        List<Menu.MenuItem> menuItems = Menu.ITEMS;
+//        List<Menu.MenuItem> menuItems = new ArrayList<>();
 //        int countProducts = productDtos.size();
 //        for (int i = 0; i < countProducts; i++) {
 //            productDto = productDtos.get(i);
@@ -98,8 +98,7 @@ public class MenuFragment extends Fragment {
 //        }
         int countProducts = 5;
         for (int i = 0; i < countProducts; i++) {
-            item = new Menu.MenuItem(i, productDtos.get(i).getName(), i + "p.", "item: " + i, 1);
-            menuItems.add(item);
+            Menu.ITEMS.add(new Menu.MenuItem(i, this.productDtos.get(i).getName(), 100 + "p.", "item: " + i, 1));
         }
 
         RecyclerView rvNovelties = view.findViewById(R.id.rvNovelties);

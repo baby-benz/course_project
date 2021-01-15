@@ -15,17 +15,11 @@ public class Menu {
     /**
      * An array of items.
      */
-    public static final List<MenuItem> ITEMS = new ArrayList<>();
+    public static List<MenuItem> ITEMS = new ArrayList<>();
 
-    private static final int COUNT = 10;
+    private final int COUNT = 10;
 
-    static {
-        for (int i = 1; i <= COUNT; i++) {
-            ITEMS.add(createMenuItem(i, "Блюдо " + i, i, "Item " + i, i));
-        }
-    }
-
-    private static MenuItem createMenuItem(long id, String name, int price, String description, int count) {
+    private MenuItem createMenuItem(long id, String name, int price, String description, int count) {
         Random random = new Random();
         int randomNumber = random.nextInt(price);
         return new MenuItem(id, name, randomNumber + "₽", description, count);
