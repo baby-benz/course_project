@@ -1,13 +1,8 @@
 package com.example.course_project.dto;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import java.util.Base64;
 
 public class ProductDto {
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public ProductDto(String name, double price, Boolean available, String description, String type, String image, String nameBuilding) {
         this.name = name;
         this.price = (float)price;
