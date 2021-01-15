@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 @Slf4j
 @RestController
@@ -25,6 +26,7 @@ public class ImageWriterController {
     @GetMapping("/{productId}")
     public String checkImageAsFileFromByte(@PathVariable Long productId) throws NoEntityException {
         byte[] imageBytes = productService.getProduct(productId).getImage().getImage();
+        System.out.println(Arrays.toString(imageBytes));
 
         ByteArrayInputStream bais = new ByteArrayInputStream(imageBytes);
         BufferedImage image = null;

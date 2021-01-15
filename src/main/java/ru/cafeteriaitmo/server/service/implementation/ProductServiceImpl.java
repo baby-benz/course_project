@@ -21,10 +21,7 @@ import ru.cafeteriaitmo.server.service.ProductService;
 
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -86,7 +83,7 @@ public class ProductServiceImpl implements ProductService {
     public Product dtoToProduct(ProductDto productDto) throws NoEntityException {
         Building building = buildingService.getBuildingByName(productDto.getNameBuilding());
         Image image = new Image();
-        image.setImage(productDto.getImage());
+        image.setImage(Base64.getDecoder().decode(productDto.getImage()));
 
         Product product = Product.builder()
                 .available(productDto.getAvailable())
@@ -122,7 +119,7 @@ public class ProductServiceImpl implements ProductService {
 
         byte[] imageByte = product.getImage().getImage();
 
-        productDto.setImage(imageByte);
+        productDto.setImage(Base64.getEncoder().encodeToString(imageByte));
         productDto.setNameBuilding(product.getBuilding().getName());
         productDto.setPrice(product.getPrice());
         productDto.setType(product.getType());
