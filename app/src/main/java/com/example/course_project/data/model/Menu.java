@@ -20,9 +20,7 @@ public class Menu {
     private final int COUNT = 10;
 
     private MenuItem createMenuItem(long id, String name, int price, String description, int count) {
-        Random random = new Random();
-        int randomNumber = random.nextInt(price);
-        return new MenuItem(id, name, randomNumber + "₽", description, count);
+        return new MenuItem(id, null, name, price + "₽", description, count);
     }
 
     /**
@@ -32,7 +30,7 @@ public class Menu {
     @RequiredArgsConstructor
     public static class MenuItem {
         private final long id;
-        private Bitmap image;
+        private final Bitmap image;
         private final String name;
         private final String price;
         private final String description;
