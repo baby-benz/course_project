@@ -187,7 +187,7 @@ public class ProductDataFiller {
             return null;
         }
 
-        bufferedImage = scale(bufferedImage, 100, 100);
+//        bufferedImage = scale(bufferedImage, 50, 50);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
