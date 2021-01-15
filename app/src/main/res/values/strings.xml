@@ -20,12 +20,23 @@
     <string name="action_add_to_cart">+</string>
     <!-- Strings related to header -->
     <string name="header_text_description">Меню ближайшей столовой</string>
-    <string name="header_text_default_address">Кронверкский пр., 49</string>
+    <string name="default_address">Кронверкский пр., 49</string>
     <!-- Strings related to footer -->
-    <string name="footer_button_menu">Меню</string>
-    <string name="footer_button_profile">Профиль</string>
-    <string name="footer_button_more">Ещё</string>
+    <string name="action_footer_menu">Меню</string>
+    <string name="action_footer_profile">Профиль</string>
+    <string name="action_footer_cart">Корзина</string>
+    <string name="action_footer_more">Ещё</string>
+    <!-- Strings related to cart -->
+    <string name="cart_title">Заказ из столовой</string>
+    <string name="action_change_place">Изменить место</string>
+    <string name="order_time_title">Выберите время</string>
+    <string name="action_change_order_time">Изменить время</string>
+    <string name="action_place_order">Оформить заказ</string>
     <!-- Menu image description -->
     <string name="default_image_description">Default product display image</string>
     <string name="itmo_logo_image_description">ITMO University logo</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">Map</string>
+
 </resources>
