@@ -4,10 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.workerinterface.R;
@@ -19,12 +23,14 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -48,7 +54,7 @@ public class MenuActivity extends AppCompatActivity {
 
         new Thread(() -> {
             try  {
-                String IP = "192.168.1.130:8080";
+                String IP = "192.168.0.5:8080";
                 int page = 0;
                 URL producturl;
                 while (true) {
@@ -73,7 +79,7 @@ public class MenuActivity extends AppCompatActivity {
                                 for (int i = 0; i < jsonarray.length(); i++) {
                                     productDTOS.add(new ProductDTO(jsonarray.getJSONObject(i).get("name").toString(), (double) jsonarray.getJSONObject(i).get("price"),
                                             (Boolean) jsonarray.getJSONObject(i).get("available"), jsonarray.getJSONObject(i).get("description").toString(),
-                                            jsonarray.getJSONObject(i).get("type").toString(), jsonarray.getJSONObject(i).get("image").toString().getBytes(),
+                                            jsonarray.getJSONObject(i).get("type").toString(), jsonarray.getJSONObject(i).get("image").toString(),
                                             jsonarray.getJSONObject(i).get("nameBuilding").toString()));
                                 }
                             } finally {
@@ -104,6 +110,11 @@ public class MenuActivity extends AppCompatActivity {
             table.addView(view);
 
             TextView tv1 = (TextView) findViewById(R.id.test_text);
+            ImageView iv1 = (ImageView) findViewById(R.id.icon);
+            byte[] imageBytes = productDTOS.get(i).getImage();
+            Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+            iv1.setImageBitmap(bitmap);
+
             tv1.setId(counter.get());
             tv1.setText(productDTOS.get(counter.get()).getName());
             tv1.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
@@ -111,6 +122,4 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }
