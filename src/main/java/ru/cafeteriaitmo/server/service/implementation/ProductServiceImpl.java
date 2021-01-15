@@ -18,6 +18,7 @@ import ru.cafeteriaitmo.server.dto.ProductDto;
 import ru.cafeteriaitmo.server.repository.ProductRepository;
 import ru.cafeteriaitmo.server.service.BuildingService;
 import ru.cafeteriaitmo.server.service.ProductService;
+import ru.cafeteriaitmo.server.service.helper.ProductConverter;
 
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -37,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
         if (pageNumber < 0L) return null;
         Pageable pageable = PageRequest.of(pageNumber.intValue(), pagesSize);
         Page<Product> productPage = productRepository.findAll(pageable);
-        return changePageToDtoPage(productPage);
+        return ProductConverter.changePageToDtoPage(productPage);
     }
 
     public Product getProduct(Long id) throws NoEntityException {
@@ -49,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
         ProductDto productDto;
         Product product = productRepository.findById(id).orElseThrow(() ->
                 new NoEntityException(Product.class.getSimpleName().toLowerCase(), id));
-        productDto = convertProductToProductDto(product);
+        productDto = ProductConverter.convertProductToProductDto(product);
         return productDto;
     }
 
@@ -57,7 +58,7 @@ public class ProductServiceImpl implements ProductService {
         Building building = buildingService.getBuildingByName(buildingName);
         Pageable pageable = PageRequest.of(page, pagesSize);
         Page<Product> productPage = productRepository.findAllProductsByBuilding(building, pageable);
-        return changePageToDtoPage(productPage);
+        return ProductConverter.changePageToDtoPage(productPage);
     }
 
     public Integer getNumberOfPages() {
@@ -95,34 +96,5 @@ public class ProductServiceImpl implements ProductService {
                 .type(productDto.getType())
                 .build();
         return product;
-    }
-
-    private Page<ProductDto> changePageToDtoPage(Page<Product> productPage) {
-        log.info("convert {} products from page to dto", productPage.toList().size());
-
-        Page<ProductDto> productDtoPage;
-        List<ProductDto> productDtos = new ArrayList<>();
-        List<Product> products = productPage.toList();
-        for (Product product : products) {
-            productDtos.add(convertProductToProductDto(product));
-        }
-        productDtoPage = new PageImpl<>(productDtos);
-        return productDtoPage;
-    }
-
-    private ProductDto convertProductToProductDto(Product product) {
-        ProductDto productDto = new ProductDto();
-        productDto.setId(product.getId());
-        productDto.setName(product.getName());
-        productDto.setAvailable(product.getAvailable());
-        productDto.setDescription(product.getDescription());
-
-        byte[] imageByte = product.getImage().getImage();
-
-        productDto.setImage(Base64.getEncoder().encodeToString(imageByte));
-        productDto.setNameBuilding(product.getBuilding().getName());
-        productDto.setPrice(product.getPrice());
-        productDto.setType(product.getType());
-        return productDto;
     }
 }

@@ -24,6 +24,8 @@ import ru.cafeteriaitmo.server.repository.UserRepository;
 import ru.cafeteriaitmo.server.service.BuildingService;
 import ru.cafeteriaitmo.server.service.OrderService;
 import ru.cafeteriaitmo.server.service.ProductService;
+import ru.cafeteriaitmo.server.service.UserService;
+import ru.cafeteriaitmo.server.service.helper.OrderConverter;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -37,7 +39,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     private final BuildingService buildingService;
     private  final ProductService productService;
@@ -49,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
         if (pageNumber < 0L) return null;
         Pageable pageable = PageRequest.of(pageNumber.intValue(), pagesSize);
         Page<Order> orderPage = orderRepository.findAll(pageable);
-        return changePageToDtoPage(orderPage);
+        return OrderConverter.changePageToDtoPage(orderPage);
     }
 
     public Order getOrder(Long orderId) throws NoEntityException {
@@ -60,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto getOrderDto(Long orderId) throws NoEntityException {
         Order order = orderRepository.findById(orderId).orElseThrow(() ->
                 new NoEntityException(Order.class.getSimpleName().toLowerCase(), orderId));
-        return convertOrderToOrderDto(order);
+        return OrderConverter.convertOrderToOrderDto(order);
     }
 
     public Collection<Order> getAll() {
@@ -104,7 +106,7 @@ public class OrderServiceImpl implements OrderService {
         }
         Order order = getOrder(id);
         order.setStatus(status);
-        return orderToDto(addOrder(order));
+        return OrderConverter.convertOrderToOrderDto(addOrder(order));
     }
 
     public Integer getNumberOfPages() {
@@ -124,55 +126,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private User getUserFromRepository(Long id) throws NoEntityException {
-        return userRepository.findById(id).orElseThrow(() ->
-                new NoEntityException(User.class.getSimpleName().toLowerCase(), id));
-    }
-
-    private OrderDto orderToDto(Order order) {
-        ArrayList<Long> productIds = new ArrayList<>();
-        List<Product> products = (ArrayList<Product>) order.getProducts();
-        for (Product product : products) {
-            productIds.add(product.getId());
-        }
-
-        OrderDto dto = new OrderDto();
-        dto.setStatus(order.getStatus().toString());
-        dto.setOrderedOn(order.getDateTimeOrderedOn());
-        dto.setBuildingName(order.getBuilding().getName());
-        dto.setMonitorCode(order.getMonitorCode());
-        dto.setProductIds(productIds);
-        dto.setUserId(order.getUser().getId());
-        return dto;
-    }
-
-    public Page<OrderDto> changePageToDtoPage(Page<Order> orderPage) {
-        log.info("convert {} orders from page to dto", orderPage.toList().size());
-
-        Page<OrderDto> orderDtoPage;
-        List<OrderDto> orderDtos = new ArrayList<>();
-        List<Order> orders = orderPage.toList();
-        for (Order order : orders) {
-            orderDtos.add(convertOrderToOrderDto(order));
-        }
-        orderDtoPage = new PageImpl<>(orderDtos);
-        return orderDtoPage;
-    }
-
-    private OrderDto convertOrderToOrderDto(Order order) {
-        OrderDto orderDto = new OrderDto();
-        orderDto.setOrderedOn(order.getDateTimeOrderedOn());
-        orderDto.setMonitorCode(order.getMonitorCode());
-        orderDto.setBuildingName(order.getBuilding().getName());
-        orderDto.setStatus(order.getStatus().toString());
-        orderDto.setUserId(order.getUser().getId());
-
-        Collection<Product> products = order.getProducts();
-        ArrayList<Long> productsIds = new ArrayList<>();
-        for (Product product : products) {
-            productsIds.add(product.getId());
-        }
-        orderDto.setProductIds(productsIds);
-
-        return orderDto;
+        return userService.getUser(id);
     }
 }

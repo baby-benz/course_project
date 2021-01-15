@@ -2,11 +2,11 @@ package ru.cafeteriaitmo.server.filler.database;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.cafeteriaitmo.server.domain.entity.Building;
 import ru.cafeteriaitmo.server.domain.entity.Image;
 import ru.cafeteriaitmo.server.domain.entity.Product;
+import ru.cafeteriaitmo.server.domain.enums.Type;
 import ru.cafeteriaitmo.server.service.BuildingService;
 import ru.cafeteriaitmo.server.service.ProductService;
 
@@ -74,24 +74,24 @@ public class ProductDataFiller {
     String name17 = "Шаверма";
     String name18 = "Компот";
 
-    String type1 = "Первое";
-    String type2 = "Салат";
-    String type3 = "Напиток";
-    String type4 = "Напиток";
-    String type5 = "Первое";
-    String type6 = "Первое";
-    String type7 = "Второе";
-    String type8 = "Второе";
-    String type9 = "Закуска";
-    String type10 = "Закуска";
-    String type11 = "Второе";
-    String type12 = "Гарнир";
-    String type13 = "Закуска";
-    String type14 = "Сладкое";
-    String type15 = "Сладкое";
-    String type16 = "Гарнир";
-    String type17 = "Второе";
-    String type18 = "Напиток";
+    String type1 = Type.STARTER.toString();
+    String type2 = Type.BREAKFAST.toString();
+    String type3 = Type.DRINKING.toString();
+    String type4 = Type.DRINKING.toString();
+    String type5 = Type.STARTER.toString();
+    String type6 = Type.STARTER.toString();
+    String type7 = Type.SECOND.toString();
+    String type8 = Type.SECOND.toString();
+    String type9 = Type.BREAKFAST.toString();
+    String type10 = Type.BREAKFAST.toString();
+    String type11 = Type.SECOND.toString();
+    String type12 = Type.SECOND.toString();
+    String type13 = Type.BREAKFAST.toString();
+    String type14 = Type.SECOND.toString();
+    String type15 = Type.SECOND.toString();
+    String type16 = Type.SECOND.toString();
+    String type17 = Type.SECOND.toString();
+    String type18 = Type.DRINKING.toString();
 
     public void createDailyMenuExample() {
         List<Product> products = new ArrayList<>();

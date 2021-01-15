@@ -11,4 +11,5 @@ import ru.cafeteriaitmo.server.domain.entity.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findAllProductsByBuilding(Building building, Pageable pageable);
+    Page<Product> findAllProductsByType(String type, Pageable pageable);
 }
