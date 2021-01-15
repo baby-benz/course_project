@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.widget.EditText;
 
 import com.example.workerinterface.R;
+import com.example.workerinterface.dto.OrderDTO;
 
 import android.os.Bundle;
 import android.view.View;
@@ -43,6 +44,7 @@ public class OrderActivity extends AppCompatActivity {
         Button addButton = (Button) findViewById(R.id.order_button);
         //инициализировали наш массив с edittext.aьи
         allEds = new ArrayList<>();
+        ArrayList<OrderDTO> orderDTOS = new ArrayList<>();
 
         //находим наш linear который у нас под кнопкой add edittext в activity_main.xml
         final LinearLayout linear = (LinearLayout) findViewById(R.id.linear);
@@ -51,29 +53,39 @@ public class OrderActivity extends AppCompatActivity {
             URL orderurl;
             int page = 0;
             String IP = "192.168.1.130:8080";
-            try {
-                orderurl = new URL(new URL("http", IP, "/api/order/" + page).toString().replace("[", "").replace("]", ""));
-                System.out.println(orderurl);
-                HttpURLConnection connection;
+            while (true) {
                 try {
-                    connection = (HttpURLConnection) orderurl.openConnection();
-                    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                        InputStream in = new BufferedInputStream(connection.getInputStream());
-                        BufferedReader r = new BufferedReader(new InputStreamReader(in));
-                        StringBuilder total = new StringBuilder();
-                        for (String line; (line = r.readLine()) != null; ) {
-                            total.append(line).append('\n');
-                        }
-                        JSONObject jsonObj = new JSONObject(total.toString());
+                    orderurl = new URL(new URL("http", IP, "/api/order/" + page).toString().replace("[", "").replace("]", ""));
+                    System.out.println(orderurl);
+                    HttpURLConnection connection;
+                    try {
+                        connection = (HttpURLConnection) orderurl.openConnection();
+                        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                            InputStream in = new BufferedInputStream(connection.getInputStream());
+                            BufferedReader r = new BufferedReader(new InputStreamReader(in));
+                            StringBuilder total = new StringBuilder();
+                            for (String line; (line = r.readLine()) != null; ) {
+                                total.append(line).append('\n');
+                            }
+                            JSONObject jsonObj = new JSONObject(total.toString());
 
-                        JSONArray jsonarray = jsonObj.getJSONArray("content");
-                        System.out.println(jsonarray.length());
+                            JSONArray jsonarray = jsonObj.getJSONArray("content");
+                            if (jsonarray.length() == 0) break;
+                            System.out.println(jsonarray.length());
+                            for (int i = 0; i < jsonarray.length(); i++) {
+//                                orderDTOS.add(new OrderDTO(jsonarray.getJSONObject(i).get("orderedOn").toString(),
+//                                        jsonarray.getJSONObject(i).get("monitorCode").toString(),
+//                                        jsonarray.getJSONObject(i).getString("status")))
+                                System.out.println(jsonarray.getJSONObject(i).get("productIds").toString());
+                            }
+                        }
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException | JSONException e) {
+                } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
+                page++;
             }
         }).start();
 
