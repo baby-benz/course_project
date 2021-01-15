@@ -46,21 +46,22 @@ public class OrderController {
 
     @PatchMapping("{id}")
     public Order changeStatus(@PathVariable Long id, Status status) throws NoEntityException {
+        log.info("get request to change status of {} prder to {}", id, status.toString());
         return orderService.changeStatus(id, status);
     }
 
     @PatchMapping("{id}/status")
     public void changeStatusString(@PathVariable Long id, @RequestParam String status) throws NoEntityException {
+        log.info("get request to change status of {} order to \"{}\"", id, status);
         orderService.changeStatusString(id, status);
     }
 
     //TODO: убрать в сервис (пока проверяю)
     @GetMapping("/pages")
     public Integer getNumberOfPages() {
-        int partial = 0;
-        int totalFields = orderService.getAll().size();
-        if (totalFields % pagesSize > 0)
-            partial += 1;
-        return (totalFields/pagesSize) + partial;
+        log.info("get request to check total orders pages");
+        Integer totalPages = orderService.getNumberOfPages();
+        log.info("total: {} pages", totalPages);
+        return totalPages;
     }
 }

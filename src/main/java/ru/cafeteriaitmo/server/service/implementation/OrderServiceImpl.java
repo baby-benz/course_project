@@ -105,7 +105,15 @@ public class OrderServiceImpl implements OrderService {
         Order order = getOrder(id);
         order.setStatus(status);
         return orderToDto(addOrder(order));
-}
+    }
+
+    public Integer getNumberOfPages() {
+        int partial = 0;
+        int totalFields = getAll().size();
+        if (totalFields % pagesSize > 0)
+            partial += 1;
+        return (totalFields/pagesSize) + partial;
+    }
 
     private List<Product> getProductListById(List<Long> productIds) throws NoEntityException {
         List<Product> products = new ArrayList<>();
@@ -138,7 +146,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Page<OrderDto> changePageToDtoPage(Page<Order> orderPage) {
-        log.info("convert {} orders from page to dto", orderPage.getSize());
+        log.info("convert {} orders from page to dto", orderPage.toList().size());
 
         Page<OrderDto> orderDtoPage;
         List<OrderDto> orderDtos = new ArrayList<>();

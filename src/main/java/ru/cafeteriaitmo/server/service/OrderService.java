@@ -17,6 +17,7 @@ public interface OrderService {
 
     Order changeStatus(Long id, Status status) throws NoEntityException;
     OrderDto changeStatusString(Long id, String status) throws NoEntityException;
+    Integer getNumberOfPages();
 
     @Deprecated
     Order getOrder(Long orderId) throws NoEntityException;

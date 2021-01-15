@@ -63,6 +63,14 @@ public class ProductServiceImpl implements ProductService {
         return changePageToDtoPage(productPage);
     }
 
+    public Integer getNumberOfPages() {
+        int partial = 0;
+        int totalFields = getAll().size();
+        if (totalFields % pagesSize > 0)
+            partial += 1;
+        return (totalFields/pagesSize) + partial;
+    }
+
     public Product addProduct(Product product) {
         return productRepository.save(product);
     }
@@ -93,7 +101,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private Page<ProductDto> changePageToDtoPage(Page<Product> productPage) {
-        log.info("convert {} products from page to dto", productPage.getSize());
+        log.info("convert {} products from page to dto", productPage.toList().size());
 
         Page<ProductDto> productDtoPage;
         List<ProductDto> productDtos = new ArrayList<>();

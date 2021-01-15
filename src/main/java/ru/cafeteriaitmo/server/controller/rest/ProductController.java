@@ -48,10 +48,9 @@ public class ProductController {
 
     @GetMapping("/pages")
     public Integer getNumberOfPages() {
-        int partial = 0;
-        int totalFields = productService.getAll().size();
-        if (totalFields % pagesSize > 0)
-            partial += 1;
-        return (totalFields/pagesSize) + partial;
+        log.info("get request to check total orders pages");
+        Integer totalPages = productService.getNumberOfPages();
+        log.info("total: {} pages", totalPages);
+        return totalPages;
     }
 }
