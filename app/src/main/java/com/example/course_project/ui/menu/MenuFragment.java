@@ -11,10 +11,23 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.course_project.R;
 import com.example.course_project.data.model.Menu;
+import com.example.course_project.dto.ProductDto;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MenuFragment extends Fragment {
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -26,6 +39,55 @@ public class MenuFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ArrayList<ProductDto> productDtos = new ArrayList<>();
+        new Thread(() -> {
+            try  {
+                String IP = "192.168.0.5:8080";
+                int page = 0;
+                URL producturl;
+                while (true) {
+                    producturl = new URL(new URL("http", IP, "/api/product/" + page).toString().replace("[", "").replace("]", ""));
+                    System.out.println(producturl);
+                    HttpURLConnection connection;
+                    try {
+                        connection = (HttpURLConnection) producturl.openConnection();
+                        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                            try {
+                                InputStream in = new BufferedInputStream(connection.getInputStream());
+                                BufferedReader r = new BufferedReader(new InputStreamReader(in));
+                                StringBuilder total = new StringBuilder();
+                                for (String line; (line = r.readLine()) != null; ) {
+                                    total.append(line).append('\n');
+                                }
+                                JSONObject jsonObj = new JSONObject(total.toString());
+
+                                JSONArray jsonarray = jsonObj.getJSONArray("content");
+                                System.out.println(jsonarray.length());
+                                if (jsonarray.length() == 0) break;
+                                for (int i = 0; i < jsonarray.length(); i++) {
+                                    productDtos.add(new ProductDto(jsonarray.getJSONObject(i).get("name").toString(), (double) jsonarray.getJSONObject(i).get("price"),
+                                            (Boolean) jsonarray.getJSONObject(i).get("available"), jsonarray.getJSONObject(i).get("description").toString(),
+                                            jsonarray.getJSONObject(i).get("type").toString(), jsonarray.getJSONObject(i).get("image").toString(),
+                                            jsonarray.getJSONObject(i).get("nameBuilding").toString()));
+                                }
+                            } finally {
+                                connection.disconnect();
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    page++;
+                }
+                System.out.println("finished downloading data");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+        System.out.println(productDtos.get(0).getName());
+        for (ProductDto productDto : productDtos) {
+            System.out.println(productDto.getName());
+        }
         List<Menu.MenuItem> menuItems = Menu.ITEMS;
 
         RecyclerView rvNovelties = view.findViewById(R.id.rvNovelties);
