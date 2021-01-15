@@ -1,15 +1,14 @@
-package com.example.workerinterface.productdto;
-
-import java.io.Serializable;
+package com.example.workerinterface.dto;
 
 public class ProductDTO {
-        public ProductDTO(String name, double price, Boolean available, String description, String type, byte[] image) {
+        public ProductDTO(String name, double price, Boolean available, String description, String type, byte[] image, String nameBuilding) {
                 this.name = name;
                 this.price = (float)price;
                 this.available = available;
                 this.description = description;
                 this.type = type;
                 this.image = image;
+                this.nameBuilding = nameBuilding;
         }
 
         private String name;
@@ -18,6 +17,7 @@ public class ProductDTO {
         private String description;
         private String type;
         private byte[] image;
+        private String nameBuilding;
 
         public String getName() {
                 return name;
@@ -65,5 +65,13 @@ public class ProductDTO {
 
         public void setImage(byte[] image) {
                 this.image = image;
+        }
+
+        public String getNameBuilding() {
+                return nameBuilding;
+        }
+
+        public void setNameBuilding(String nameBuilding) {
+                this.nameBuilding = nameBuilding;
         }
 }

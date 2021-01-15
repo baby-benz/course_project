@@ -12,6 +12,18 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +46,38 @@ public class OrderActivity extends AppCompatActivity {
 
         //находим наш linear который у нас под кнопкой add edittext в activity_main.xml
         final LinearLayout linear = (LinearLayout) findViewById(R.id.linear);
+
+        new Thread(() -> {
+            URL orderurl;
+            int page = 0;
+            String IP = "192.168.1.130:8080";
+            try {
+                orderurl = new URL(new URL("http", IP, "/api/order/" + page).toString().replace("[", "").replace("]", ""));
+                System.out.println(orderurl);
+                HttpURLConnection connection;
+                try {
+                    connection = (HttpURLConnection) orderurl.openConnection();
+                    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                        InputStream in = new BufferedInputStream(connection.getInputStream());
+                        BufferedReader r = new BufferedReader(new InputStreamReader(in));
+                        StringBuilder total = new StringBuilder();
+                        for (String line; (line = r.readLine()) != null; ) {
+                            total.append(line).append('\n');
+                        }
+                        JSONObject jsonObj = new JSONObject(total.toString());
+
+                        JSONArray jsonarray = jsonObj.getJSONArray("content");
+                        System.out.println(jsonarray.length());
+                    }
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+
         addButton.setOnClickListener((View.OnClickListener) v -> {
             counter++;
 
