@@ -5,6 +5,7 @@ android {
     buildToolsVersion "30.0.3"
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -28,18 +29,52 @@ android {
 }
 
 dependencies {
+    def room_version='2.2.6'
+    def rxjava2_version='2.1.1'
+    def material_version='1.2.1'
+    def carbon_version='0.16.0.1'
+    def lombok_version='1.18.16'
+    def eventbus_version='3.2.0'
+    def counterfab_version='1.2.2'
+    def dexter_version='6.2.2'
+    def number_button_version='1.0.2'
+    def desugaring_version='1.1.1'
+    def ps_location_version='17.1.0'
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation "com.google.android.material:material:$material_version"
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.cepheuen.elegant-number-button:lib:1.0.2'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+
+    implementation "org.greenrobot:eventbus:$eventbus_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxjava2_version"
+
+    implementation "com.google.android.gms:play-services-location:$ps_location_version"
+    implementation "com.karumi:dexter:$dexter_version"
+
+    // Testing dependencies
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    api 'tk.zielony:carbon:0.16.0.1'
-    compileOnly 'org.projectlombok:lombok:1.18.16'
-    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+    // Material design dependencies
+    api "tk.zielony:carbon:$carbon_version"
+    implementation "com.github.andremion:counterfab:$counterfab_version"
+    implementation "com.cepheuen.elegant-number-button:lib:$number_button_version"
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
+    // Lombok dependencies
+    compileOnly "org.projectlombok:lombok:$lombok_version"
+    annotationProcessor "org.projectlombok:lombok:$lombok_version"
+
+    // Room dependencies
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-rxjava2:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugaring_version"
 }
