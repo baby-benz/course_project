@@ -28,6 +28,8 @@ import java.util.List;
 
 public class MenuFragment extends Fragment {
 
+    volatile ArrayList<ProductDto> productDtos;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -39,7 +41,7 @@ public class MenuFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ArrayList<ProductDto> productDtos = new ArrayList<>();
+        productDtos = new ArrayList<>();
         new Thread(() -> {
             try  {
                 String IP = "192.168.0.5:8080";
@@ -84,11 +86,21 @@ public class MenuFragment extends Fragment {
                 e.printStackTrace();
             }
         }).start();
-        System.out.println(productDtos.get(0).getName());
-        for (ProductDto productDto : productDtos) {
-            System.out.println(productDto.getName());
+
+        Menu.MenuItem item;
+        ProductDto productDto;
+        List<Menu.MenuItem> menuItems = new ArrayList<>();
+//        int countProducts = productDtos.size();
+//        for (int i = 0; i < countProducts; i++) {
+//            productDto = productDtos.get(i);
+//            item = new Menu.MenuItem(i+1, productDto.getName(), productDto.getPrice().toString(), productDto.getDescription(), 1);
+//            menuItems.add(item);
+//        }
+        int countProducts = 5;
+        for (int i = 0; i < countProducts; i++) {
+            item = new Menu.MenuItem(i, productDtos.get(i).getName(), i + "p.", "item: " + i, 1);
+            menuItems.add(item);
         }
-        List<Menu.MenuItem> menuItems = Menu.ITEMS;
 
         RecyclerView rvNovelties = view.findViewById(R.id.rvNovelties);
         RecyclerView rvPopular = view.findViewById(R.id.rvPopular);
