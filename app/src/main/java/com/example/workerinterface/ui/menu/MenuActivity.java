@@ -111,8 +111,10 @@ public class MenuActivity extends AppCompatActivity {
 
             TextView tv1 = (TextView) findViewById(R.id.test_text);
             ImageView iv1 = (ImageView) findViewById(R.id.icon);
+
             byte[] imageBytes = productDTOS.get(i).getImage();
             Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+            iv1.setId(counter.get());
             iv1.setImageBitmap(bitmap);
 
             tv1.setId(counter.get());
