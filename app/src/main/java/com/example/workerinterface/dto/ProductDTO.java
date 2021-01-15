@@ -1,13 +1,15 @@
 package com.example.workerinterface.dto;
 
+import java.util.Base64;
+
 public class ProductDTO {
-        public ProductDTO(String name, double price, Boolean available, String description, String type, byte[] image, String nameBuilding) {
+        public ProductDTO(String name, double price, Boolean available, String description, String type, String image, String nameBuilding) {
                 this.name = name;
                 this.price = (float)price;
                 this.available = available;
                 this.description = description;
                 this.type = type;
-                this.image = image;
+                this.image = Base64.getDecoder().decode(image);
                 this.nameBuilding = nameBuilding;
         }
 
