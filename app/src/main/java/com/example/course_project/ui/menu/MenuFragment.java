@@ -87,18 +87,18 @@ public class MenuFragment extends Fragment {
             }
         }).start();
 
-        ProductDto productDto;
+        while (productDtos.size() == 0) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         List<Menu.MenuItem> menuItems = Menu.ITEMS;
-//        List<Menu.MenuItem> menuItems = new ArrayList<>();
-//        int countProducts = productDtos.size();
-//        for (int i = 0; i < countProducts; i++) {
-//            productDto = productDtos.get(i);
-//            item = new Menu.MenuItem(i+1, productDto.getName(), productDto.getPrice().toString(), productDto.getDescription(), 1);
-//            menuItems.add(item);
-//        }
-        int countProducts = 5;
-        for (int i = 0; i < countProducts; i++) {
-            Menu.ITEMS.add(new Menu.MenuItem(i, this.productDtos.get(i).getName(), 100 + "p.", "item: " + i, 1));
+
+        for (int i = 0; i < productDtos.size(); i++) {
+
+            Menu.ITEMS.add(new Menu.MenuItem(i, this.productDtos.get(i).getName(), productDtos.get(i).getPrice() + "p.", productDtos.get(i).getDescription(), 1));
         }
 
         RecyclerView rvNovelties = view.findViewById(R.id.rvNovelties);
