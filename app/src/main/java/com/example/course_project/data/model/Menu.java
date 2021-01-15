@@ -2,6 +2,7 @@ package com.example.course_project.data.model;
 
 import android.graphics.Bitmap;
 import androidx.annotation.NonNull;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.*;
@@ -10,7 +11,6 @@ import java.util.*;
  * Model class for providing content for user interfaces
  * <p>
  */
-@RequiredArgsConstructor
 public class Menu {
     /**
      * An array of items.
@@ -21,51 +21,33 @@ public class Menu {
 
     static {
         for (int i = 1; i <= COUNT; i++) {
-            ITEMS.add(createMenuItem("Блюдо " + i, i, "Item " + i, i));
+            ITEMS.add(createMenuItem(i, "Блюдо " + i, i, "Item " + i, i));
         }
     }
 
-    private static MenuItem createMenuItem(String name, int price, String description, int count) {
+    private static MenuItem createMenuItem(long id, String name, int price, String description, int count) {
         Random random = new Random();
         int randomNumber = random.nextInt(price);
-        return new MenuItem(name, randomNumber + "₽", description, count);
+        return new MenuItem(id, name, randomNumber + "₽", description, count);
     }
 
     /**
      * A menu item representing a piece of content.
      */
+    @Getter
     @RequiredArgsConstructor
     public static class MenuItem {
-        private Bitmap mImage;
-        private final String mName;
-        private final String mPrice;
-        private final String mDescription;
-        private final int mCount;
-
-        public Bitmap getImage() {
-            return mImage;
-        }
-
-        public String getName() {
-            return mName;
-        }
-
-        public String getPrice() {
-            return mPrice;
-        }
-
-        public String getDescription() {
-            return mDescription;
-        }
-
-        public int getCount() {
-            return mCount;
-        }
+        private final long id;
+        private Bitmap image;
+        private final String name;
+        private final String price;
+        private final String description;
+        private final int count;
 
         @NonNull
         @Override
         public String toString() {
-            return mName + " price: " + mPrice + " description: " + mDescription + " count: " + mCount;
+            return name + " price: " + price + " description: " + description + " count: " + count;
         }
     }
 }

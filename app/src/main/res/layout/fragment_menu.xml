@@ -27,14 +27,14 @@
                         android:fontFamily="sans-serif" android:textColor="#000000"
                 />
                 <TextView
-                        android:text="@string/header_text_default_address"
+                        android:text="@string/default_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" android:id="@+id/header_address" android:textSize="12sp"/>
             </LinearLayout>
             <carbon.widget.Button
                     android:text="@string/fragment_change_canteen"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp" android:id="@+id/button"
+                    android:layout_height="30dp" android:id="@+id/change_place"
                     android:background="@drawable/purple_blue_gradient" android:textColor="#FFFFFF"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"

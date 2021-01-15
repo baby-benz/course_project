@@ -11,7 +11,7 @@
     tools:context=".ui.login.LoginFragment">
 
     <EditText
-            android:id="@+id/username"
+            android:id="@+id/user_id"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -37,7 +37,7 @@
             android:selectAllOnFocus="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/username" android:autofillHints=""/>
+            app:layout_constraintTop_toBottomOf="@+id/user_id" android:autofillHints=""/>
     <carbon.widget.Button
             android:id="@+id/login"
             android:enabled="false"

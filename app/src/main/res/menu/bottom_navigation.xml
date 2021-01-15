@@ -3,15 +3,19 @@
 
     <item
             android:id="@+id/menu"
-            android:title="@string/footer_button_menu" android:icon="@drawable/ic_menu"/>
+            android:title="@string/action_footer_menu" android:icon="@drawable/ic_menu"/>
 
     <item
             android:id="@+id/profile"
-            android:title="@string/footer_button_profile" android:icon="@drawable/ic_profile"/>
+            android:title="@string/action_footer_profile" android:icon="@drawable/ic_profile"/>
+
+    <item
+            android:id="@+id/cart"
+            android:title="@string/action_footer_cart" android:icon="@drawable/ic_cart"/>
 
     <item
             android:id="@+id/more"
             android:icon="@drawable/ic_more"
-            android:title="@string/footer_button_more"/>
+            android:title="@string/action_footer_more"/>
 
 </menu>

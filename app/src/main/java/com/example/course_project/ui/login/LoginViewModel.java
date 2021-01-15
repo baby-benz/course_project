@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.course_project.data.LoginRepository;
 import com.example.course_project.data.Result;
+import com.example.course_project.data.model.Common;
 import com.example.course_project.data.model.LoggedInUser;
 import com.example.course_project.R;
 
@@ -33,6 +34,7 @@ public class LoginViewModel extends ViewModel {
 
         if (result instanceof Result.Success) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
+            Common.loggedInUser = data;
             loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));

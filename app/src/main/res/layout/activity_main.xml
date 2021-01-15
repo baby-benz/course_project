@@ -7,7 +7,7 @@
                 android:scrollbarThumbHorizontal="@null" android:orientation="vertical">
     <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp" android:layout_weight="1">
+            android:layout_height="0dp" android:layout_weight="1" android:id="@+id/main_app_bar">
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" app:srcCompat="@drawable/ic_itmo_logo"
@@ -30,5 +30,5 @@
             android:layout_height="0dp"
             android:background="@android:color/white"
             app:menu="@menu/bottom_navigation" android:id="@+id/bottom_navigation"
-            app:itemRippleColor="#FF0000" android:layout_weight="1"/>
+            app:itemRippleColor="#FF0000" android:layout_weight="1" app:labelVisibilityMode="selected"/>
 </LinearLayout>

@@ -1,17 +1,29 @@
 package com.example.course_project.ui.menu;
 
-import android.widget.ImageView;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
+import com.example.course_project.eventbus.CounterCartEvent;
 import com.example.course_project.R;
+import com.example.course_project.data.db.cart.CartDataSource;
+import com.example.course_project.data.db.cart.CartDatabase;
+import com.example.course_project.data.db.cart.CartItem;
+import com.example.course_project.data.db.cart.LocalCartDataSource;
+import com.example.course_project.data.model.Common;
 import com.example.course_project.data.model.Menu.MenuItem;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import lombok.RequiredArgsConstructor;
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -20,43 +32,78 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
-    private final List<MenuItem> mItems;
+    private final Context context;
+    private final List<MenuItem> items;
+    private final CompositeDisposable compositeDisposable;
+    private final CartDataSource cartDataSource;
+
+    public MenuAdapter(Context context, List<MenuItem> items) {
+        this.context = context;
+        this.items = items;
+        this.compositeDisposable = new CompositeDisposable();
+        this.cartDataSource = new LocalCartDataSource(CartDatabase.getInstance(context).cartDao());
+    }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context)
                 .inflate(R.layout.fragment_menu_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final MenuAdapter.ViewHolder holder, int position) {
-        MenuItem menuItem = mItems.get(position);
+        MenuItem menuItem = items.get(position);
 
         /*ImageView imageView = holder.imageView;
         imageView.setImageBitmap(menuItem.getImage());*/
         TextView nameTextView = holder.nameTextView;
         nameTextView.setText(menuItem.getName());
+
         TextView priceTextView = holder.priceTextView;
         priceTextView.setText(menuItem.getPrice());
+
         TextView descriptionTextView = holder.descriptionTextView;
         descriptionTextView.setText(menuItem.getDescription());
+
         ElegantNumberButton countNumberButton = holder.countNumberButton;
         countNumberButton.setNumber(String.valueOf(menuItem.getCount()));
+
+        holder.toCartButton.setOnClickListener(view -> {
+            CartItem cartItem = new CartItem();
+
+            cartItem.setUserId(Common.loggedInUser.getUserId());
+            cartItem.setProductId(menuItem.getId());
+            cartItem.setProductName(menuItem.getName());
+            cartItem.setCount(menuItem.getCount());
+
+            String priceWithCurrency = menuItem.getPrice();
+            cartItem.setProductPrice(Double.valueOf(priceWithCurrency.substring(0, priceWithCurrency.length() - 1)));
+
+            compositeDisposable.add(cartDataSource.insertOrReplaceAll(cartItem)
+                    .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(() -> {
+                        Toast.makeText(context, "Added to cart successfully", Toast.LENGTH_SHORT).show();
+                        EventBus.getDefault().postSticky(new CounterCartEvent(true));
+                    }, throwable -> {
+                        Toast.makeText(context, "[ОШИБКА ДОБАВЛЕНИЯ В КОРЗИНУ]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    }));
+        });
     }
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return items.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public final ImageView imageView;
         public final TextView nameTextView;
         public final TextView priceTextView;
         public final TextView descriptionTextView;
         public final ElegantNumberButton countNumberButton;
+        public final Button toCartButton;
 
         public ViewHolder(View view) {
             super(view);
@@ -66,6 +113,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
             priceTextView = view.findViewById(R.id.item_price);
             descriptionTextView = view.findViewById(R.id.item_description);
             countNumberButton = view.findViewById(R.id.item_count);
+            toCartButton = view.findViewById(R.id.to_cart);
         }
     }
 }

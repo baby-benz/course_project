@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.course_project.R;
-import com.example.course_project.ui.menu.MenuFragment;
 
 public class LoginFragment extends Fragment {
     private LoginViewModel loginViewModel;
@@ -31,7 +30,7 @@ public class LoginFragment extends Fragment {
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        final EditText usernameEditText = view.findViewById(R.id.username);
+        final EditText userIdEditText = view.findViewById(R.id.user_id);
         final EditText passwordEditText = view.findViewById(R.id.password);
         final Button loginButton = view.findViewById(R.id.login);
         final ProgressBar loadingProgressBar = view.findViewById(R.id.loading);
@@ -41,11 +40,15 @@ public class LoginFragment extends Fragment {
                 return;
             }
             loginButton.setEnabled(loginFormState.isDataValid());
-            if (loginFormState.getUsernameError() != null) {
-                usernameEditText.setError(getString(loginFormState.getUsernameError()));
+
+            Integer userIdError = loginFormState.getUserIdError();
+            Integer passwordError = loginFormState.getPasswordError();
+
+            if (userIdError != null) {
+                userIdEditText.setError(getString(userIdError));
             }
-            if (loginFormState.getPasswordError() != null) {
-                passwordEditText.setError(getString(loginFormState.getPasswordError()));
+            if (passwordError != null) {
+                passwordEditText.setError(getString(passwordError));
             }
         });
 
@@ -75,15 +78,15 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
+                loginViewModel.loginDataChanged(userIdEditText.getText().toString(),
                         passwordEditText.getText().toString());
             }
         };
-        usernameEditText.addTextChangedListener(afterTextChangedListener);
+        userIdEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                loginViewModel.login(usernameEditText.getText().toString(),
+                loginViewModel.login(userIdEditText.getText().toString(),
                         passwordEditText.getText().toString());
             }
             return false;
@@ -91,7 +94,7 @@ public class LoginFragment extends Fragment {
 
         loginButton.setOnClickListener(v -> {
             loadingProgressBar.setVisibility(View.VISIBLE);
-            loginViewModel.login(usernameEditText.getText().toString(),
+            loginViewModel.login(userIdEditText.getText().toString(),
                     passwordEditText.getText().toString());
         });
     }
@@ -102,8 +105,7 @@ public class LoginFragment extends Fragment {
         FragmentActivity fragmentActivity = getActivity();
         Toast.makeText(fragmentActivity, welcome, Toast.LENGTH_LONG).show();
         fragmentActivity.setResult(Activity.RESULT_OK);
-
-        fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.main_container_view, new MenuFragment()).commit();
+        fragmentActivity.onBackPressed();
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {

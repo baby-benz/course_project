@@ -1,5 +1,6 @@
 package com.example.course_project.ui.menu;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,11 +34,13 @@ public class MenuFragment extends Fragment {
         RecyclerView rvStarters = view.findViewById(R.id.rvStarters);
         RecyclerView rvSeconds = view.findViewById(R.id.rvSeconds);
 
-        rvNovelties.setAdapter(new MenuAdapter(menuItems));
-        rvPopular.setAdapter(new MenuAdapter(menuItems));
-        rvBreakfasts.setAdapter(new MenuAdapter(menuItems));
-        rvStarters.setAdapter(new MenuAdapter(menuItems));
-        rvSeconds.setAdapter(new MenuAdapter(menuItems));
+        Context context = getContext();
+
+        rvNovelties.setAdapter(new MenuAdapter(context, menuItems));
+        rvPopular.setAdapter(new MenuAdapter(context, menuItems));
+        rvBreakfasts.setAdapter(new MenuAdapter(context, menuItems));
+        rvStarters.setAdapter(new MenuAdapter(context, menuItems));
+        rvSeconds.setAdapter(new MenuAdapter(context, menuItems));
 
         HorizontalScrollView horizontalScrollView = view.findViewById(R.id.horizontal_menu);
         horizontalScrollView.setHorizontalScrollBarEnabled(false);
