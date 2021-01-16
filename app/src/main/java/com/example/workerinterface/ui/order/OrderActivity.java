@@ -126,7 +126,7 @@ public class OrderActivity extends AppCompatActivity {
                         String IP = "192.168.1.130:8080";
                         URL orderurl = new URL(new URL("http", IP, "/api/order/1/status?" + urlParameters).toString().replace("[", "").replace("]", ""));
                         con = (HttpURLConnection) orderurl.openConnection();
-                        con.setRequestMethod("POST");
+                        con.setRequestMethod("PATCH");
                         con.setRequestProperty("User-Agent", USER_AGENT);
 
                         // For POST only - START
@@ -138,7 +138,7 @@ public class OrderActivity extends AppCompatActivity {
                         // For POST only - END
 
                         int responseCode = con.getResponseCode();
-                        System.out.println("POST Response Code :: " + responseCode);
+                        System.out.println("PATCH Response Code :: " + responseCode);
 
                         if (responseCode == HttpURLConnection.HTTP_OK) { // success
                             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -152,7 +152,7 @@ public class OrderActivity extends AppCompatActivity {
                             // print result
                             System.out.println(response.toString());
                         } else {
-                            System.out.println("POST request not worked");
+                            System.out.println("PATCH request not worked");
                         }
 
 //                        String IP = "192.168.1.130:8080";
