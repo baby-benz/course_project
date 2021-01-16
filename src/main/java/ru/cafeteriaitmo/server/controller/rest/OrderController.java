@@ -49,7 +49,7 @@ public class OrderController {
 
     @PatchMapping("{id}")
     public Order changeStatusOrAvailable(@PathVariable Long id, Status status) throws NoEntityException {
-        log.info("get request to change status of {} order to {}", id, status.toString());
+        log.info("Patch request to change status of {} order to {}", id, status.toString());
         return orderService.changeStatus(id, status);
         }
 
@@ -68,7 +68,7 @@ public class OrderController {
     //TODO: убрать в сервис (пока проверяю)
     @GetMapping("/pages")
     public Integer getNumberOfPages() {
-        log.info("get request to check total orders pages");
+        log.info("Get request to check total orders pages");
         Integer totalPages = orderService.getNumberOfPages();
         log.info("total: {} pages", totalPages);
         return totalPages;
