@@ -29,7 +29,7 @@ public class OrderConverter {
 
     public OrderDto convertOrderToOrderDto(Order order) {
         ArrayList<Long> productIds = new ArrayList<>();
-        List<Product> products = (ArrayList<Product>) order.getProducts();
+        List<Product> products = (List<Product>) order.getProducts();
         for (Product product : products) {
             productIds.add(product.getId());
         }

@@ -10,10 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.cafeteriaitmo.server.controller.exception.NoEntityException;
+import ru.cafeteriaitmo.server.controller.exception.ResponseException;
 import ru.cafeteriaitmo.server.domain.entity.Order;
 import ru.cafeteriaitmo.server.domain.enums.Status;
 import ru.cafeteriaitmo.server.dto.OrderDto;
 import ru.cafeteriaitmo.server.service.OrderService;
+
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -45,15 +48,29 @@ public class OrderController {
     }
 
     @PatchMapping("{id}")
-    public Order changeStatus(@PathVariable Long id, Status status) throws NoEntityException {
-        log.info("get request to change status of {} prder to {}", id, status.toString());
-        return orderService.changeStatus(id, status);
+    public Order changeStatusOrAvailable(@PathVariable Long id, Map<String, Object> is) throws NoEntityException {
+        if (is.containsKey("status")) {
+            Status status = Status.valueOf(is.get("status").toString());
+            log.info("get request to change status of {} order to {}", id, status.toString());
+            return orderService.changeStatus(id, status);
+        }
+        if (is.containsKey("available")) {
+            Boolean available = (Boolean) is.get("available");
+            return null;
+        }
+        return new Order();
     }
 
     @PatchMapping("{id}/status")
     public void changeStatusString(@PathVariable Long id, @RequestParam String status) throws NoEntityException {
+        status = status.toUpperCase();
         log.info("get request to change status of {} order to \"{}\"", id, status);
         orderService.changeStatusString(id, status);
+    }
+
+    @PatchMapping("{id}/available")
+    public void changeAvailableString(@PathVariable Long id, @RequestParam String available){
+        log.info("get request to change status of {} order to \"{}\"", id, available);
     }
 
     //TODO: убрать в сервис (пока проверяю)
