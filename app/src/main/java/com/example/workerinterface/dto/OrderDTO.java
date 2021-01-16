@@ -1,14 +1,20 @@
 package com.example.workerinterface.dto;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 public class OrderDTO {
-    public OrderDTO(String orderedOn, String monitorCode, String status, ArrayList<Integer> productIds,
-                    String nameBuilding, Integer userId) {
+    public OrderDTO(String orderedOn, String monitorCode, String status, JSONArray productIds,
+                    String nameBuilding, Integer userId) throws JSONException {
         this.orderedOn = orderedOn;
         this.monitorCode = monitorCode;
         this.status = status;
-        this.productIds = productIds;
+        this.productIds = new ArrayList<>();
+        for (int i = 0; i < productIds.length(); i++) {
+            this.productIds.add((Integer)productIds.get(i));
+        }
         this.nameBuilding = nameBuilding;
         this.userId = userId;
     }

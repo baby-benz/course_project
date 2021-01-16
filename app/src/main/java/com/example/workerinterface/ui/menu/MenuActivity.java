@@ -54,7 +54,7 @@ public class MenuActivity extends AppCompatActivity {
 
         new Thread(() -> {
             try  {
-                String IP = "192.168.0.5:8080";
+                String IP = "192.168.1.130:8080";
                 int page = 0;
                 URL producturl;
                 while (true) {
