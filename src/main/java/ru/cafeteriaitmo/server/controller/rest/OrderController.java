@@ -48,29 +48,21 @@ public class OrderController {
     }
 
     @PatchMapping("{id}")
-    public Order changeStatusOrAvailable(@PathVariable Long id, Map<String, Object> is) throws NoEntityException {
-        if (is.containsKey("status")) {
-            Status status = Status.valueOf(is.get("status").toString());
-            log.info("get request to change status of {} order to {}", id, status.toString());
-            return orderService.changeStatus(id, status);
+    public Order changeStatusOrAvailable(@PathVariable Long id, Status status) throws NoEntityException {
+        log.info("get request to change status of {} order to {}", id, status.toString());
+        return orderService.changeStatus(id, status);
         }
-        if (is.containsKey("available")) {
-            Boolean available = (Boolean) is.get("available");
-            return null;
-        }
-        return new Order();
-    }
 
     @PatchMapping("{id}/status")
     public void changeStatusString(@PathVariable Long id, @RequestParam String status) throws NoEntityException {
-        status = status.toUpperCase();
+        if (status.contains(",")) {
+            if (status.contains(("\"")))
+                status = status.substring(1, status.indexOf(","));
+            else
+                status = status.substring(0, status.indexOf(","));
+        }
         log.info("get request to change status of {} order to \"{}\"", id, status);
-        orderService.changeStatusString(id, status);
-    }
-
-    @PatchMapping("{id}/available")
-    public void changeAvailableString(@PathVariable Long id, @RequestParam String available){
-        log.info("get request to change status of {} order to \"{}\"", id, available);
+        orderService.changeStatusString(id, status.toUpperCase());
     }
 
     //TODO: убрать в сервис (пока проверяю)
