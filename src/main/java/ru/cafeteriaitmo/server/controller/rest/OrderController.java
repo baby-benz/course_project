@@ -61,7 +61,7 @@ public class OrderController {
             else
                 status = status.substring(0, status.indexOf(","));
         }
-        log.info("get request to change status of {} order to \"{}\"", id, status);
+        log.info("Patch request to change status of {} order to \"{}\"", id, status);
         orderService.changeStatusString(id, status.toUpperCase());
     }
 
