@@ -29,6 +29,7 @@ public class Product {
 
     /** поле available - присутствие в наличии */
     @Column(columnDefinition = "boolean default true")
+    @Setter
     private Boolean available;
 
     /** поле available - присутствие в наличии */

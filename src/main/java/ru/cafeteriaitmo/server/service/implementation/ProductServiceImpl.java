@@ -69,6 +69,13 @@ public class ProductServiceImpl implements ProductService {
         return (totalFields/pagesSize) + partial;
     }
 
+    public Product changeAvailable(Long id, Boolean available) throws NoEntityException {
+        Product product = getProduct(id);
+        product.setAvailable(available);
+        addProduct(product);
+        return product;
+    }
+
     public Product addProduct(Product product) {
         return productRepository.save(product);
     }

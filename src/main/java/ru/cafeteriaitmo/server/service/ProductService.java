@@ -15,6 +15,7 @@ public interface ProductService {
     ProductDto getProductDto(Long id) throws NoEntityException;
     List<Product> getAll();
     Integer getNumberOfPages();
+    Product changeAvailable(Long id, Boolean available) throws NoEntityException;
 
     Product addProduct(Product product);
     Product addProductFromDto(ProductDto productDto) throws NoEntityException;

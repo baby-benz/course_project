@@ -17,9 +17,6 @@ import ru.cafeteriaitmo.server.service.ProductService;
 public class ProductController {
     private final ProductService productService;
 
-    @Value("${cafeteria.api.pages.size}")
-    private Integer pagesSize;
-
     @GetMapping
     public ProductDto getProduct(@RequestParam Long id) throws NoEntityException {
         log.info("Get request with product {} id", id);
@@ -46,9 +43,15 @@ public class ProductController {
         return "Product added into server";
     }
 
+    @PatchMapping("{id}/available")
+    public void changeAvailable(@PathVariable Long id, @RequestParam Boolean available) throws NoEntityException {
+        log.info("Patch request to change availabling of {} product to \"{}\"", id, available);
+        productService.changeAvailable(id, available);
+    }
+
     @GetMapping("/pages")
     public Integer getNumberOfPages() {
-        log.info("get request to check total orders pages");
+        log.info("Get request to check total orders pages");
         Integer totalPages = productService.getNumberOfPages();
         log.info("total: {} pages", totalPages);
         return totalPages;
