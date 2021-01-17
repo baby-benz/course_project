@@ -19,4 +19,11 @@
     <string name="description_food_item">description_food_item</string>
     <string name="image_of_food_item">Image of food item</string>
     <string name="info_about_order">Info about order</string>
+    <string name="todo">TODO</string>
+    <string name="title_activity_description">DescriptionActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
 </resources>
