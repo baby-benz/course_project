@@ -15,20 +15,12 @@ public class Menu {
     /**
      * An array of items.
      */
-    public static final List<MenuItem> ITEMS = new ArrayList<>();
+    public static List<MenuItem> ITEMS = new ArrayList<>();
 
-    private static final int COUNT = 10;
+    private final int COUNT = 10;
 
-    static {
-        for (int i = 1; i <= COUNT; i++) {
-            ITEMS.add(createMenuItem(i, "Блюдо " + i, i, "Item " + i, i));
-        }
-    }
-
-    private static MenuItem createMenuItem(long id, String name, int price, String description, int count) {
-        Random random = new Random();
-        int randomNumber = random.nextInt(price);
-        return new MenuItem(id, name, randomNumber + "₽", description, count);
+    private MenuItem createMenuItem(long id, String name, int price, String description, int count) {
+        return new MenuItem(id, null, name, price + "₽", description, count);
     }
 
     /**
@@ -38,7 +30,7 @@ public class Menu {
     @RequiredArgsConstructor
     public static class MenuItem {
         private final long id;
-        private Bitmap image;
+        private final Bitmap image;
         private final String name;
         private final String price;
         private final String description;
