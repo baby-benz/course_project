@@ -114,27 +114,27 @@ public class MenuFragment extends Fragment {
         for (int i = 0; i < productDtos.size(); i++) {
             byte[] imageBytes = productDtos.get(i).getImage();
             Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-            menuItems.add(new Menu.MenuItem(i, bitmap, this.productDtos.get(i).getName(), productDtos.get(i).getPrice().intValue() + "₽", productDtos.get(i).getDescription(), 1));
+            menuItems.add(new Menu.MenuItem(i, bitmap, this.productDtos.get(i).getName(), (int) productDtos.get(i).getPrice() + "₽", productDtos.get(i).getDescription(), 1));
         }
         for (int i = 0; i < breakfastDtos.size(); i++) {
             byte[] imageBytes = breakfastDtos.get(i).getImage();
             Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-            breakfastItems.add(new Menu.MenuItem(i, bitmap, this.breakfastDtos.get(i).getName(), breakfastDtos.get(i).getPrice().intValue() + "₽", breakfastDtos.get(i).getDescription(), 1));
+            breakfastItems.add(new Menu.MenuItem(i, bitmap, this.breakfastDtos.get(i).getName(), (int) breakfastDtos.get(i).getPrice() + "₽", breakfastDtos.get(i).getDescription(), 1));
         }
         for (int i = 0; i < starterDtos.size(); i++) {
             byte[] imageBytes = starterDtos.get(i).getImage();
             Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-            starterItems.add(new Menu.MenuItem(i, bitmap, this.starterDtos.get(i).getName(), starterDtos.get(i).getPrice().intValue() + "₽", starterDtos.get(i).getDescription(), 1));
+            starterItems.add(new Menu.MenuItem(i, bitmap, this.starterDtos.get(i).getName(), (int) starterDtos.get(i).getPrice() + "₽", starterDtos.get(i).getDescription(), 1));
         }
         for (int i = 0; i < secondDtos.size(); i++) {
             byte[] imageBytes = secondDtos.get(i).getImage();
             Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-            secondItems.add(new Menu.MenuItem(i, bitmap, this.secondDtos.get(i).getName(), secondDtos.get(i).getPrice().intValue() + "₽", secondDtos.get(i).getDescription(), 1));
+            secondItems.add(new Menu.MenuItem(i, bitmap, this.secondDtos.get(i).getName(), (int) secondDtos.get(i).getPrice() + "₽", secondDtos.get(i).getDescription(), 1));
         }
         for (int i = 0; i < drinkingDtos.size(); i++) {
             byte[] imageBytes = drinkingDtos.get(i).getImage();
             Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-            drinkingItems.add(new Menu.MenuItem(i, bitmap, this.drinkingDtos.get(i).getName(), drinkingDtos.get(i).getPrice().intValue() + "₽", drinkingDtos.get(i).getDescription(), 1));
+            drinkingItems.add(new Menu.MenuItem(i, bitmap, this.drinkingDtos.get(i).getName(), (int) drinkingDtos.get(i).getPrice() + "₽", drinkingDtos.get(i).getDescription(), 1));
         }
 
         RecyclerView rvNovelties = view.findViewById(R.id.rvNovelties);
