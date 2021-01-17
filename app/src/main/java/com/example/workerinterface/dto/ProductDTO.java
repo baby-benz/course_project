@@ -3,7 +3,8 @@ package com.example.workerinterface.dto;
 import java.util.Base64;
 
 public class ProductDTO {
-        public ProductDTO(String name, double price, Boolean available, String description, String type, String image, String nameBuilding) {
+        public ProductDTO(int id, String name, double price, Boolean available, String description, String type, String image, String nameBuilding) {
+                this.id = id;
                 this.name = name;
                 this.price = (float)price;
                 this.available = available;
@@ -13,6 +14,7 @@ public class ProductDTO {
                 this.nameBuilding = nameBuilding;
         }
 
+        private int id;
         private String name;
         private float price;
         private Boolean available;
@@ -75,5 +77,13 @@ public class ProductDTO {
 
         public void setNameBuilding(String nameBuilding) {
                 this.nameBuilding = nameBuilding;
+        }
+
+        public int getId() {
+                return id;
+        }
+
+        public void setId(int id) {
+                this.id = id;
         }
 }

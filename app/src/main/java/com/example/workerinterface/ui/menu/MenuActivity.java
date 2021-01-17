@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +28,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MenuActivity extends AppCompatActivity {
 
     //Создаем список вьюх которые будут создаваться
-    private List<View> allItems, allDescription;
+    private List<View> allItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +80,7 @@ public class MenuActivity extends AppCompatActivity {
                                 System.out.println(jsonarray.length());
                                 if (jsonarray.length() == 0) break;
                                 for (int i = 0; i < jsonarray.length(); i++) {
-                                    productDTOS.add(new ProductDTO(jsonarray.getJSONObject(i).get("name").toString(), (double) jsonarray.getJSONObject(i).get("price"),
+                                    productDTOS.add(new ProductDTO(jsonarray.getJSONObject(i).getInt("id"),jsonarray.getJSONObject(i).get("name").toString(), (double) jsonarray.getJSONObject(i).get("price"),
                                             (Boolean) jsonarray.getJSONObject(i).get("available"), jsonarray.getJSONObject(i).get("description").toString(),
                                             jsonarray.getJSONObject(i).get("type").toString(), jsonarray.getJSONObject(i).get("image").toString(),
                                             jsonarray.getJSONObject(i).get("nameBuilding").toString()));
@@ -123,6 +125,9 @@ public class MenuActivity extends AppCompatActivity {
             iv1.setMinimumHeight(bitmap.getHeight());
             iv1.setMaxHeight(bitmap.getHeight());
             iv1.setMaxWidth(bitmap.getWidth());
+            if (!productDTOS.get(i).getAvailable()) {
+                tv1.setTextColor(Color.RED);
+            }
 
             iv1.setOnClickListener(v1 -> {
                 System.out.println("Listen" + iv1.getId());
@@ -134,22 +139,88 @@ public class MenuActivity extends AppCompatActivity {
 
                 layoutDescription.addView(descriptionView);
 
-                TextView description = findViewById(R.id.text_description_descValue);
-                description.setText(productDTOS.get(iv1.getId()).getDescription());
-
                 TextView name = findViewById(R.id.text_description_nameValue);
                 name.setText(productDTOS.get(iv1.getId()).getName());
 
+                TextView description = findViewById(R.id.text_description_descValue);
+                description.setText(productDTOS.get(iv1.getId()).getDescription());
+
                 TextView available = findViewById(R.id.text_description_availableValue);
                 available.setText(productDTOS.get(iv1.getId()).getAvailable().toString());
+
+                available.setOnClickListener(v2 -> new Thread(() -> {
+
+                    String USER_AGENT = "Mozilla/5.0";
+
+                    HttpURLConnection con = null;
+                    try {
+                        Boolean status = productDTOS.get(iv1.getId()).getAvailable();
+                        status = !status;
+
+                        String urlParameters="available="+status.toString();
+                        System.out.println(urlParameters);
+                        int Id = productDTOS.get(iv1.getId()).getId();
+                        String IP = "192.168.1.130:8080";
+                        URL orderurl = new URL(new URL("http", IP, "/api/product/" + Id + "/available?" + urlParameters).toString().replace("[", "").replace("]", ""));
+                        System.out.println(orderurl);
+                        con = (HttpURLConnection) orderurl.openConnection();
+                        con.setRequestMethod("PATCH");
+                        con.setRequestProperty("User-Agent", USER_AGENT);
+
+                        // For POST only - START
+                        con.setDoOutput(true);
+                        OutputStream os = con.getOutputStream();
+                        os.write(urlParameters.getBytes());
+                        System.out.println("---" + os.toString() + "---");
+                        os.flush();
+                        os.close();
+                        // For POST only - END
+
+                        int responseCode = con.getResponseCode();
+                        System.out.println("PATCH Response Code :: " + responseCode);
+
+                        if (responseCode == HttpURLConnection.HTTP_OK) { // success
+                            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                            String inputLine;
+                            StringBuffer response = new StringBuffer();
+
+                            while ((inputLine = in.readLine()) != null) {
+                                response.append(inputLine);
+                            }
+                            in.close();
+
+                            if (!status) {
+                                tv1.setTextColor(Color.RED);
+                            } else {
+                                tv1.setTextColor(Color.GRAY);
+                            }
+                            productDTOS.get(iv1.getId()).setAvailable(status);
+                            available.setText(productDTOS.get(iv1.getId()).getAvailable().toString());
+
+                            // print result
+                            System.out.println(response.toString());
+                            System.out.println(response);
+                        } else {
+                            System.out.println("PATCH request not worked");
+                        }
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+
+                        assert con != null;
+                        con.disconnect();
+                    }
+
+                }).start());
 
                 ImageView image = findViewById(R.id.description_image);
                 image.setImageBitmap(bitmap);
 
                 Button returnButton = findViewById(R.id.back_button);
                 returnButton.setOnClickListener(v2 -> {
-                    System.out.println(this);
-                    System.out.println(this.getIntent());
+                    layoutDescription.removeAllViews();
                     vf.showPrevious();
                 });
 

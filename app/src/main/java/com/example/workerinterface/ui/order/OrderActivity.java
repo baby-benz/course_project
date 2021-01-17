@@ -105,7 +105,9 @@ public class OrderActivity extends AppCompatActivity {
                 @SuppressLint("InflateParams") final View view = getLayoutInflater().inflate(R.layout.custom_order_info_gallery, null);
                 Button doneField = view.findViewById(R.id.order_button_done);
                 Button cancelledField = view.findViewById(R.id.order_button_cancel);
+
                 orderDTOS.get(i).getAll();
+
                 doneField.setId(orderDTOS.get(i).getUserId());
                 TextView text = view.findViewById(R.id.editText);
                 text.setText(orderDTOS.get(i).getMonitorCode());
@@ -117,7 +119,7 @@ public class OrderActivity extends AppCompatActivity {
                 doneField.setOnClickListener(v1 -> {
 
                     String urlParameters = "status=Ready";
-                    postRequest(urlParameters);
+                    patchRequest(urlParameters);
 
                     try {
                         ((LinearLayout) view.getParent()).removeView(view);
@@ -130,7 +132,7 @@ public class OrderActivity extends AppCompatActivity {
                 cancelledField.setOnClickListener(v1 -> {
 
                     String urlParameters = "status=Cancelled";
-                    postRequest(urlParameters);
+                    patchRequest(urlParameters);
 
                     try {
                         ((LinearLayout) view.getParent()).removeView(view);
@@ -146,7 +148,7 @@ public class OrderActivity extends AppCompatActivity {
         });
     }
 
-    private static void postRequest(String urlParameters) {
+    private static void patchRequest(String urlParameters) {
         new Thread(() -> {
 
             String USER_AGENT = "Mozilla/5.0";
