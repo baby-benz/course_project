@@ -30,6 +30,13 @@ public class OrderDTO {
         return orderedOn;
     }
 
+    public void getAll() {
+        System.out.println("-----------------------");
+        System.out.println(this.getOrderedOn() + ";" + this.getProductIds() + ";" + this.getMonitorCode() + ";"
+                + this.getNameBuilding() + ";" + this.getStatus() + ";" + this.getUserId());
+        System.out.println("-----------------------");
+    }
+
     public void setOrderedOn(String orderedOn) {
         this.orderedOn = orderedOn;
     }
