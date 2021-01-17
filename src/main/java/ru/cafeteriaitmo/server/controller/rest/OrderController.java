@@ -48,13 +48,13 @@ public class OrderController {
     }
 
     @PatchMapping("{id}")
-    public Order changeStatusOrAvailable(@PathVariable Long id, Status status) throws NoEntityException {
+    public Order changeStatus(@PathVariable Long id, Status status) throws NoEntityException {
         log.info("Patch request to change status of {} order to {}", id, status.toString());
         return orderService.changeStatus(id, status);
         }
 
     @PatchMapping("{id}/status")
-    public void changeStatusString(@PathVariable Long id, @RequestParam String status) throws NoEntityException {
+    public void changeStatusByUrlStringParam(@PathVariable Long id, @RequestParam String status) throws NoEntityException {
         if (status.contains(",")) {
             if (status.contains(("\"")))
                 status = status.substring(1, status.indexOf(","));
