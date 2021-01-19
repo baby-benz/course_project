@@ -29,10 +29,7 @@ import ru.cafeteriaitmo.server.service.helper.OrderConverter;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -74,7 +71,12 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
+    public Optional<Order> getOrderByMonitorCode(String monitorCode) {
+        return orderRepository.findByMonitorCode(monitorCode);
+    }
+
     public Order addOrderDto(OrderDto orderDto) throws NoEntityException {
+        Optional<Order> orderWithMonitorCode = getOrderByMonitorCode(orderDto.getMonitorCode());
         Order order = new Order();
         order.setDateTimeOrderedOn(orderDto.getOrderedOn());
         order.setMonitorCode(orderDto.getMonitorCode());
@@ -87,6 +89,15 @@ public class OrderServiceImpl implements OrderService {
         order.setBuilding(buildingService.getBuildingByName(orderDto.getBuildingName()));
         order.setProducts(getProductListById(orderDto.getProductIds()));
         order.setUser(getUserFromRepository(orderDto.getUserId()));
+        orderWithMonitorCode.ifPresent(value -> {
+            log.warn("Attemption!!! Rewriting order with new!!! " +
+                            "Check previous {} code with [{}] products on {} for {} ({})",
+                    orderWithMonitorCode.get().getMonitorCode(),
+                    orderWithMonitorCode.get().getProducts(),
+                    orderWithMonitorCode.get().getDateTimeOrderedOn(),
+                    orderWithMonitorCode.get().getUser().getSurname(), orderWithMonitorCode.get().getUser().getId());
+            order.setId(value.getId());
+        });
         return orderRepository.save(order);
     }
 

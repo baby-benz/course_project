@@ -25,17 +25,14 @@ import java.util.Map;
 public class OrderController {
     private final OrderService orderService;
 
-    @Value("${cafeteria.api.pages.size}")
-    private Integer pagesSize;
-
     @GetMapping("/{page}")
-    public Page<OrderDto> getOrderPage(@PathVariable long page) {
+    public Page<OrderDto> getOrderPage(@PathVariable Long page) {
         log.info("Get request for {} product page", page);
         return orderService.getOrderPage(page);
     }
 
     @GetMapping
-    public OrderDto getOrderDto(@RequestParam long orderId) throws NoEntityException {
+    public OrderDto getOrderDto(@RequestParam Long orderId) throws NoEntityException {
         log.info("Get request for {} order id", orderId);
         return orderService.getOrderDto(orderId);
     }

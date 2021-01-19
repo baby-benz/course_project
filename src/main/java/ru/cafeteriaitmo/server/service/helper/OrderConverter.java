@@ -35,6 +35,7 @@ public class OrderConverter {
         }
 
         OrderDto dto = new OrderDto();
+        dto.setId(order.getId());
         dto.setStatus(order.getStatus().toString());
         dto.setOrderedOn(order.getDateTimeOrderedOn());
         dto.setBuildingName(order.getBuilding().getName());
