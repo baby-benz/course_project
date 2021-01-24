@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.course_project.R;
+import com.example.course_project.ui.menu.MenuFragment;
 
 public class LoginFragment extends Fragment {
     private LoginViewModel loginViewModel;
@@ -101,11 +102,10 @@ public class LoginFragment extends Fragment {
 
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
-        // TODO : initiate successful logged in experience
         FragmentActivity fragmentActivity = getActivity();
         Toast.makeText(fragmentActivity, welcome, Toast.LENGTH_LONG).show();
         fragmentActivity.setResult(Activity.RESULT_OK);
-        fragmentActivity.onBackPressed();
+        getParentFragmentManager().beginTransaction().replace(R.id.main_container_view, new MenuFragment()).commit();
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {
