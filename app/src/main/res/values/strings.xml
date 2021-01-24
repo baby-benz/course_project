@@ -32,6 +32,7 @@
     <string name="order_time_title">Выберите время</string>
     <string name="action_change_order_time">Изменить время</string>
     <string name="action_place_order">Оформить заказ</string>
+    <string name="action_finish_order">Готово!</string>
     <!-- Menu image description -->
     <string name="default_image_description">Default product display image</string>
     <string name="itmo_logo_image_description">ITMO University logo</string>

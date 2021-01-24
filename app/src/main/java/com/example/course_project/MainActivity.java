@@ -4,8 +4,9 @@ import android.Manifest;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentManager;
-import carbon.view.View;
+import android.view.View;
 import com.example.course_project.ui.cart.CartFragment;
 import com.example.course_project.ui.login.LoginFragment;
 import com.example.course_project.ui.menu.MenuFragment;
@@ -50,21 +51,35 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager.beginTransaction().add(R.id.main_container_view, new MenuFragment()).commit();
 
+        MenuFragment menuFragment = new MenuFragment();
+        LoginFragment loginFragment = new LoginFragment();
+        CartFragment cartFragment = new CartFragment();
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 item -> {
+                    if(item.isChecked()) {
+                        if(item.getItemId() == R.id.menu) {
+                            NestedScrollView scrollView = findViewById(R.id.svMenu);
+                            if(scrollView != null) {
+                                scrollView.smoothScrollTo(0, 0);
+                            }
+                        }
+                        return false;
+                    }
+                    item.setChecked(true);
                     switch (item.getItemId()) {
                         case R.id.menu:
-                            fragmentManager.beginTransaction().replace(R.id.main_container_view, new MenuFragment()).commit();
+                            fragmentManager.beginTransaction().replace(R.id.main_container_view, menuFragment).commit();
                             findViewById(R.id.main_app_bar).setVisibility(View.VISIBLE);
                             break;
                         case R.id.profile:
-                            fragmentManager.beginTransaction().replace(R.id.main_container_view, new LoginFragment()).commit();
+                            fragmentManager.beginTransaction().replace(R.id.main_container_view, loginFragment).commit();
                             findViewById(R.id.main_app_bar).setVisibility(View.VISIBLE);
                             break;
                         case R.id.cart:
-                            fragmentManager.beginTransaction().replace(R.id.main_container_view, new CartFragment()).commit();
+                            fragmentManager.beginTransaction().replace(R.id.main_container_view, cartFragment).commit();
                             findViewById(R.id.main_app_bar).setVisibility(View.GONE);
                             break;
                         case R.id.more:

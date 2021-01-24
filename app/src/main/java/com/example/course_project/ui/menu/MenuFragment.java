@@ -3,17 +3,19 @@ package com.example.course_project.ui.menu;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
+import androidx.annotation.NonNull;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.course_project.R;
 import com.example.course_project.data.model.Menu;
 import com.example.course_project.dto.ProductDto;
+import com.google.android.material.appbar.AppBarLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,13 +26,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class MenuFragment extends Fragment {
 
@@ -48,7 +49,7 @@ public class MenuFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         productDtos = new ArrayList<>();
@@ -156,42 +157,104 @@ public class MenuFragment extends Fragment {
 
         final Button noveltiesButton = view.findViewById(R.id.novelties);
         final Button popularButton = view.findViewById(R.id.popular);
-        final Button breakfastButton = view.findViewById(R.id.breakfast);
-        final Button starterButton = view.findViewById(R.id.starter);
-        final Button secondButton = view.findViewById(R.id.second);
+        final Button breakfastsButton = view.findViewById(R.id.breakfasts);
+        final Button startersButton = view.findViewById(R.id.starters);
+        final Button secondsButton = view.findViewById(R.id.seconds);
+
+        noveltiesButton.setSelected(true);
+        popularButton.setSelected(false);
+        breakfastsButton.setSelected(false);
+        startersButton.setSelected(false);
+        secondsButton.setSelected(false);
+
+        NestedScrollView scrollView = view.findViewById(R.id.svMenu);
+
+        scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            Rect offsetViewBounds = new Rect();
+
+            int noveltiesLastChildTop = getLastChildRelativeTop(v, rvNovelties, offsetViewBounds);
+            int popularLastChildTop = getLastChildRelativeTop(v, rvPopular, offsetViewBounds);
+            int breakfastsLastChildTop = getLastChildRelativeTop(v, rvBreakfasts, offsetViewBounds);
+            int startersLastChildTop = getLastChildRelativeTop(v, rvStarters, offsetViewBounds);
+
+            if(scrollY < noveltiesLastChildTop) {
+                horizontalScrollView.smoothScrollTo(0, 0);
+                noveltiesButton.setSelected(true);
+                popularButton.setSelected(false);
+                breakfastsButton.setSelected(false);
+                startersButton.setSelected(false);
+                secondsButton.setSelected(false);
+            } else if(popularLastChildTop > scrollY) {
+                horizontalScrollView.smoothScrollTo(0, 0);
+                popularButton.setSelected(true);
+                noveltiesButton.setSelected(false);
+                breakfastsButton.setSelected(false);
+                startersButton.setSelected(false);
+                secondsButton.setSelected(false);
+            } else if(breakfastsLastChildTop > scrollY) {
+                horizontalScrollView.smoothScrollTo(breakfastsButton.getLeft() + breakfastsButton.getWidth() / 2 - getDisplayWidth() / 2, 0);
+                breakfastsButton.setSelected(true);
+                noveltiesButton.setSelected(false);
+                popularButton.setSelected(false);
+                startersButton.setSelected(false);
+                secondsButton.setSelected(false);
+            } else if(startersLastChildTop > scrollY) {
+                horizontalScrollView.smoothScrollTo(horizontalScrollView.getWidth(), 0);
+                startersButton.setSelected(true);
+                noveltiesButton.setSelected(false);
+                breakfastsButton.setSelected(false);
+                popularButton.setSelected(false);
+                secondsButton.setSelected(false);
+            } else {
+                horizontalScrollView.smoothScrollTo(horizontalScrollView.getWidth(), 0);
+                secondsButton.setSelected(true);
+                noveltiesButton.setSelected(false);
+                breakfastsButton.setSelected(false);
+                popularButton.setSelected(false);
+                startersButton.setSelected(false);
+            }
+        });
 
         noveltiesButton.setOnClickListener(v -> {
-            int titleTop = getRelativeTop(view.findViewById(R.id.novelties_title));
-            view.findViewById(R.id.fragment_menu).scrollTo(0, titleTop);
+            int titleTop = view.findViewById(R.id.novelties_title).getTop();
+            scrollView.smoothScrollTo(0, titleTop);
         });
 
         popularButton.setOnClickListener(v -> {
-            int titleTop = getRelativeTop(view.findViewById(R.id.popular_title));
-            view.findViewById(R.id.fragment_menu).scrollTo(0, titleTop);
+            ((AppBarLayout) view.findViewById(R.id.appBar)).setExpanded(false, false);
+            int titleTop = view.findViewById(R.id.popular_title).getTop();
+            scrollView.smoothScrollTo(0, titleTop);
         });
 
-        breakfastButton.setOnClickListener(v -> {
-            int titleTop = getRelativeTop(view.findViewById(R.id.breakfasts_title));
-            view.findViewById(R.id.fragment_menu).scrollTo(0, titleTop);
+        breakfastsButton.setOnClickListener(v -> {
+            ((AppBarLayout) view.findViewById(R.id.appBar)).setExpanded(false, false);
+            int titleTop = view.findViewById(R.id.breakfasts_title).getTop();
+            scrollView.smoothScrollTo(0, titleTop);
         });
 
-        starterButton.setOnClickListener(v -> {
-            int titleTop = getRelativeTop(view.findViewById(R.id.starters_title));
-            view.findViewById(R.id.fragment_menu).scrollTo(0, titleTop);
+        startersButton.setOnClickListener(v -> {
+            ((AppBarLayout) view.findViewById(R.id.appBar)).setExpanded(false, false);
+            int titleTop = view.findViewById(R.id.starters_title).getTop();
+            scrollView.smoothScrollTo(0, titleTop);
         });
 
-        secondButton.setOnClickListener(v -> {
-            int titleTop = getRelativeTop(view.findViewById(R.id.seconds_title));
-            view.findViewById(R.id.fragment_menu).scrollTo(0, titleTop);
+        secondsButton.setOnClickListener(v -> {
+            ((AppBarLayout) view.findViewById(R.id.appBar)).setExpanded(false, false);
+            int titleTop = view.findViewById(R.id.seconds_title).getTop();
+            scrollView.smoothScrollTo(0, titleTop);
         });
     }
 
-    private int getRelativeTop(View view) {
-        if (view.getParent() == view.getRootView()) {
-            return view.getTop();
-        } else {
-            return view.getTop() + getRelativeTop((View) view.getParent());
-        }
+    private int getDisplayWidth() {
+        final WindowMetrics metrics = Objects.requireNonNull(getActivity()).getWindowManager().getCurrentWindowMetrics();
+        return metrics.getBounds().width();
+    }
+
+    private int getLastChildRelativeTop(NestedScrollView scrollView, RecyclerView recyclerView, Rect offsetViewBounds) {
+        View noveltiesLastChild = recyclerView.getChildAt(recyclerView.getChildCount() - 1);
+        noveltiesLastChild.getDrawingRect(offsetViewBounds);
+        scrollView.offsetRectIntoDescendantCoords(noveltiesLastChild, offsetViewBounds);
+        return Math.abs(offsetViewBounds.top);
     }
 
     private ArrayList<ProductDto> getProductFromServer(String urlApiPart) throws MalformedURLException {

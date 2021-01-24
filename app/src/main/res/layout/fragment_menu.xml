@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                     xmlns:tools="http://schemas.android.com/tools"
+                                                     xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                     android:layout_width="match_parent"
+                                                     android:layout_height="match_parent"
+                                                     android:background="@android:color/background_light"
+                                                     android:id="@+id/fragment_menu">
+    <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
-            tools:context=".ui.menu.MenuFragment"
-            android:overScrollMode="never" android:id="@+id/fragment_menu"
-            android:scrollbars="none">
-
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:orientation="vertical">
+            android:layout_height="wrap_content">
         <carbon.widget.RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                tools:context=".HeaderFragment" android:background="#E4E4E4" android:elevation="10dp">
+                tools:context=".HeaderFragment" android:background="#E4E4E4" android:elevation="10dp"
+                app:layout_scrollFlags="scroll">
             <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
@@ -23,13 +25,15 @@
                 <TextView
                         android:text="@string/header_text_description"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" android:id="@+id/header_description" android:textSize="14sp"
+                        android:layout_height="wrap_content" android:id="@+id/header_description"
+                        android:textSize="14sp"
                         android:fontFamily="sans-serif" android:textColor="#000000"
                 />
                 <TextView
                         android:text="@string/default_address"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" android:id="@+id/header_address" android:textSize="12sp"/>
+                        android:layout_height="wrap_content" android:id="@+id/header_address"
+                        android:textSize="12sp"/>
             </LinearLayout>
             <carbon.widget.Button
                     android:text="@string/fragment_change_canteen"
@@ -44,110 +48,135 @@
                     app:carbon_elevationShadowColor="@color/carbon_purple_800"
                     android:layout_margin="@dimen/carbon_padding"/>
         </carbon.widget.RelativeLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 style="@android:style/Widget.Material.HorizontalScrollView" android:id="@+id/horizontal_menu"
-                android:overScrollMode="never">
+                android:overScrollMode="never"
+                app:layout_scrollFlags="scroll|snap">
             <LinearLayout android:layout_width="wrap_content" android:layout_height="match_parent"
                           android:orientation="horizontal" android:background="#00FFFFFF"
-            >
+                          android:weightSum="37">
                 <Button
                         android:text="@string/action_novelties"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent" android:id="@+id/novelties"
-                        style="@style/Widget.AppCompat.Button.Borderless"/>
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:textColor="@color/menu_sv_text_color"
+                        android:background="@drawable/button_bottomline" android:layout_weight="7"/>
                 <Button
                         android:text="@string/action_popular"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent" android:id="@+id/popular"
-                        style="@style/Widget.AppCompat.Button.Borderless"/>
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:textColor="@color/menu_sv_text_color"
+                        android:background="@drawable/button_bottomline" android:layout_weight="10"/>
                 <Button
                         android:text="@string/action_breakfast"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" android:id="@+id/breakfast"
-                        style="@style/Widget.AppCompat.Button.Borderless"/>
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent" android:id="@+id/breakfasts"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:textColor="@color/menu_sv_text_color"
+                        android:background="@drawable/button_bottomline" android:layout_weight="8"/>
                 <Button
                         android:text="@string/action_starter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" android:id="@+id/starter"
-                        style="@style/Widget.AppCompat.Button.Borderless"/>
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent" android:id="@+id/starters"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:textColor="@color/menu_sv_text_color"
+                        android:background="@drawable/button_bottomline" android:layout_weight="6"/>
                 <Button
                         android:text="@string/action_second"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" android:id="@+id/second"
-                        style="@style/Widget.AppCompat.Button.Borderless"/>
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent" android:id="@+id/seconds"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:textColor="@color/menu_sv_text_color"
+                        android:background="@drawable/button_bottomline" android:layout_weight="6"/>
             </LinearLayout>
         </HorizontalScrollView>
         <TextView
                 android:layout_width="match_parent"
-                android:layout_height="2dp" android:id="@+id/horizontal_menu_underline"
+                android:layout_height="wrap_content" android:id="@+id/horizontal_menu_underline"
                 android:background="@drawable/textline"/>
-        <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_marginTop="15dp">
-            <TextView
-                    android:text="@string/action_novelties"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/novelties_title" android:textSize="24sp"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:fontFamily="sans-serif-black" android:textColor="#000000"/>
-            <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layoutManager="LinearLayoutManager"
-                    tools:listitem="@layout/fragment_menu_item" android:nestedScrollingEnabled="false"
-                    android:id="@+id/rvNovelties"/>
-            <TextView
-                    android:text="@string/action_popular"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/popular_title"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:fontFamily="sans-serif-black" android:textSize="24sp" android:textColor="#000000"/>
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvPopular"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layoutManager="LinearLayoutManager"
-                    tools:listitem="@layout/fragment_menu_item" android:nestedScrollingEnabled="false"/>
-            <TextView
-                    android:text="@string/action_breakfast"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/breakfasts_title"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:fontFamily="sans-serif-black" android:textSize="24sp" android:textColor="#000000"/>
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvBreakfasts"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layoutManager="LinearLayoutManager"
-                    tools:listitem="@layout/fragment_menu_item" android:nestedScrollingEnabled="false"/>
-            <TextView
-                    android:text="@string/action_starter"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/starters_title"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:fontFamily="sans-serif-black" android:textSize="24sp" android:textColor="#000000"/>
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvStarters"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layoutManager="LinearLayoutManager"
-                    tools:listitem="@layout/fragment_menu_item" android:nestedScrollingEnabled="false"/>
-            <TextView
-                    android:text="@string/action_second"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/seconds_title"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:fontFamily="sans-serif-black" android:textSize="24sp" android:textColor="#000000"/>
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvSeconds"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layoutManager="LinearLayoutManager"
-                    tools:listitem="@layout/fragment_menu_item" android:nestedScrollingEnabled="false"/>
-        </LinearLayout>
 
+        <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".ui.menu.MenuFragment"
+                android:overScrollMode="never"
+                android:scrollbars="none" android:id="@+id/svMenu"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+        >
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                          android:orientation="vertical">
+                <TextView
+                        android:text="@string/action_novelties"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/novelties_title"
+                        android:textSize="24sp"
+                        android:fontFamily="sans-serif-black" android:textColor="#000000"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"/>
+                <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layoutManager="LinearLayoutManager"
+                        tools:listitem="@layout/fragment_menu_item" android:nestedScrollingEnabled="false"
+                        android:id="@+id/rvNovelties"/>
+                <TextView
+                        android:text="@string/action_popular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/popular_title"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:fontFamily="sans-serif-black" android:textSize="24sp" android:textColor="#000000"/>
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvPopular"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layoutManager="LinearLayoutManager"
+                        tools:listitem="@layout/fragment_menu_item" android:nestedScrollingEnabled="false"/>
+                <TextView
+                        android:text="@string/action_breakfast"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/breakfasts_title"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:fontFamily="sans-serif-black" android:textSize="24sp" android:textColor="#000000"/>
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvBreakfasts"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layoutManager="LinearLayoutManager"
+                        tools:listitem="@layout/fragment_menu_item" android:nestedScrollingEnabled="false"/>
+                <TextView
+                        android:text="@string/action_starter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/starters_title"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:fontFamily="sans-serif-black" android:textSize="24sp" android:textColor="#000000"/>
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvStarters"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layoutManager="LinearLayoutManager"
+                        tools:listitem="@layout/fragment_menu_item" android:nestedScrollingEnabled="false"/>
+                <TextView
+                        android:text="@string/action_second"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/seconds_title"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:fontFamily="sans-serif-black" android:textSize="24sp" android:textColor="#000000"/>
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvSeconds"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layoutManager="LinearLayoutManager"
+                        tools:listitem="@layout/fragment_menu_item" android:nestedScrollingEnabled="false"/>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
-</ScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

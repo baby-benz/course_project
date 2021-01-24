@@ -15,10 +15,6 @@
                 android:contentDescription="@string/itmo_logo_image_description"
                 android:layout_margin="@dimen/carbon_padding"
                 app:tint="#7b1fa2"/>
-        <Button android:layout_width="30dp" android:layout_height="30dp"
-                android:background="@drawable/ic_cart" android:layout_gravity="end"
-                android:layout_margin="@dimen/carbon_padding" android:backgroundTint="#7b1fa2"/>
-
     </FrameLayout>
     <androidx.fragment.app.FragmentContainerView
             android:layout_width="match_parent"
@@ -27,8 +23,8 @@
     </androidx.fragment.app.FragmentContainerView>
     <com.google.android.material.bottomnavigation.BottomNavigationView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:background="@android:color/white"
             app:menu="@menu/bottom_navigation" android:id="@+id/bottom_navigation"
-            app:itemRippleColor="#FF0000" android:layout_weight="1" app:labelVisibilityMode="selected"/>
+            app:itemRippleColor="#FF0000" app:labelVisibilityMode="selected"/>
 </LinearLayout>
