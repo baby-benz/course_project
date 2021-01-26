@@ -9,7 +9,7 @@ import java.util.List;
 public interface CartDataSource {
     Flowable<List<CartItem>> getAllCart(String userId);
 
-    Single<Long> sumPriceInCart(long userId);
+    Single<Double> sumPriceInCart(long userId);
 
     Single<CartItem> getCartItem(long userId, long productId);
 
