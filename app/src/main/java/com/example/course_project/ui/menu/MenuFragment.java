@@ -13,10 +13,11 @@ import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.course_project.R;
-import com.example.course_project.data.model.Menu;
+import com.example.course_project.data.model.MenuItem;
 import com.example.course_project.dto.ProductDto;
 import com.google.android.material.appbar.AppBarLayout;
 
+import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +35,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class MenuFragment extends Fragment {
-
     volatile ArrayList<ProductDto> productDtos;
     volatile ArrayList<ProductDto> breakfastDtos;
     volatile ArrayList<ProductDto> starterDtos;
@@ -44,7 +44,6 @@ public class MenuFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.fragment_menu, null);
     }
 
@@ -52,13 +51,13 @@ public class MenuFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        productDtos = new ArrayList<>();
+        /*productDtos = new ArrayList<>();
         breakfastDtos = new ArrayList<>();
         starterDtos = new ArrayList<>();
         secondDtos = new ArrayList<>();
         drinkingDtos = new ArrayList<>();
 
-        new Thread(() -> {
+        *//*new Thread(() -> {
             try  {
                 productDtos = getProductFromServer("/api/product/");
                 } catch (Exception e) {
@@ -104,39 +103,39 @@ public class MenuFragment extends Fragment {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
-//        List<Menu.MenuItem> menuItems = Menu.ITEMS;
-        List<Menu.MenuItem> menuItems = new ArrayList<>();;
-        List<Menu.MenuItem> breakfastItems = new ArrayList<>();
-        List<Menu.MenuItem> starterItems = new ArrayList<>();;
-        List<Menu.MenuItem> secondItems = new ArrayList<>();;
-        List<Menu.MenuItem> drinkingItems = new ArrayList<>();;
+        }*//*
+
+        List<MenuItem> menuItems = new ArrayList<>();
+        List<MenuItem> breakfastItems = new ArrayList<>();
+        List<MenuItem> starterItems = new ArrayList<>();
+        List<MenuItem> secondItems = new ArrayList<>();
+        List<MenuItem> drinkingItems = new ArrayList<>();
 
         for (int i = 0; i < productDtos.size(); i++) {
             byte[] imageBytes = productDtos.get(i).getImage();
             Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-            menuItems.add(new Menu.MenuItem(i, bitmap, this.productDtos.get(i).getName(), (int) productDtos.get(i).getPrice() + "₽", productDtos.get(i).getDescription(), 1));
+            menuItems.add(new MenuItem(i, bitmap, this.productDtos.get(i).getName(), (int) productDtos.get(i).getPrice() + "₽", productDtos.get(i).getDescription(), 1));
         }
         for (int i = 0; i < breakfastDtos.size(); i++) {
             byte[] imageBytes = breakfastDtos.get(i).getImage();
             Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-            breakfastItems.add(new Menu.MenuItem(i, bitmap, this.breakfastDtos.get(i).getName(), (int) breakfastDtos.get(i).getPrice() + "₽", breakfastDtos.get(i).getDescription(), 1));
+            breakfastItems.add(new MenuItem(i, bitmap, this.breakfastDtos.get(i).getName(), (int) breakfastDtos.get(i).getPrice() + "₽", breakfastDtos.get(i).getDescription(), 1));
         }
         for (int i = 0; i < starterDtos.size(); i++) {
             byte[] imageBytes = starterDtos.get(i).getImage();
             Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-            starterItems.add(new Menu.MenuItem(i, bitmap, this.starterDtos.get(i).getName(), (int) starterDtos.get(i).getPrice() + "₽", starterDtos.get(i).getDescription(), 1));
+            starterItems.add(new MenuItem(i, bitmap, this.starterDtos.get(i).getName(), (int) starterDtos.get(i).getPrice() + "₽", starterDtos.get(i).getDescription(), 1));
         }
         for (int i = 0; i < secondDtos.size(); i++) {
             byte[] imageBytes = secondDtos.get(i).getImage();
             Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-            secondItems.add(new Menu.MenuItem(i, bitmap, this.secondDtos.get(i).getName(), (int) secondDtos.get(i).getPrice() + "₽", secondDtos.get(i).getDescription(), 1));
+            secondItems.add(new MenuItem(i, bitmap, this.secondDtos.get(i).getName(), (int) secondDtos.get(i).getPrice() + "₽", secondDtos.get(i).getDescription(), 1));
         }
         for (int i = 0; i < drinkingDtos.size(); i++) {
             byte[] imageBytes = drinkingDtos.get(i).getImage();
             Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-            drinkingItems.add(new Menu.MenuItem(i, bitmap, this.drinkingDtos.get(i).getName(), (int) drinkingDtos.get(i).getPrice() + "₽", drinkingDtos.get(i).getDescription(), 1));
-        }
+            drinkingItems.add(new MenuItem(i, bitmap, this.drinkingDtos.get(i).getName(), (int) drinkingDtos.get(i).getPrice() + "₽", drinkingDtos.get(i).getDescription(), 1));
+        }*/
 
         RecyclerView rvNovelties = view.findViewById(R.id.rvNovelties);
         RecyclerView rvPopular = view.findViewById(R.id.rvPopular);
@@ -146,11 +145,19 @@ public class MenuFragment extends Fragment {
 
         Context context = getContext();
 
+        List<MenuItem> menuItems = MenuItem.ITEMS;
+
         rvNovelties.setAdapter(new MenuAdapter(context, menuItems));
+        rvPopular.setAdapter(new MenuAdapter(context, menuItems));
+        rvBreakfasts.setAdapter(new MenuAdapter(context, menuItems));
+        rvStarters.setAdapter(new MenuAdapter(context, menuItems));
+        rvSeconds.setAdapter(new MenuAdapter(context, menuItems));
+
+        /*rvNovelties.setAdapter(new MenuAdapter(context, menuItems));
         rvPopular.setAdapter(new MenuAdapter(context, drinkingItems));
         rvBreakfasts.setAdapter(new MenuAdapter(context, breakfastItems));
         rvStarters.setAdapter(new MenuAdapter(context, starterItems));
-        rvSeconds.setAdapter(new MenuAdapter(context, secondItems));
+        rvSeconds.setAdapter(new MenuAdapter(context, secondItems));*/
 
         HorizontalScrollView horizontalScrollView = view.findViewById(R.id.horizontal_menu);
         horizontalScrollView.setHorizontalScrollBarEnabled(false);
@@ -216,7 +223,8 @@ public class MenuFragment extends Fragment {
         });
 
         noveltiesButton.setOnClickListener(v -> {
-            int titleTop = view.findViewById(R.id.novelties_title).getTop();
+            ((AppBarLayout) view.findViewById(R.id.appBar)).setExpanded(false, true);
+            int titleTop = view.findViewById(R.id.novelties_title).getPaddingTop();
             scrollView.smoothScrollTo(0, titleTop);
         });
 

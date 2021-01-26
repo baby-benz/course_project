@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
+import com.example.course_project.data.model.MenuItem;
 import com.example.course_project.eventbus.CounterCartEvent;
 import com.example.course_project.R;
 import com.example.course_project.data.db.cart.CartDataSource;
@@ -18,7 +19,6 @@ import com.example.course_project.data.db.cart.CartDatabase;
 import com.example.course_project.data.db.cart.CartItem;
 import com.example.course_project.data.db.cart.LocalCartDataSource;
 import com.example.course_project.data.model.Common;
-import com.example.course_project.data.model.Menu.MenuItem;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -56,25 +56,15 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     public void onBindViewHolder(final MenuAdapter.ViewHolder holder, int position) {
         MenuItem menuItem = items.get(position);
 
-        ImageView imageView = holder.imageView;
-        imageView.setImageBitmap(menuItem.getImage());
-
-        TextView nameTextView = holder.nameTextView;
-        nameTextView.setText(menuItem.getName());
-
-        TextView priceTextView = holder.priceTextView;
-        priceTextView.setText(menuItem.getPrice());
-
-        TextView descriptionTextView = holder.descriptionTextView;
-        descriptionTextView.setText(menuItem.getDescription());
-
-        ElegantNumberButton countNumberButton = holder.countNumberButton;
-        countNumberButton.setNumber(String.valueOf(menuItem.getCount()));
+        /*holder.imageView.setImageBitmap(menuItem.getImage());*/
+        holder.nameTextView.setText(menuItem.getName());
+        holder.priceTextView.setText(menuItem.getPrice());
+        holder.descriptionTextView.setText(menuItem.getDescription());
 
         holder.toCartButton.setOnClickListener(view -> {
             CartItem cartItem = new CartItem();
 
-            cartItem.setUserId(Common.loggedInUser.getUserId());
+            cartItem.setUserId(Common.LOGGED_IN_USER.getUserId());
             cartItem.setProductId(menuItem.getId());
             cartItem.setProductName(menuItem.getName());
             cartItem.setCount(menuItem.getCount());
@@ -103,7 +93,6 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         public final TextView nameTextView;
         public final TextView priceTextView;
         public final TextView descriptionTextView;
-        public final ElegantNumberButton countNumberButton;
         public final Button toCartButton;
 
         public ViewHolder(View view) {
@@ -113,7 +102,6 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
             nameTextView = view.findViewById(R.id.item_name);
             priceTextView = view.findViewById(R.id.item_price);
             descriptionTextView = view.findViewById(R.id.item_description);
-            countNumberButton = view.findViewById(R.id.item_count);
             toCartButton = view.findViewById(R.id.to_cart);
         }
     }

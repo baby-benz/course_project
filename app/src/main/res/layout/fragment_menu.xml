@@ -14,7 +14,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                tools:context=".HeaderFragment" android:background="#E4E4E4" android:elevation="10dp"
+                tools:context=".HeaderFragment" android:background="@color/carbon_grey_200" android:elevation="10dp"
                 app:layout_scrollFlags="scroll">
             <LinearLayout
                     android:orientation="vertical"
@@ -52,66 +52,65 @@
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:layout_height="match_parent" app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    >
         <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@android:style/Widget.Material.HorizontalScrollView" android:id="@+id/horizontal_menu"
                 android:overScrollMode="never"
-                app:layout_scrollFlags="scroll|snap">
+                app:layout_scrollFlags="scroll|snap" android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin">
             <LinearLayout android:layout_width="wrap_content" android:layout_height="match_parent"
-                          android:orientation="horizontal" android:background="#00FFFFFF"
-                          android:weightSum="37">
+                          android:orientation="horizontal" android:background="#00FFFFFF">
                 <Button
                         android:text="@string/action_novelties"
-                        android:layout_width="0dp"
+                        android:layout_width="70dp"
                         android:layout_height="match_parent" android:id="@+id/novelties"
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:textColor="@color/menu_sv_text_color"
-                        android:background="@drawable/button_bottomline" android:layout_weight="7"/>
+                        android:background="@drawable/button_bottomline" android:textAllCaps="false"/>
                 <Button
                         android:text="@string/action_popular"
-                        android:layout_width="0dp"
+                        android:layout_width="100dp"
                         android:layout_height="match_parent" android:id="@+id/popular"
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:textColor="@color/menu_sv_text_color"
-                        android:background="@drawable/button_bottomline" android:layout_weight="10"/>
+                        android:background="@drawable/button_bottomline" android:layout_marginStart="10dp"
+                        android:textAllCaps="false"/>
                 <Button
                         android:text="@string/action_breakfast"
-                        android:layout_width="0dp"
+                        android:layout_width="80dp"
                         android:layout_height="match_parent" android:id="@+id/breakfasts"
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:textColor="@color/menu_sv_text_color"
-                        android:background="@drawable/button_bottomline" android:layout_weight="8"/>
+                        android:background="@drawable/button_bottomline" android:layout_marginStart="10dp"
+                        android:textAllCaps="false"/>
                 <Button
                         android:text="@string/action_starter"
-                        android:layout_width="0dp"
+                        android:layout_width="60dp"
                         android:layout_height="match_parent" android:id="@+id/starters"
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:textColor="@color/menu_sv_text_color"
-                        android:background="@drawable/button_bottomline" android:layout_weight="6"/>
+                        android:background="@drawable/button_bottomline" android:layout_marginStart="10dp"
+                        android:textAllCaps="false"/>
                 <Button
                         android:text="@string/action_second"
-                        android:layout_width="0dp"
+                        android:layout_width="60dp"
                         android:layout_height="match_parent" android:id="@+id/seconds"
                         style="@style/Widget.AppCompat.Button.Borderless"
                         android:textColor="@color/menu_sv_text_color"
-                        android:background="@drawable/button_bottomline" android:layout_weight="6"/>
+                        android:background="@drawable/button_bottomline" android:layout_marginStart="10dp"
+                        android:textAllCaps="false"/>
             </LinearLayout>
         </HorizontalScrollView>
-        <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/horizontal_menu_underline"
-                android:background="@drawable/textline"/>
-
         <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:context=".ui.menu.MenuFragment"
                 android:overScrollMode="never"
                 android:scrollbars="none" android:id="@+id/svMenu"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-        >
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                           android:orientation="vertical">
                 <TextView
@@ -120,6 +119,7 @@
                         android:layout_height="wrap_content" android:id="@+id/novelties_title"
                         android:textSize="24sp"
                         android:fontFamily="sans-serif-black" android:textColor="#000000"
+                        android:layout_marginTop="@dimen/activity_horizontal_margin"
                         android:layout_marginStart="@dimen/activity_horizontal_margin"/>
                 <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
