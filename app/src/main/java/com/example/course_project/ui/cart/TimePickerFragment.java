@@ -29,7 +29,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         //TODO add time to order model
-        CartFragment.ORDER_TIME = LocalTime.of(hourOfDay, minute);
+        //CartFragment.ORDER_TIME = LocalTime.of(hourOfDay, minute);
         System.out.println(LocalTime.of(hourOfDay, minute));
     }
 }
