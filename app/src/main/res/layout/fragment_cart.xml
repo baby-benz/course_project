@@ -38,8 +38,13 @@
                     android:layout_height="wrap_content" android:id="@+id/cart_total"/>
             <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/cart_total_sum" android:text="0"
+                    android:layout_height="wrap_content" android:id="@+id/cart_total_sum"
+                    android:text="@string/cart_empty_total"
                     android:layout_marginStart="3dp"/>
+            <TextView
+                    android:text="@string/default_currency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/cart_currency"/>
         </LinearLayout>
         <carbon.widget.Button
                 android:text="@string/action_place_order"

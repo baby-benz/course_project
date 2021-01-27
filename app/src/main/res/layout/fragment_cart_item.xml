@@ -37,9 +37,15 @@
                         android:layout_height="20dp"
                         android:textAppearance="?attr/textAppearanceListItem"
                         android:layout_alignParentStart="true" android:layout_centerInParent="false"
-                        app:carbon_cornerRadius="@dimen/carbon_cornerRadiusButton"
-                        android:paddingStart="@dimen/carbon_padding"
-                        android:paddingEnd="@dimen/carbon_padding" android:layout_alignParentBottom="true"/>
+                        android:layout_alignParentBottom="true"
+                />
+                <carbon.widget.TextView
+                        android:text="@string/default_currency"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp" android:id="@+id/item_currency"
+                        android:textAppearance="?attr/textAppearanceListItem"
+                        android:layout_toEndOf="@id/item_price" android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="@dimen/carbon_padding"/>
                 <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton
                         android:id="@+id/item_count"
                         android:layout_height="20dp"
