@@ -113,7 +113,7 @@ public class CartFragment extends Fragment {
     }
 
     private void calculateTotalPrice() {
-        cartDataSource.sumPriceInCart(Long.parseLong(Common.LOGGED_IN_USER.getUserId()))
+        cartDataSource.sumPriceInCart(Common.LOGGED_IN_USER.getUserId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Double>() {

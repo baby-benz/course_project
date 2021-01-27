@@ -13,10 +13,10 @@ public interface CartDAO {
     Flowable<List<CartItem>> getAllCart(String userId);
 
     @Query("SELECT SUM(product_price*count) FROM Cart WHERE user_id=:userId")
-    Single<Double> sumPriceInCart(long userId);
+    Single<Double> sumPriceInCart(String userId);
 
     @Query("SELECT * FROM Cart WHERE user_id=:userId AND product_id=:productId")
-    Single<CartItem> getCartItem(long userId, long productId);
+    Single<CartItem> getCartItem(String userId, long productId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable insertOrReplaceAll(CartItem... cartItem);
@@ -28,5 +28,5 @@ public interface CartDAO {
     Single<Integer> removeCartItem(CartItem cartItem);
 
     @Query("DELETE FROM Cart WHERE user_id=:userId")
-    Single<Integer> clearCart(long userId);
+    Single<Integer> clearCart(String userId);
 }
