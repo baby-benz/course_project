@@ -30,6 +30,8 @@
     <string name="cart_total">Итого:</string>
     <string name="cart_title">Заказ из столовой</string>
     <string name="cart_empty">Корзина пуста</string>
+    <string name="cart_empty_total">0</string>
+    <string name="default_currency">₽</string>
     <!-- Strings related to order -->
     <string name="action_change_place">Изменить место</string>
     <string name="order_time_title">Выберите время</string>
