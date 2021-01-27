@@ -39,13 +39,13 @@ public class OrderController {
 
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
-    public Order createOrder(OrderDto order) throws NoEntityException {
+    public Order createOrder(@RequestBody OrderDto order) throws NoEntityException {
         log.info("Post request for adding order");
         return orderService.addOrderDto(order);
     }
 
     @PatchMapping("{id}")
-    public Order changeStatus(@PathVariable Long id, Status status) throws NoEntityException {
+    public Order changeStatus(@PathVariable Long id, @RequestBody Status status) throws NoEntityException {
         log.info("Patch request to change status of {} order to {}", id, status.toString());
         return orderService.changeStatus(id, status);
         }
@@ -62,7 +62,6 @@ public class OrderController {
         orderService.changeStatusString(id, status.toUpperCase());
     }
 
-    //TODO: убрать в сервис (пока проверяю)
     @GetMapping("/pages")
     public Integer getNumberOfPages() {
         log.info("Get request to check total orders pages");
