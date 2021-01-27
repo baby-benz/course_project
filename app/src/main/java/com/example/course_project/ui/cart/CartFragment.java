@@ -62,6 +62,7 @@ public class CartFragment extends Fragment {
                 view.findViewById(R.id.cart_empty).setVisibility(View.GONE);
                 rvCart.setVisibility(View.VISIBLE);
                 rvCart.setAdapter(new CartAdapter(getContext(), cartItems));
+                calculateTotalPrice();
             }
         });
         initViews();
@@ -88,7 +89,7 @@ public class CartFragment extends Fragment {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onUpdateItemInCartEvent(UpdateItemInCart event) {
         if (event.getCartItem() != null) {
-            recyclerViewState = ((RecyclerView) getActivity().findViewById(R.id.cart_fragment)).getLayoutManager().onSaveInstanceState();
+            recyclerViewState = rvCart.getLayoutManager().onSaveInstanceState();
             cartDataSource.updateCart(event.getCartItem())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -101,7 +102,7 @@ public class CartFragment extends Fragment {
                         @Override
                         public void onSuccess(@NonNull Integer integer) {
                             calculateTotalPrice();
-                            ((RecyclerView) getActivity().findViewById(R.id.rvCart)).getLayoutManager().onRestoreInstanceState(recyclerViewState);
+                            rvCart.getLayoutManager().onRestoreInstanceState(recyclerViewState);
                         }
 
                         @Override
@@ -124,8 +125,7 @@ public class CartFragment extends Fragment {
 
                     @Override
                     public void onSuccess(@NonNull Double price) {
-                        ((TextView) getActivity().findViewById(R.id.cart_total_sum)).setText(price + "₽");
-
+                        ((TextView) getActivity().findViewById(R.id.cart_total_sum)).setText(String.valueOf(price));
                     }
 
                     @Override

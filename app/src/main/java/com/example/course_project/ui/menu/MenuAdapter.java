@@ -67,10 +67,10 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
             cartItem.setUserId(Common.LOGGED_IN_USER.getUserId());
             cartItem.setProductId(menuItem.getId());
             cartItem.setProductName(menuItem.getName());
-            cartItem.setCount(menuItem.getCount());
+            cartItem.setCount(Integer.parseInt(holder.numberButton.getNumber()));
 
             String priceWithCurrency = menuItem.getPrice();
-            cartItem.setProductPrice(Double.valueOf(priceWithCurrency.substring(0, priceWithCurrency.length() - 1)));
+            cartItem.setProductPrice(Double.parseDouble(priceWithCurrency.substring(0, priceWithCurrency.length() - 1)));
 
             compositeDisposable.add(cartDataSource.insertOrReplaceAll(cartItem)
                     .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -94,6 +94,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         public final TextView priceTextView;
         public final TextView descriptionTextView;
         public final Button toCartButton;
+        public final ElegantNumberButton numberButton;
 
         public ViewHolder(View view) {
             super(view);
@@ -103,6 +104,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
             priceTextView = view.findViewById(R.id.item_price);
             descriptionTextView = view.findViewById(R.id.item_description);
             toCartButton = view.findViewById(R.id.to_cart);
+            numberButton = view.findViewById(R.id.item_count);
         }
     }
 }

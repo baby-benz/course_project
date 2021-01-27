@@ -36,8 +36,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
         /*holder.imageView.setImageBitmap(cartItem.getImage());*/
         holder.nameTextView.setText(cartItem.getProductName());
-        holder.priceTextView.setText(String.valueOf(cartItem.getProductPrice()));
-        holder.countNumberButton.setNumber(String.valueOf(cartItem.getCount()));
+
+        int productCount = cartItem.getCount();
+        holder.priceTextView.setText(String.valueOf(cartItem.getProductPrice() * productCount));
+        holder.countNumberButton.setNumber(String.valueOf(productCount));
 
         holder.countNumberButton.setOnValueChangeListener((view, oldValue, newValue) -> {
             cartItem.setCount(newValue);
