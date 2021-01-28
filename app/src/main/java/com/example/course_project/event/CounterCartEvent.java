@@ -1,4 +1,4 @@
-package com.example.course_project.eventbus;
+package com.example.course_project.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

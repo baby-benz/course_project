@@ -1,4 +1,4 @@
-package com.example.course_project.eventbus;
+package com.example.course_project.event;
 
 import com.example.course_project.data.db.cart.CartItem;
 import lombok.AllArgsConstructor;
