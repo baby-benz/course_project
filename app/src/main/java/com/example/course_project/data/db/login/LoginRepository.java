@@ -1,5 +1,6 @@
-package com.example.course_project.data;
+package com.example.course_project.data.db.login;
 
+import com.example.course_project.data.model.Common;
 import com.example.course_project.data.model.LoggedInUser;
 
 /**
@@ -37,17 +38,11 @@ public class LoginRepository {
         dataSource.logout();
     }
 
-    private void setLoggedInUser(LoggedInUser user) {
-        this.user = user;
-        // If user credentials will be cached in local storage, it is recommended it be encrypted
-        // @see https://developer.android.com/training/articles/keystore
-    }
-
     public Result login(String userId, String password) {
         // handle login
         Result result = dataSource.login(userId, password);
         if (result instanceof Result.Success) {
-            setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
+            user = ((Result.Success<LoggedInUser>) result).getData();
         }
         return result;
     }

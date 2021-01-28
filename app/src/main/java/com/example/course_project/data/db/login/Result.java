@@ -1,4 +1,6 @@
-package com.example.course_project.data;
+package com.example.course_project.data.db.login;
+
+import androidx.annotation.NonNull;
 
 /**
  * A generic class that holds a result success w/ data or an error exception.
@@ -33,6 +35,7 @@ public class Result {
         }
     }
 
+    @NonNull
     @Override
     public String toString() {
         if (this instanceof Result.Success) {

@@ -1,5 +1,6 @@
-package com.example.course_project.data;
+package com.example.course_project.data.db.login;
 
+import com.example.course_project.data.model.Common;
 import com.example.course_project.data.model.LoggedInUser;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ public class LoginDataSource {
                     new LoggedInUser(
                             java.util.UUID.randomUUID().toString(),
                             "Jane Doe");
+            Common.LOGGED_IN_USER = fakeUser;
             return new Result.Success<>(fakeUser);
         } catch (Exception e) {
             return new Result.Error(new IOException("Error logging in", e));
@@ -25,5 +27,6 @@ public class LoginDataSource {
 
     public void logout() {
         // TODO: revoke authentication
+        Common.LOGGED_IN_USER = null;
     }
 }
