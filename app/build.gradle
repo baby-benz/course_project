@@ -40,6 +40,8 @@ dependencies {
     def number_button_version='1.0.2'
     def desugaring_version='1.1.1'
     def ps_location_version='17.1.0'
+    def timepicker_version='1.0.1'
+    def android_networking_version='1.0.2'
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.google.android.material:material:$material_version"
@@ -67,6 +69,10 @@ dependencies {
     implementation "com.github.andremion:counterfab:$counterfab_version"
     implementation "com.cepheuen.elegant-number-button:lib:$number_button_version"
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation "com.akexorcist:snap-time-picker:$timepicker_version"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
 
     // Lombok dependencies
     compileOnly "org.projectlombok:lombok:$lombok_version"
@@ -77,5 +83,6 @@ dependencies {
     implementation "androidx.room:room-rxjava2:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugaring_version"
+    // Networking dependencies
+    implementation "com.amitshekhar.android:android-networking:$android_networking_version"
 }

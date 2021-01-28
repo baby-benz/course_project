@@ -6,7 +6,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentManager;
-import android.view.View;
+import com.androidnetworking.AndroidNetworking;
+import com.example.course_project.data.db.cart.CartDataSource;
+import com.example.course_project.data.db.cart.CartDatabase;
+import com.example.course_project.data.db.cart.LocalCartDataSource;
+import com.example.course_project.data.model.Common;
+import com.example.course_project.event.SuccessfulLogin;
 import com.example.course_project.ui.cart.CartFragment;
 import com.example.course_project.ui.login.LoginFragment;
 import com.example.course_project.ui.menu.MenuFragment;
@@ -45,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AndroidNetworking.initialize(getApplicationContext());
         setContentView(R.layout.activity_main);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
