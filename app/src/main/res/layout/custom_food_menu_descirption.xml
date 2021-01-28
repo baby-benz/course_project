@@ -78,13 +78,14 @@
         android:layout_height="50dp"
         android:layout_alignStart="@+id/text_description_available"
         android:layout_alignBottom="@+id/text_description_available"
-        android:layout_marginBottom="-150dp"
-        android:text="Back"/>
+        android:layout_marginStart="1020dp"
+        android:layout_marginBottom="245dp"
+        android:text="Back" />
 
     <ImageView
         android:id="@+id/description_image"
-        android:layout_width="500dp"
-        android:layout_height="500dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_alignStart="@+id/text_description_availableValue"
         android:layout_alignParentTop="true"
         android:layout_marginStart="400dp"

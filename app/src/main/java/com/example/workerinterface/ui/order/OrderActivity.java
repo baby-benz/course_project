@@ -4,12 +4,20 @@ import android.annotation.SuppressLint;
 
 import com.example.workerinterface.R;
 import com.example.workerinterface.dto.OrderDTO;
+import com.example.workerinterface.dto.ProductDTO;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,6 +36,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class OrderActivity extends AppCompatActivity {
 
@@ -40,7 +49,7 @@ public class OrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
 
-        Button addButton = findViewById(R.id.order_button);
+        ViewFlipper vf = findViewById( R.id.order_viewFlipper );
         //инициализировали наш массив с edittext.aьи
         allEds = new ArrayList<>();
         ArrayList<OrderDTO> orderDTOS = new ArrayList<>();
@@ -48,7 +57,7 @@ public class OrderActivity extends AppCompatActivity {
         //находим наш linear который у нас под кнопкой add edittext в activity_main.xml
         final LinearLayout linear = findViewById(R.id.linear);
 
-        new Thread(() -> {
+        Thread getData = new Thread(() -> {
             URL orderurl;
             int page = 0;
             String IP = "192.168.1.130:8080";
@@ -94,58 +103,108 @@ public class OrderActivity extends AppCompatActivity {
             for (int i = 0; i < orderDTOS.size(); i++) {
                 System.out.println(orderDTOS.get(i).getOrderedOn() + " " + orderDTOS.get(i).getMonitorCode() + " " + orderDTOS.get(i).getProductIds());
             }
-        }).start();
-
-
-
-        addButton.setOnClickListener(v -> {
-
-            //берем наш кастомный лейаут находим через него все наши кнопки и едит тексты, задаем нужные данные
-            for (int i = 0; i < orderDTOS.size(); i++) {
-                @SuppressLint("InflateParams") final View view = getLayoutInflater().inflate(R.layout.custom_order_info_gallery, null);
-                Button doneField = view.findViewById(R.id.order_button_done);
-                Button cancelledField = view.findViewById(R.id.order_button_cancel);
-
-                orderDTOS.get(i).getAll();
-
-                doneField.setId(orderDTOS.get(i).getUserId());
-                TextView text = view.findViewById(R.id.editText);
-                text.setText(orderDTOS.get(i).getMonitorCode());
-                //добавляем все что создаем в массив
-                allEds.add(view);
-                //добавляем елементы в linearlayout
-                linear.addView(view);
-
-                doneField.setOnClickListener(v1 -> {
-
-                    String urlParameters = "status=Ready";
-                    patchRequest(urlParameters);
-
-                    try {
-                        ((LinearLayout) view.getParent()).removeView(view);
-                        allEds.remove(view);
-                    } catch (IndexOutOfBoundsException ex) {
-                        ex.printStackTrace();
-                    }
-                });
-
-                cancelledField.setOnClickListener(v1 -> {
-
-                    String urlParameters = "status=Cancelled";
-                    patchRequest(urlParameters);
-
-                    try {
-                        ((LinearLayout) view.getParent()).removeView(view);
-                        allEds.remove(view);
-                    } catch (IndexOutOfBoundsException ex) {
-                        ex.printStackTrace();
-                    }
-
-                });
-
-            }
-
         });
+        getData.start();
+        try {
+            getData.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //берем наш кастомный лейаут находим через него все наши кнопки и едит тексты, задаем нужные данные
+        for (int i = 0; i < orderDTOS.size(); i++) {
+            @SuppressLint("InflateParams") final View view = getLayoutInflater().inflate(R.layout.custom_order_info_gallery, null);
+            TextView orderName = view.findViewById(R.id.orderName);
+            Button doneButton = view.findViewById(R.id.order_button_done);
+            Button cancelButton = view.findViewById(R.id.order_button_cancel);
+
+            orderDTOS.get(i).getAll();
+
+            doneButton.setId(i);
+            orderName.setText(orderDTOS.get(i).getMonitorCode());
+            //добавляем все что создаем в массив
+            allEds.add(view);
+            //добавляем елементы в linearlayout
+            linear.addView(view);
+
+            orderName.setOnClickListener(v1 -> {
+                vf.showNext();
+
+                GridLayout layoutDescription = findViewById(R.id.order_description);
+
+                for (int is = 0; is < orderDTOS.get(doneButton.getId()).getProductIds().size(); is++) {
+
+                    @SuppressLint("InflateParams") View descriptionView = getLayoutInflater().inflate(R.layout.custom_order_description, null);
+                    int id = orderDTOS.get(doneButton.getId()).getProductIds().get(is);
+                    layoutDescription.addView(descriptionView);
+
+                    ProductDTO productDTO = null;
+                    try {
+                        productDTO = getRequest(id);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    assert productDTO != null;
+
+                    TextView name = findViewById(R.id.text_description_order_nameValue);
+                    name.setId(productDTO.getId());
+                    name.setText(productDTO.getName());
+
+                    ImageView image = findViewById(R.id.description_order_image);
+                    byte[] imageBytes = productDTO.getImage();
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                    image.setId(productDTO.getId());
+                    image.setImageBitmap(bitmap);
+                    image.setMinimumWidth(bitmap.getWidth());
+                    image.setMinimumHeight(bitmap.getHeight());
+                    image.setMaxHeight(bitmap.getHeight());
+                    image.setMaxWidth(bitmap.getWidth());
+
+                    Button returnButton = findViewById(R.id.order_back_button);
+                    returnButton.setId(is);
+                    if (is != 0) {
+                        ((ViewGroup) returnButton.getParent()).removeView(returnButton);
+                    }
+
+                    returnButton.setOnClickListener(v2 -> {
+                        System.out.println(returnButton.getParent());
+                        System.out.println(returnButton.getId());
+                        layoutDescription.removeAllViews();
+                        vf.showPrevious();
+                    });
+
+
+                }
+            });
+
+            doneButton.setOnClickListener(v1 -> {
+
+                String urlParameters = "status=Ready";
+                patchRequest(urlParameters);
+
+                try {
+                    ((LinearLayout) view.getParent()).removeView(view);
+                    allEds.remove(view);
+                } catch (IndexOutOfBoundsException ex) {
+                    ex.printStackTrace();
+                }
+            });
+
+            cancelButton.setOnClickListener(v1 -> {
+
+                String urlParameters = "status=Cancelled";
+                patchRequest(urlParameters);
+
+                try {
+                    ((LinearLayout) view.getParent()).removeView(view);
+                    allEds.remove(view);
+                } catch (IndexOutOfBoundsException ex) {
+                    ex.printStackTrace();
+                }
+
+            });
+
+        }
     }
 
     private static void patchRequest(String urlParameters) {
@@ -202,5 +261,50 @@ public class OrderActivity extends AppCompatActivity {
             }
 
         }).start();
+    }
+
+    private static ProductDTO getRequest(int id) throws InterruptedException {
+        AtomicReference<ProductDTO> productDTO = new AtomicReference<>();
+        Thread getData = new Thread(() -> {
+            String USER_AGENT = "Mozilla/5.0";
+
+            HttpURLConnection con = null;
+            try {
+
+                String IP = "192.168.1.130:8080";
+                URL orderurl = new URL(new URL("http", IP, "/api/product?id=" + id).toString().replace("[", "").replace("]", ""));
+
+                con = (HttpURLConnection) orderurl.openConnection();
+                con.setRequestMethod("GET");
+                con.setRequestProperty("User-Agent", USER_AGENT);
+
+                int responseCode = con.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) { // success
+                    try {
+                        InputStream in = new BufferedInputStream(con.getInputStream());
+                        BufferedReader r = new BufferedReader(new InputStreamReader(in));
+                        String data = r.readLine();
+                        JSONObject jsonObj = new JSONObject(data);
+
+                        productDTO.set(new ProductDTO(jsonObj.getInt("id"), jsonObj.getString("name"),
+                                jsonObj.getDouble("price"), jsonObj.getBoolean("available"),
+                                jsonObj.getString("description"), jsonObj.getString("type"),
+                                jsonObj.getString("image"), jsonObj.getString("nameBuilding")));
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                assert con != null;
+                con.disconnect();
+            }
+        });
+        getData.start();
+        getData.join();
+
+        return productDTO.get();
     }
 }

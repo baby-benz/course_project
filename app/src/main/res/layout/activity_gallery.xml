@@ -3,21 +3,36 @@
 android:layout_width="match_parent"
 android:layout_height="match_parent" android:padding="16dp">
 
-<Button
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/add_edit_text"
-    android:id="@+id/order_button"
-    android:layout_alignParentTop="true"
-    android:layout_alignParentStart="true"
-    android:layout_alignParentEnd="true" />
+<ViewFlipper android:id="@+id/order_viewFlipper"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent">
+
+<ScrollView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
 
 <LinearLayout
     android:id="@+id/linear"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_below="@+id/order_button"
-    android:layout_alignEnd="@+id/order_button" />
+    android:layout_marginTop="50dp"/>
+
+    </ScrollView>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+    <GridLayout
+        android:id="@+id/order_description"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="1" />
+
+    </ScrollView>
+
+    </ViewFlipper>
 
 </RelativeLayout>

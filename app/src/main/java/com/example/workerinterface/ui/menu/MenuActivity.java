@@ -21,6 +21,7 @@ import com.example.workerinterface.dto.ProductDTO;
 
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -37,9 +38,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MenuActivity extends AppCompatActivity {
 
-    //Создаем список вьюх которые будут создаваться
-    private List<View> allItems;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,65 +45,66 @@ public class MenuActivity extends AppCompatActivity {
 
         ViewFlipper vf = findViewById( R.id.viewFlipper );
 
-        Button addButton = findViewById(R.id.test_product_button);
-        //инициализировали наш массив с edittext.aьи
-        allItems = new ArrayList<>();
         ArrayList<ProductDTO> productDTOS = new ArrayList<>();
 
-        //находим наш linear который у нас под кнопкой add edittext в activity_main.xml
-        final GridLayout table = findViewById(R.id.table);
-
-        new Thread(() -> {
+        Thread getData = new Thread(() -> {
+            HttpURLConnection connection = null;
             try  {
                 String IP = "192.168.1.130:8080";
                 int page = 0;
                 URL producturl;
+
                 while (true) {
                     producturl = new URL(new URL("http", IP, "/api/product/" + page).toString().replace("[", "").replace("]", ""));
-                    System.out.println(producturl);
-                    HttpURLConnection connection;
-                    try {
-                        connection = (HttpURLConnection) producturl.openConnection();
-                        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                            try {
-                                InputStream in = new BufferedInputStream(connection.getInputStream());
-                                BufferedReader r = new BufferedReader(new InputStreamReader(in));
-                                StringBuilder total = new StringBuilder();
-                                for (String line; (line = r.readLine()) != null; ) {
-                                    total.append(line).append('\n');
-                                }
-                                JSONObject jsonObj = new JSONObject(total.toString());
 
-                                JSONArray jsonarray = jsonObj.getJSONArray("content");
-                                System.out.println(jsonarray.length());
-                                if (jsonarray.length() == 0) break;
-                                for (int i = 0; i < jsonarray.length(); i++) {
-                                    productDTOS.add(new ProductDTO(jsonarray.getJSONObject(i).getInt("id"),jsonarray.getJSONObject(i).get("name").toString(), (double) jsonarray.getJSONObject(i).get("price"),
-                                            (Boolean) jsonarray.getJSONObject(i).get("available"), jsonarray.getJSONObject(i).get("description").toString(),
-                                            jsonarray.getJSONObject(i).get("type").toString(), jsonarray.getJSONObject(i).get("image").toString(),
-                                            jsonarray.getJSONObject(i).get("nameBuilding").toString()));
-                                }
-                            } finally {
-                                connection.disconnect();
+                    connection = (HttpURLConnection) producturl.openConnection();
+                    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                        try {
+                            InputStream in = new BufferedInputStream(connection.getInputStream());
+                            BufferedReader r = new BufferedReader(new InputStreamReader(in));
+                            StringBuilder total = new StringBuilder();
+                            for (String line; (line = r.readLine()) != null; ) {
+                                total.append(line).append('\n');
                             }
+                            JSONObject jsonObj = new JSONObject(total.toString());
+                            JSONArray jsonarray = jsonObj.getJSONArray("content");
+
+                            if (jsonarray.length() == 0) break;
+                            for (int i = 0; i < jsonarray.length(); i++) {
+                                productDTOS.add(new ProductDTO(jsonarray.getJSONObject(i).getInt("id"),jsonarray.getJSONObject(i).get("name").toString(), (double) jsonarray.getJSONObject(i).get("price"),
+                                        (Boolean) jsonarray.getJSONObject(i).get("available"), jsonarray.getJSONObject(i).get("description").toString(),
+                                        jsonarray.getJSONObject(i).get("type").toString(), jsonarray.getJSONObject(i).get("image").toString(),
+                                        jsonarray.getJSONObject(i).get("nameBuilding").toString()));
+                            }
+                        } catch (IOException | JSONException e) {
+                            e.printStackTrace();
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
-                page++;
+                    page++;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                assert connection != null;
+                connection.disconnect();
             }
-        }).start();
+        });
+
+        getData.start();
+        try {
+            getData.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //Создаем список вьюх которые будут создаваться
+        List<View> allItems = new ArrayList<>();
+
+        //находим наш linear который у нас под кнопкой add edittext в activity_main.xml
+        final GridLayout table = findViewById(R.id.table);
 
         AtomicInteger counter = new AtomicInteger();
-        addButton.setOnClickListener(v -> {
-            System.out.println(productDTOS.size());
-            System.out.println(this);
-            for (int i = 0; i < productDTOS.size(); i++) {
-                System.out.println(i + " " + productDTOS.get(i).getName() + " " + productDTOS.get(i).getNameBuilding());
-
+        for (int i = 0; i < productDTOS.size(); i++) {
             //берем наш кастомный лейаут находим через него все наши кнопки и едит тексты, задаем нужные данные
             @SuppressLint("InflateParams") final View view = getLayoutInflater().inflate(R.layout.custom_food_menu_item, null);
 
@@ -130,8 +129,6 @@ public class MenuActivity extends AppCompatActivity {
             }
 
             iv1.setOnClickListener(v1 -> {
-                System.out.println("Listen" + iv1.getId());
-
                 vf.showNext();
 
                 RelativeLayout layoutDescription = findViewById(R.id.description);
@@ -158,11 +155,11 @@ public class MenuActivity extends AppCompatActivity {
                         status = !status;
 
                         String urlParameters="available="+status.toString();
-                        System.out.println(urlParameters);
+
                         int Id = productDTOS.get(iv1.getId()).getId();
                         String IP = "192.168.1.130:8080";
                         URL orderurl = new URL(new URL("http", IP, "/api/product/" + Id + "/available?" + urlParameters).toString().replace("[", "").replace("]", ""));
-                        System.out.println(orderurl);
+
                         con = (HttpURLConnection) orderurl.openConnection();
                         con.setRequestMethod("PATCH");
                         con.setRequestProperty("User-Agent", USER_AGENT);
@@ -171,13 +168,11 @@ public class MenuActivity extends AppCompatActivity {
                         con.setDoOutput(true);
                         OutputStream os = con.getOutputStream();
                         os.write(urlParameters.getBytes());
-                        System.out.println("---" + os.toString() + "---");
                         os.flush();
                         os.close();
                         // For POST only - END
 
                         int responseCode = con.getResponseCode();
-                        System.out.println("PATCH Response Code :: " + responseCode);
 
                         if (responseCode == HttpURLConnection.HTTP_OK) { // success
                             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -197,9 +192,6 @@ public class MenuActivity extends AppCompatActivity {
                             productDTOS.get(iv1.getId()).setAvailable(status);
                             available.setText(productDTOS.get(iv1.getId()).getAvailable().toString());
 
-                            // print result
-                            System.out.println(response.toString());
-                            System.out.println(response);
                         } else {
                             System.out.println("PATCH request not worked");
                         }
@@ -208,7 +200,6 @@ public class MenuActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     } finally {
-
                         assert con != null;
                         con.disconnect();
                     }
@@ -230,7 +221,6 @@ public class MenuActivity extends AppCompatActivity {
             tv1.setText(productDTOS.get(counter.get()).getName());
             tv1.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
             counter.getAndIncrement();
-            }
-        });
+        }
     }
 }

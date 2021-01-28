@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/text_description_order_name"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:text="Name:"
+        android:textSize="20sp"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/text_description_order_nameValue"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
+        android:layout_alignEnd="@+id/text_description_order_name"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="-300dp"
+        android:textSize="20sp"/>
+
+    <ImageView
+        android:id="@+id/description_order_image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignStart="@+id/text_description_order_nameValue"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="400dp"
+        android:layout_marginTop="50dp"
+        android:contentDescription="Image" />
+
+    <Button
+        android:id="@+id/order_back_button"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="1000dp"
+        android:layout_marginTop="50dp"
+        android:text="Back" />
+
+</RelativeLayout>
