@@ -34,10 +34,14 @@
     <string name="default_currency">₽</string>
     <!-- Strings related to order -->
     <string name="action_change_place">Изменить место</string>
-    <string name="order_time_title">Выберите время</string>
+    <string name="order_time_title">Время заказа</string>
     <string name="action_change_order_time">Изменить время</string>
     <string name="action_place_order">Оформить заказ</string>
+    <string name="action_go_to_menu">Перейти в меню</string>
     <string name="action_finish_order">Готово!</string>
+    <!-- Strings related to profile -->
+    <string name="action_order_history">История\nзаказов</string>
+    <string name="action_logout">Выйти</string>
     <!-- Menu image description -->
     <string name="default_image_description">Default product display image</string>
     <string name="itmo_logo_image_description">ITMO University logo</string>
