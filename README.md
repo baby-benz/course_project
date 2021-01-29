@@ -17,6 +17,7 @@ ____
     GET /api/product{{page}}/building?name={{name}} - передать {{page}} страницу продукции из {{building name}} корпуса 
     POST /api/product (product dto) - добавить продукцию
     PATCH /api/product/{{id}}/available?available={{true or false}} - изменить наличие продукции
+    PATCH /api/product/building/{{productId}}/available (building name, true of false) - изменить наличие продукции в корпусе
 ### product types
     GET /api/product/type/breakfast/{page}
     GET /api/product/type/starter/{page}
