@@ -32,7 +32,7 @@ public class OrderController {
     }
 
     @GetMapping("/monitor")
-    public OrderDto getOrderDtoByMonitorCode(@RequestParam String monitorCode) throws NoEntityException {
+    public OrderDto getOrderDtoByMonitorCode(@RequestBody String monitorCode) throws NoEntityException {
         log.info("Get request for {} monitor code", monitorCode);
         return orderService.getOrderByMonitorCode(monitorCode);
     }
