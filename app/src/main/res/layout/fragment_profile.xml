@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" android:orientation="vertical"
+              android:layout_marginTop="@dimen/activity_vertical_margin"
+              android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/profile_name"
+            android:layout_gravity="center_horizontal" android:textStyle="bold" android:textSize="30sp"/>
+    <carbon.widget.Button
+            android:text="@string/action_order_history"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" android:id="@+id/button"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin" android:background="@color/carbon_red_500"
+            android:textAllCaps="false" android:textSize="30sp" android:textColor="@color/carbon_white"
+            app:carbon_cornerRadius="10dp" android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin" android:gravity="start|center_vertical"
+            android:paddingStart="@dimen/activity_horizontal_margin"/>
+    <Button
+            android:text="@string/action_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="15dp" android:id="@+id/logout"
+            style="@style/Widget.AppCompat.Button.Borderless" android:textSize="12sp"
+            android:textAllCaps="false"
+            android:textColor="#787878"
+            android:background="@color/carbon_colorBackground_light"/>
+</LinearLayout>
