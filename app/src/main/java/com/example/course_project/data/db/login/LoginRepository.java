@@ -1,6 +1,5 @@
 package com.example.course_project.data.db.login;
 
-import com.example.course_project.data.model.Common;
 import com.example.course_project.data.model.LoggedInUser;
 
 /**
@@ -27,6 +26,10 @@ public class LoginRepository {
             instance = new LoginRepository(dataSource);
         }
         return instance;
+    }
+
+    public LoggedInUser getLoggedUser() {
+        return user;
     }
 
     public boolean isLoggedIn() {

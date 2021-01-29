@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +16,13 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.course_project.R;
+import com.example.course_project.data.db.cart.CartDAO_Impl;
+import com.example.course_project.data.db.cart.CartDataSource;
+import com.example.course_project.data.db.cart.CartDatabase;
+import com.example.course_project.data.db.cart.LocalCartDataSource;
+import com.example.course_project.data.db.login.LoginDataSource;
+import com.example.course_project.data.db.login.LoginRepository;
+import com.example.course_project.dto.OrderDto;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import org.json.JSONObject;
 
@@ -22,6 +30,8 @@ import java.time.LocalTime;
 import java.util.Calendar;
 
 public class OrderDialogFragment extends BottomSheetDialogFragment {
+    private final LoginRepository loginRepository = LoginRepository.getInstance(new LoginDataSource());
+    private final CartDataSource cartDataSource = new LocalCartDataSource(CartDatabase.getInstance(getContext()).cartDao());
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -54,10 +64,15 @@ public class OrderDialogFragment extends BottomSheetDialogFragment {
             timePicker.show(requireActivity().getSupportFragmentManager(), SnapTimePickerDialog.TAG);
         });
 
+        OrderDto orderDto = new OrderDto();
+        orderDto.setBuildingName("Ломо");
+        orderDto.setId(20L);
+        orderDto.setMonitorCode(loginRepository.getLoggedUser().getUserId() + "_" + loginRepository.getLoggedUser().getDisplayName() + ":mon");
+        System.out.println(cartDataSource.getAllCart(loginRepository.getLoggedUser().getUserId()).blockingFirst().get(0).getProductId());
+
         view.findViewById(R.id.finish_order).setOnClickListener(v ->
-                AndroidNetworking.post("http://localhost:8080/api/order")
-                        .addBodyParameter("orderId", "1")
-                        .addBodyParameter("Коля, че по заказам?", "ММ?")
+                AndroidNetworking.post("http://192.168.0.5:8080/api/order")
+                        .addApplicationJsonBody(orderDto)
                         .setTag("test")
                         .setPriority(Priority.MEDIUM)
                         .build()
