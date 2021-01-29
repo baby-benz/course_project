@@ -2,12 +2,9 @@ package ru.cafeteriaitmo.server.controller.rest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-import ru.cafeteriaitmo.server.controller.exception.NoEntityException;
 import ru.cafeteriaitmo.server.dto.ProductDto;
-import ru.cafeteriaitmo.server.service.ProductService;
 import ru.cafeteriaitmo.server.service.ProductTypeService;
 
 @Slf4j
@@ -16,9 +13,6 @@ import ru.cafeteriaitmo.server.service.ProductTypeService;
 @RequiredArgsConstructor
 public class ProductTypeController {
     private final ProductTypeService productTypeService;
-
-    @Value("${cafeteria.api.pages.size}")
-    private Integer pagesSize;
 
     @GetMapping("/breakfast/{page}")
     public Page<ProductDto> getBreakfastProductPage(@PathVariable Long page) {

@@ -76,6 +76,19 @@ public class ProductServiceImpl implements ProductService {
         return product;
     }
 
+    //TODO: понять как правильно изменять наличие продукции внутри корпусов.
+    public void changeAvailableInBuilding(Long productId, String buildingName, boolean available) throws NoEntityException {
+        Building building = buildingService.getBuildingByName(buildingName);
+        ArrayList<Product> products = (ArrayList<Product>) building.getProducts();
+        products.forEach(product -> {
+            if (product.getId().equals(productId)) {
+                products.remove(product);
+            }
+        });
+        building.setProducts(products);
+        buildingService.addBuilding(building);
+    }
+
     public Product addProduct(Product product) {
         return productRepository.save(product);
     }

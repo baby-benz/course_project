@@ -43,10 +43,17 @@ public class ProductController {
         return "Product added into server";
     }
 
+    @Deprecated
     @PatchMapping("{id}/available")
     public void changeAvailable(@PathVariable Long id, @RequestParam Boolean available) throws NoEntityException {
         log.info("Patch request to change availabling of {} product to \"{}\"", id, available);
         productService.changeAvailable(id, available);
+    }
+
+    @PatchMapping("/building/{productId}/available")
+    public void changeProductAvailableInBuilding(@PathVariable Long productId, @RequestBody String buildingName, @RequestBody boolean available) throws NoEntityException {
+        log.info("Patch request to change availabling of {} product to \"{}\" in {}", productId, available, buildingName);
+        productService.changeAvailableInBuilding(productId, buildingName, available);
     }
 
     @GetMapping("/pages")
