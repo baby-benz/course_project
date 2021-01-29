@@ -23,6 +23,9 @@ public class User {
     @Column
     private String surname;
 
+    @Column
+    private String personalNumber;
+
     @OneToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.ALL})
     @JoinTable(

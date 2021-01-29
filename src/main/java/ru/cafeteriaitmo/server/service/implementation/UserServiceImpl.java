@@ -18,6 +18,11 @@ public class UserServiceImpl implements UserService {
 
     public User getUser(Long id) throws NoEntityException {
         return userRepository.findById(id).orElseThrow(() ->
-                new NoEntityException(User.class.getSimpleName().toLowerCase(), id));
+                new NoEntityException(User.class.getSimpleName().toLowerCase(), id.toString()));
+    }
+
+    public User getUserByPersonalNumber(String personalNumber) throws NoEntityException {
+        return userRepository.findUserByPersonalNumber(personalNumber).orElseThrow(() ->
+                new NoEntityException(User.class.getSimpleName().toLowerCase(), personalNumber));
     }
 }

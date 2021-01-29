@@ -20,7 +20,7 @@ public class BuildingServiceImpl implements BuildingService {
 
     public Building getBuildingByName(String buildingName) throws NoEntityException {
         return buildingRepository.findBuildingByName(buildingName).orElseThrow( () ->
-                NoEntityException.createWith(Building.class.getSimpleName().toLowerCase(),  -1L));
+                NoEntityException.createWith(Building.class.getSimpleName().toLowerCase(),  "-1"));
     }
 
     public Building addBuilding(Building building) {

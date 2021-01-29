@@ -41,7 +41,7 @@ public class OrderConverter {
         dto.setBuildingName(order.getBuilding().getName());
         dto.setMonitorCode(order.getMonitorCode());
         dto.setProductIds(productIds);
-        dto.setUserId(order.getUser().getId());
+        dto.setUserPersonalNumber(order.getUser().getPersonalNumber());
         return dto;
     }
 }

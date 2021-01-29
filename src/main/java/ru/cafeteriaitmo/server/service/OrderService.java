@@ -7,11 +7,15 @@ import ru.cafeteriaitmo.server.domain.enums.Status;
 import ru.cafeteriaitmo.server.dto.OrderDto;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface OrderService {
     Page<OrderDto> getOrderPage(Long page);
     Collection<Order> getAll();
+
+    OrderDto getOrderByMonitorCode(String monitorCode) throws NoEntityException;
     OrderDto getOrderDto(Long orderId) throws NoEntityException;
+
     Order addOrder(Order order);
     Order addOrderDto(OrderDto order) throws NoEntityException;
 

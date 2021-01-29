@@ -43,13 +43,13 @@ public class ProductServiceImpl implements ProductService {
 
     public Product getProduct(Long id) throws NoEntityException {
         return productRepository.findById(id).orElseThrow(() ->
-                new NoEntityException(Product.class.getSimpleName().toLowerCase(), id));
+                new NoEntityException(Product.class.getSimpleName().toLowerCase(), id.toString()));
     }
 
     public ProductDto getProductDto(Long id) throws NoEntityException {
         ProductDto productDto;
         Product product = productRepository.findById(id).orElseThrow(() ->
-                new NoEntityException(Product.class.getSimpleName().toLowerCase(), id));
+                new NoEntityException(Product.class.getSimpleName().toLowerCase(), id.toString()));
         productDto = ProductConverter.convertProductToProductDto(product);
         return productDto;
     }

@@ -51,14 +51,9 @@ public class OrderServiceImpl implements OrderService {
         return OrderConverter.changePageToDtoPage(orderPage);
     }
 
-    public Order getOrder(Long orderId) throws NoEntityException {
-        return orderRepository.findById(orderId).orElseThrow(() ->
-                new NoEntityException(Order.class.getSimpleName().toLowerCase(), orderId));
-    }
-
     public OrderDto getOrderDto(Long orderId) throws NoEntityException {
         Order order = orderRepository.findById(orderId).orElseThrow(() ->
-                new NoEntityException(Order.class.getSimpleName().toLowerCase(), orderId));
+                new NoEntityException(Order.class.getSimpleName().toLowerCase(), orderId.toString()));
         return OrderConverter.convertOrderToOrderDto(order);
     }
 
@@ -71,12 +66,14 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
-    public Optional<Order> getOrderByMonitorCode(String monitorCode) {
-        return orderRepository.findByMonitorCode(monitorCode);
+    public OrderDto getOrderByMonitorCode(String monitorCode) throws NoEntityException {
+        Order order =  orderRepository.findByMonitorCode(monitorCode).orElseThrow(() ->
+                new NoEntityException(Order.class.getSimpleName().toLowerCase(), monitorCode));
+        return OrderConverter.convertOrderToOrderDto(order);
     }
 
     public Order addOrderDto(OrderDto orderDto) throws NoEntityException {
-        Optional<Order> orderWithMonitorCode = getOrderByMonitorCode(orderDto.getMonitorCode());
+        Optional<Order> orderWithMonitorCode = orderRepository.findByMonitorCode(orderDto.getMonitorCode());
         Order order = new Order();
         order.setDateTimeOrderedOn(orderDto.getOrderedOn());
         order.setMonitorCode(orderDto.getMonitorCode());
@@ -88,7 +85,7 @@ public class OrderServiceImpl implements OrderService {
         }
         order.setBuilding(buildingService.getBuildingByName(orderDto.getBuildingName()));
         order.setProducts(getProductListById(orderDto.getProductIds()));
-        order.setUser(getUserFromRepository(orderDto.getUserId()));
+        order.setUser(getUserFromRepository(orderDto.getUserPersonalNumber()));
         orderWithMonitorCode.ifPresent(value -> {
             log.warn("Attemption!!! Rewriting order with new!!! " +
                             "Check previous {} code with [{}] products on {} for {} ({})",
@@ -136,7 +133,13 @@ public class OrderServiceImpl implements OrderService {
         return products;
     }
 
-    private User getUserFromRepository(Long id) throws NoEntityException {
-        return userService.getUser(id);
+    private User getUserFromRepository(String personalNumber) throws NoEntityException {
+        return userService.getUserByPersonalNumber(personalNumber);
+    }
+
+    @Deprecated
+    public Order getOrder(Long orderId) throws NoEntityException {
+        return orderRepository.findById(orderId).orElseThrow(() ->
+                new NoEntityException(Order.class.getSimpleName().toLowerCase(), orderId.toString()));
     }
 }

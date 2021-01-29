@@ -31,6 +31,13 @@ public class OrderController {
         return orderService.getOrderPage(page);
     }
 
+    @GetMapping("/monitor")
+    public OrderDto getOrderDtoByMonitorCode(@RequestParam String monitorCode) throws NoEntityException {
+        log.info("Get request for {} monitor code", monitorCode);
+        return orderService.getOrderByMonitorCode(monitorCode);
+    }
+
+    @Deprecated
     @GetMapping
     public OrderDto getOrderDto(@RequestParam Long orderId) throws NoEntityException {
         log.info("Get request for {} order id", orderId);

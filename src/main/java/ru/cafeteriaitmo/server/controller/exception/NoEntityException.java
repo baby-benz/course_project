@@ -9,19 +9,19 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class NoEntityException extends Exception {
     private static final long serialVersionUID = -5774500457280976647L;
     private final String entity;
-    private final Long id;
+    private final String uid;
 
     /**
      * Конструктор ошибки отсутсвия сущности
      * @param entity тип сущности
-     * @param id уникальный номер сущности
+     * @param uid запрашиваемый уникальный номер сущности
      * @return ошибка по сущности и номеру
      */
-    public static NoEntityException createWith(String entity, Long id) {
-        return new NoEntityException(entity, id);
+    public static NoEntityException createWith(String entity, String uid) {
+        return new NoEntityException(entity, uid);
     }
 
     public String getMessage() {
-            return "The server reported: " + entity + " with ID=" + id + " was not found.";
+            return "The server reported: " + entity + " with ID=" + uid + " was not found.";
     }
 }
