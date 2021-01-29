@@ -44,20 +44,20 @@ dependencies {
     def android_networking_version='1.0.2'
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.google.android.material:material:$material_version"
+
     implementation 'androidx.annotation:annotation:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugaring_version"
 
+    // Reactive and event dependencies
     implementation "org.greenrobot:eventbus:$eventbus_version"
     implementation "io.reactivex.rxjava2:rxandroid:$rxjava2_version"
 
+    // Maps dependencies
     implementation "com.google.android.gms:play-services-location:$ps_location_version"
     implementation "com.karumi:dexter:$dexter_version"
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
     // Testing dependencies
     testImplementation 'junit:junit:4.12'
@@ -66,6 +66,7 @@ dependencies {
 
     // Material design dependencies
     api "tk.zielony:carbon:$carbon_version"
+    implementation "com.google.android.material:material:$material_version"
     implementation "com.github.andremion:counterfab:$counterfab_version"
     implementation "com.cepheuen.elegant-number-button:lib:$number_button_version"
     implementation 'androidx.recyclerview:recyclerview:1.1.0'

@@ -3,6 +3,7 @@ package com.example.course_project.ui.cart;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import io.reactivex.disposables.CompositeDisposable;
 
 public class CartViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
@@ -10,7 +11,7 @@ public class CartViewModelFactory implements ViewModelProvider.Factory {
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(CartViewModel.class)) {
-            return (T) new CartViewModel();
+            return (T) new CartViewModel(new CompositeDisposable());
         } else {
             throw new IllegalArgumentException("Unknown ViewModel class");
         }

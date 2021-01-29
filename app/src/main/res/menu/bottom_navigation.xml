@@ -13,9 +13,9 @@
             android:id="@+id/cart"
             android:title="@string/action_footer_cart" android:icon="@drawable/ic_cart"/>
 
-    <item
+    <!--<item
             android:id="@+id/more"
             android:icon="@drawable/ic_more"
-            android:title="@string/action_footer_more"/>
+            android:title="@string/action_footer_more"/>-->
 
 </menu>

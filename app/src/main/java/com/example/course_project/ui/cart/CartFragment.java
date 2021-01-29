@@ -17,7 +17,8 @@ import com.example.course_project.data.db.cart.CartDataSource;
 import com.example.course_project.data.db.cart.CartDatabase;
 import com.example.course_project.data.db.cart.LocalCartDataSource;
 import com.example.course_project.data.model.Common;
-import com.example.course_project.eventbus.UpdateItemInCart;
+import com.example.course_project.event.UpdateItemInCart;
+import com.example.course_project.ui.order.OrderDialogFragment;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -41,12 +42,6 @@ public class CartFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_cart, container, false);
     }
 
-    private void initViews() {
-        cartDataSource = new LocalCartDataSource(CartDatabase.getInstance(getContext()).cartDao());
-        rvCart.setHasFixedSize(true);
-        rvCart.setLayoutManager(new LinearLayoutManager(getContext()));
-    }
-
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +51,11 @@ public class CartFragment extends Fragment {
         rvCart = view.findViewById(R.id.rvCart);
         cartViewModel.getMutableLiveDataCartItems().observe(getViewLifecycleOwner(), cartItems -> {
             if (cartItems == null || cartItems.isEmpty()) {
+                view.findViewById(R.id.finish_order).setVisibility(View.GONE);
+                view.findViewById(R.id.cart_total).setVisibility(View.GONE);
                 rvCart.setVisibility(View.GONE);
                 view.findViewById(R.id.cart_empty).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.go_to_menu).setVisibility(View.VISIBLE);
             } else {
                 view.findViewById(R.id.cart_empty).setVisibility(View.GONE);
                 rvCart.setVisibility(View.VISIBLE);
@@ -65,7 +63,26 @@ public class CartFragment extends Fragment {
                 calculateTotalPrice();
             }
         });
+
+        view.findViewById(R.id.finish_order).setOnClickListener(v -> {
+            if (Common.LOGGED_IN_USER != null) {
+                OrderDialogFragment orderDialogFragment = new OrderDialogFragment();
+                orderDialogFragment.show(requireActivity().getSupportFragmentManager(), "");
+            } else {
+                Toast.makeText(getContext(), "Пожалуйста, авторизуйтесь", Toast.LENGTH_SHORT).show();
+                requireActivity().findViewById(R.id.profile).performClick();
+            }
+        });
+
+        view.findViewById(R.id.go_to_menu).setOnClickListener(v -> requireActivity().findViewById(R.id.menu).performClick());
+
         initViews();
+    }
+
+    private void initViews() {
+        cartDataSource = new LocalCartDataSource(CartDatabase.getInstance(getContext()).cartDao());
+        rvCart.setHasFixedSize(true);
+        rvCart.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     @Override
@@ -114,7 +131,7 @@ public class CartFragment extends Fragment {
     }
 
     private void calculateTotalPrice() {
-        cartDataSource.sumPriceInCart(Common.LOGGED_IN_USER.getUserId())
+        cartDataSource.sumPriceInCart(Common.LOGGED_IN_USER != null ? Common.LOGGED_IN_USER.getUserId() : "1")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Double>() {
@@ -125,7 +142,7 @@ public class CartFragment extends Fragment {
 
                     @Override
                     public void onSuccess(@NonNull Double price) {
-                        ((TextView) getActivity().findViewById(R.id.cart_total_sum)).setText(String.valueOf(price));
+                        ((TextView) requireActivity().findViewById(R.id.cart_total_sum)).setText(String.valueOf(price));
                     }
 
                     @Override

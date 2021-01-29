@@ -11,9 +11,11 @@ import com.example.course_project.data.model.Common;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 public class CartViewModel extends ViewModel {
     private final CompositeDisposable compositeDisposable;
     private CartDataSource cartDataSource;
@@ -23,16 +25,12 @@ public class CartViewModel extends ViewModel {
         cartDataSource = new LocalCartDataSource(CartDatabase.getInstance(context).cartDao());
     }
 
-    public CartViewModel() {
-        compositeDisposable = new CompositeDisposable();
-    }
-
     public void onStop() {
         compositeDisposable.clear();
     }
 
     public MutableLiveData<List<CartItem>> getMutableLiveDataCartItems() {
-        if(mutableLiveDataCartItems == null) {
+        if (mutableLiveDataCartItems == null) {
             mutableLiveDataCartItems = new MutableLiveData<>();
         }
         getAllCartItems();
@@ -40,14 +38,12 @@ public class CartViewModel extends ViewModel {
     }
 
     public void getAllCartItems() {
-        compositeDisposable.add(cartDataSource.getAllCart(Common.LOGGED_IN_USER.getUserId())
+        compositeDisposable.add(cartDataSource.getAllCart(Common.LOGGED_IN_USER != null ? Common.LOGGED_IN_USER.getUserId() : "1")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(cartItems -> {
                     mutableLiveDataCartItems.setValue(cartItems);
-                }, throwable -> {
-                    mutableLiveDataCartItems.setValue(null);
-                })
+                }, throwable -> mutableLiveDataCartItems.setValue(null))
         );
     }
 }

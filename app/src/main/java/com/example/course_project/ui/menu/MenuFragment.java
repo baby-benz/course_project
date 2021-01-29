@@ -13,11 +13,20 @@ import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.course_project.R;
+import com.example.course_project.data.db.cart.CartDataSource;
+import com.example.course_project.data.db.cart.CartDatabase;
+import com.example.course_project.data.db.cart.LocalCartDataSource;
 import com.example.course_project.data.model.MenuItem;
 import com.example.course_project.dto.ProductDto;
+import com.example.course_project.event.SuccessfulLogin;
 import com.google.android.material.appbar.AppBarLayout;
 
-import lombok.RequiredArgsConstructor;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,9 +41,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class MenuFragment extends Fragment {
+    private final CompositeDisposable compositeDisposable;
+    private CartDataSource cartDataSource;
+
     volatile ArrayList<ProductDto> productDtos;
     volatile ArrayList<ProductDto> breakfastDtos;
     volatile ArrayList<ProductDto> starterDtos;
@@ -47,9 +58,32 @@ public class MenuFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_menu, null);
     }
 
+    public MenuFragment() {
+        compositeDisposable = new CompositeDisposable();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+        compositeDisposable.clear();
+        super.onStop();
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        cartDataSource = new LocalCartDataSource(CartDatabase.getInstance(getContext()).cartDao());
 
         /*productDtos = new ArrayList<>();
         breakfastDtos = new ArrayList<>();
@@ -254,7 +288,7 @@ public class MenuFragment extends Fragment {
     }
 
     private int getDisplayWidth() {
-        final WindowMetrics metrics = Objects.requireNonNull(getActivity()).getWindowManager().getCurrentWindowMetrics();
+        final WindowMetrics metrics = requireActivity().getWindowManager().getCurrentWindowMetrics();
         return metrics.getBounds().width();
     }
 
@@ -306,5 +340,19 @@ public class MenuFragment extends Fragment {
         }
         System.out.println("finished downloading data by " + urlApiPart);
         return productDtosFromServer;
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onUserLoggedInSuccessfully(SuccessfulLogin event) {
+        if (event.getLoggedInUser() != null) {
+            compositeDisposable.add(cartDataSource.getAllCart("1")
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(cartItems -> cartItems.forEach(item -> {
+                        item.setUserId(event.getLoggedInUser().getUserId());
+                        cartDataSource.updateCart(item);
+                    }))
+            );
+        }
     }
 }

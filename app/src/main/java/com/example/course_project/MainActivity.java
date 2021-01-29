@@ -2,6 +2,7 @@ package com.example.course_project;
 
 import android.Manifest;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
@@ -15,6 +16,7 @@ import com.example.course_project.event.SuccessfulLogin;
 import com.example.course_project.ui.cart.CartFragment;
 import com.example.course_project.ui.login.LoginFragment;
 import com.example.course_project.ui.menu.MenuFragment;
+import com.example.course_project.ui.profile.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -22,11 +24,18 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
         Dexter.withContext(this)
                 .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                 .withListener(new PermissionListener() {
@@ -44,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
 
                     }
-                }).check();
+                })
+                .check();
     }
 
     @Override
@@ -60,16 +70,17 @@ public class MainActivity extends AppCompatActivity {
 
         MenuFragment menuFragment = new MenuFragment();
         LoginFragment loginFragment = new LoginFragment();
+        ProfileFragment profileFragment = new ProfileFragment();
         CartFragment cartFragment = new CartFragment();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 item -> {
-                    if(item.isChecked()) {
-                        if(item.getItemId() == R.id.menu) {
+                    if (item.isChecked()) {
+                        if (item.getItemId() == R.id.menu) {
                             NestedScrollView scrollView = findViewById(R.id.svMenu);
-                            if(scrollView != null) {
+                            if (scrollView != null) {
                                 scrollView.smoothScrollTo(0, 0);
                             }
                         }
@@ -82,15 +93,19 @@ public class MainActivity extends AppCompatActivity {
                             findViewById(R.id.main_app_bar).setVisibility(View.VISIBLE);
                             break;
                         case R.id.profile:
-                            fragmentManager.beginTransaction().replace(R.id.main_container_view, loginFragment).commit();
+                            if (Common.LOGGED_IN_USER == null) {
+                                fragmentManager.beginTransaction().replace(R.id.main_container_view, loginFragment).commit();
+                            } else {
+                                fragmentManager.beginTransaction().replace(R.id.main_container_view, profileFragment).commit();
+                            }
                             findViewById(R.id.main_app_bar).setVisibility(View.VISIBLE);
                             break;
                         case R.id.cart:
                             fragmentManager.beginTransaction().replace(R.id.main_container_view, cartFragment).commit();
                             findViewById(R.id.main_app_bar).setVisibility(View.GONE);
                             break;
-                        case R.id.more:
-                            break;
+                        /*case R.id.more:
+                            break;*/
                         default:
                     }
                     return false;

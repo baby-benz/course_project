@@ -1,6 +1,5 @@
 package com.example.course_project.ui.login;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,10 +10,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.course_project.R;
-import com.example.course_project.ui.menu.MenuFragment;
 
 public class LoginFragment extends Fragment {
     private LoginViewModel loginViewModel;
@@ -102,10 +99,8 @@ public class LoginFragment extends Fragment {
 
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
-        FragmentActivity fragmentActivity = getActivity();
-        Toast.makeText(fragmentActivity, welcome, Toast.LENGTH_LONG).show();
-        fragmentActivity.setResult(Activity.RESULT_OK);
-        getParentFragmentManager().beginTransaction().replace(R.id.main_container_view, new MenuFragment()).commit();
+        Toast.makeText(requireActivity(), welcome, Toast.LENGTH_LONG).show();
+        requireActivity().findViewById(R.id.menu).performClick();
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {

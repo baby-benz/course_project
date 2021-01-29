@@ -1,41 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              tools:context=".ui.cart.CartFragment" android:layout_marginStart="@dimen/activity_horizontal_margin"
-              android:layout_marginEnd="@dimen/activity_horizontal_margin"
-              android:id="@+id/cart_fragment">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".ui.cart.CartFragment" android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:id="@+id/cart_fragment" android:layout_marginBottom="@dimen/activity_vertical_margin">
     <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp" android:layout_weight="14">
+            android:layout_height="640dp"
+            android:id="@+id/cart_main">
 
         <TextView
                 android:text="@string/cart_empty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/cart_empty" android:textSize="44sp"
-                android:textStyle="bold" android:textAllCaps="true" android:textAlignment="center"
+                android:textStyle="bold" android:textAllCaps="false" android:textAlignment="center"
                 android:layout_gravity="center" android:gravity="center"/>
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" app:layoutManager="LinearLayoutManager"
                 tools:listitem="@layout/fragment_cart_item" android:nestedScrollingEnabled="false"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:id="@+id/rvCart" android:overScrollMode="never"/>
+                android:id="@+id/rvCart" android:overScrollMode="never" android:visibility="gone"/>
     </FrameLayout>
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="0dp" android:layout_weight="2">
+            android:layout_height="wrap_content" android:layout_alignParentBottom="true"
+    >
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_marginTop="8dp">
+                android:layout_height="wrap_content" android:layout_marginTop="8dp" android:id="@+id/cart_total">
             <TextView
                     android:text="@string/cart_total"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/cart_total"/>
+                    android:layout_height="wrap_content" android:id="@+id/total_amount"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:id="@+id/cart_total_sum"
@@ -46,14 +48,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:id="@+id/cart_currency"/>
         </LinearLayout>
-        <carbon.widget.Button
-                android:text="@string/action_place_order"
+        <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp" android:id="@+id/place_order"
-                android:layout_gravity="center"
-                android:background="@color/carbon_green_500" app:carbon_cornerRadius="8dp"
-                app:carbon_elevation="@dimen/carbon_elevationButton"
-                app:carbon_elevationShadowColor="@color/carbon_green_800"
-                android:layout_marginTop="8dp"/>
+                android:layout_height="40dp" android:layout_marginTop="8dp" android:layout_gravity="bottom">
+
+            <carbon.widget.Button
+                    android:text="@string/action_go_to_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/go_to_menu"
+                    android:layout_gravity="center"
+                    android:background="@color/carbon_green_500" app:carbon_cornerRadius="8dp"
+                    app:carbon_elevation="@dimen/carbon_elevationButton"
+                    app:carbon_elevationShadowColor="@color/carbon_green_800"
+                    android:visibility="gone" android:textAllCaps="false"
+                    android:textColor="@color/carbon_white" android:textSize="18sp"/>
+            <carbon.widget.Button
+                    android:text="@string/action_place_order"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/finish_order"
+                    android:layout_gravity="center"
+                    android:background="@color/carbon_green_500" app:carbon_cornerRadius="8dp"
+                    app:carbon_elevation="@dimen/carbon_elevationButton"
+                    app:carbon_elevationShadowColor="@color/carbon_green_800"
+                    android:textAllCaps="false" android:textColor="@color/carbon_white" android:textSize="18sp"/>
+        </FrameLayout>
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

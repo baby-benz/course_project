@@ -3,51 +3,58 @@
               xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              tools:context=".ui.cart.CartFragment" android:layout_marginStart="@dimen/activity_horizontal_margin"
-              android:layout_marginEnd="@dimen/activity_horizontal_margin"
-              android:layout_marginBottom="@dimen/activity_vertical_margin">
+              android:layout_height="wrap_content"
+              tools:context=".ui.order.OrderDialogFragment"
+>
     <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:layout_marginTop="@dimen/activity_vertical_margin">
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin">
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/cart_title" android:textSize="24sp" android:textStyle="bold"
+                android:text="@string/cart_title" android:textSize="23sp" android:textStyle="bold"
                 android:textColor="#000000"/>
         <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/default_address" android:textSize="20sp"
-                android:textColor="#000000" android:id="@+id/cart_address"
-                android:layout_marginStart="8dp" android:layout_gravity="start"/>
+                android:text="@string/default_address" android:textSize="16sp"
+                android:textColor="#000000" android:id="@+id/order_address"
+                android:layout_marginTop="-5dp"/>
+        <Button
+                android:text="@string/action_change_place"
+                android:layout_width="wrap_content"
+                android:layout_height="15dp" android:id="@+id/change_place"
+                style="@style/Widget.AppCompat.Button.Borderless" android:textSize="12sp"
+                android:textAllCaps="false"
+                android:textColor="#787878"
+                android:background="#FFF"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/order_time_title" android:textSize="23sp" android:textStyle="bold"
+                android:textColor="#000000"
+                android:id="@+id/order_time"
+                android:layout_marginTop="@dimen/activity_vertical_margin"/>
+        <Button
+                android:text="@string/action_change_order_time"
+                android:layout_width="wrap_content"
+                android:layout_height="15dp" android:id="@+id/choose_time"
+                style="@style/Widget.AppCompat.Button.Borderless" android:textSize="12sp"
+                android:textAllCaps="false"
+                android:textColor="#787878"
+                android:background="#FFF"/>
     </LinearLayout>
-    <Button
-            android:text="@string/action_change_place"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp" android:id="@+id/change_place"
-            style="@style/Widget.AppCompat.Button.Borderless" android:textSize="12sp" android:textAllCaps="false"
-            android:textColor="#787878"/>
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/order_time_title" android:textSize="24sp" android:textStyle="bold"
-            android:textColor="#000000" android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:id="@+id/textView"/>
-    <Button
-            android:text="@string/action_change_order_time"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp" android:id="@+id/choose_time"
-            style="@style/Widget.AppCompat.Button.Borderless" android:textSize="12sp" android:textAllCaps="false"
-            android:textColor="#787878"/>
     <carbon.widget.Button
             android:text="@string/action_finish_order"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/place_order"
+            android:layout_height="wrap_content" android:id="@+id/finish_order"
             android:layout_gravity="center"
             android:background="@color/carbon_green_500" app:carbon_cornerRadius="8dp"
             app:carbon_elevation="@dimen/carbon_elevationButton"
             app:carbon_elevationShadowColor="@color/carbon_green_800"
-            android:layout_marginTop="@dimen/activity_vertical_margin"/>
+            android:layout_marginTop="@dimen/activity_vertical_margin" android:layout_marginEnd="32dp"
+            android:layout_marginStart="32dp" android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 </LinearLayout>

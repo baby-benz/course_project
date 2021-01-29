@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.example.course_project.R;
 import com.example.course_project.data.db.cart.CartItem;
-import com.example.course_project.eventbus.UpdateItemInCart;
+import com.example.course_project.event.UpdateItemInCart;
 import lombok.RequiredArgsConstructor;
 import org.greenrobot.eventbus.EventBus;
 

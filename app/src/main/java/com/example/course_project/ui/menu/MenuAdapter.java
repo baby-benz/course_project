@@ -11,14 +11,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
-import com.example.course_project.data.model.MenuItem;
-import com.example.course_project.eventbus.CounterCartEvent;
 import com.example.course_project.R;
 import com.example.course_project.data.db.cart.CartDataSource;
 import com.example.course_project.data.db.cart.CartDatabase;
 import com.example.course_project.data.db.cart.CartItem;
 import com.example.course_project.data.db.cart.LocalCartDataSource;
 import com.example.course_project.data.model.Common;
+import com.example.course_project.data.model.MenuItem;
+import com.example.course_project.event.CounterCartEvent;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -64,7 +64,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         holder.toCartButton.setOnClickListener(view -> {
             CartItem cartItem = new CartItem();
 
-            cartItem.setUserId(Common.LOGGED_IN_USER.getUserId());
+            cartItem.setUserId(Common.LOGGED_IN_USER != null ? Common.LOGGED_IN_USER.getUserId() : "1");
             cartItem.setProductId(menuItem.getId());
             cartItem.setProductName(menuItem.getName());
             cartItem.setCount(Integer.parseInt(holder.numberButton.getNumber()));
@@ -79,7 +79,8 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
                         EventBus.getDefault().postSticky(new CounterCartEvent(true));
                     }, throwable -> {
                         Toast.makeText(context, "[ОШИБКА ДОБАВЛЕНИЯ В КОРЗИНУ]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                    }));
+                    })
+            );
         });
     }
 
