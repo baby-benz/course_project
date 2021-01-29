@@ -2,21 +2,15 @@ package ru.cafeteriaitmo.server.controller.rest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.cafeteriaitmo.server.controller.exception.NoEntityException;
-import ru.cafeteriaitmo.server.controller.exception.ResponseException;
 import ru.cafeteriaitmo.server.domain.entity.Order;
 import ru.cafeteriaitmo.server.domain.enums.Status;
 import ru.cafeteriaitmo.server.dto.OrderDto;
 import ru.cafeteriaitmo.server.service.OrderService;
-
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -46,9 +40,9 @@ public class OrderController {
 
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
-    public Order createOrder(@RequestBody OrderDto order) throws NoEntityException {
-        log.info("Post request for adding order");
-        return orderService.addOrderDto(order);
+    public void createOrder(@RequestBody OrderDto order, HttpServletRequest requestContext) throws NoEntityException {
+        log.info("Post request for adding order by {}:{}", requestContext.getRemoteAddr(), requestContext.getRemotePort());
+        orderService.addOrderDto(order);
     }
 
     @PatchMapping("{id}")

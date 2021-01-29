@@ -73,28 +73,42 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Order addOrderDto(OrderDto orderDto) throws NoEntityException {
-        Optional<Order> orderWithMonitorCode = orderRepository.findByMonitorCode(orderDto.getMonitorCode());
+//        Optional<Order> orderWithMonitorCode = orderRepository.findByMonitorCode(orderDto.getMonitorCode());
         Order order = new Order();
-        order.setDateTimeOrderedOn(orderDto.getOrderedOn());
+        order.setDateTimeOrderedOn(LocalDateTime.parse(orderDto.getOrderedOn()));
         order.setMonitorCode(orderDto.getMonitorCode());
         try {
-            order.setStatus(Status.valueOf(orderDto.getStatus()));
+            order.setStatus(Status.valueOf(orderDto.getStatus().toUpperCase()));
         } catch (Exception ex) {
-            log.warn("Cannot parse Status value -> Status = created for " + orderDto.getMonitorCode());
+            log.warn("Cannot parse Status value {} -> CREATED for " + orderDto.getMonitorCode(), orderDto.getStatus());
             order.setStatus(Status.CREATED);
         }
         order.setBuilding(buildingService.getBuildingByName(orderDto.getBuildingName()));
         order.setProducts(getProductListById(orderDto.getProductIds()));
-        order.setUser(getUserFromRepository(orderDto.getUserPersonalNumber()));
-        orderWithMonitorCode.ifPresent(value -> {
-            log.warn("Attemption!!! Rewriting order with new!!! " +
-                            "Check previous {} code with [{}] products on {} for {} ({})",
-                    orderWithMonitorCode.get().getMonitorCode(),
-                    orderWithMonitorCode.get().getProducts(),
-                    orderWithMonitorCode.get().getDateTimeOrderedOn(),
-                    orderWithMonitorCode.get().getUser().getSurname(), orderWithMonitorCode.get().getUser().getId());
-            order.setId(value.getId());
-        });
+        try{
+            if (userService.getUserByPersonalNumber(orderDto.getUserPersonalNumber()) != null)
+                order.setUser(getUserFromRepository(orderDto.getUserPersonalNumber()));
+        } catch (NoEntityException ex) {
+            User user = new User();
+            //TODO: Костыль
+            user.setName(orderDto.getMonitorCode().substring(0, orderDto.getMonitorCode().indexOf(" ")));
+            user.setSurname(orderDto.getMonitorCode().substring(orderDto.getMonitorCode().indexOf(" "),
+                    orderDto.getMonitorCode().indexOf("(")-1));
+            user.setPersonalNumber(orderDto.getUserPersonalNumber());
+            order.setUser(user);
+            log.warn("User not found. Created new: {} {} number:{}", user.getName(),
+                    user.getSurname(),
+                    user.getPersonalNumber());
+        }
+//        orderWithMonitorCode.ifPresent(value -> {
+//            log.warn("Attemption!!! Rewriting order with new!!! " +
+//                            "Check previous {} code with [{}] products on {} for {} ({})",
+//                    orderWithMonitorCode.get().getMonitorCode(),
+//                    orderWithMonitorCode.get().getProducts(),
+//                    orderWithMonitorCode.get().getDateTimeOrderedOn(),
+//                    orderWithMonitorCode.get().getUser().getSurname(), orderWithMonitorCode.get().getUser().getId());
+//            order.setId(value.getId());
+//        });
         return orderRepository.save(order);
     }
 
