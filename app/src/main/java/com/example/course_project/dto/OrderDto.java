@@ -17,5 +17,5 @@ public class OrderDto implements Serializable {
 
     private ArrayList<Long> productIds;
     private String buildingName;
-    private Long userId;
+    private String personalNumber;
 }

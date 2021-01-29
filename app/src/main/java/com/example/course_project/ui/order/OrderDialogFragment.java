@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,9 +15,9 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.course_project.R;
-import com.example.course_project.data.db.cart.CartDAO_Impl;
 import com.example.course_project.data.db.cart.CartDataSource;
 import com.example.course_project.data.db.cart.CartDatabase;
+import com.example.course_project.data.db.cart.CartItem;
 import com.example.course_project.data.db.cart.LocalCartDataSource;
 import com.example.course_project.data.db.login.LoginDataSource;
 import com.example.course_project.data.db.login.LoginRepository;
@@ -26,8 +25,14 @@ import com.example.course_project.dto.OrderDto;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import org.json.JSONObject;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.atomic.AtomicReference;
+
+import kotlin.random.Random;
 
 public class OrderDialogFragment extends BottomSheetDialogFragment {
     private final LoginRepository loginRepository = LoginRepository.getInstance(new LoginDataSource());
@@ -44,6 +49,8 @@ public class OrderDialogFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final LocalDateTime[] timeOn = {LocalDateTime.now(ZoneId.of("Europe/Moscow"))};
+        OrderDto orderDto = new OrderDto();
 
         view.findViewById(R.id.choose_time).setOnClickListener(v -> {
             final Calendar c = Calendar.getInstance();
@@ -59,16 +66,29 @@ public class OrderDialogFragment extends BottomSheetDialogFragment {
             timePicker.setListener((h, m) -> {
                 LocalTime orderTime = LocalTime.of(h, m);
                 ((TextView) view.findViewById(R.id.order_time)).setText("Подготовить заказ к " + orderTime);
-                // TODO: добавить время в OrderDto
+                //TODO megabruh: or Atomic?
+                timeOn[0] = LocalDateTime.now(ZoneId.of("Europe/Moscow")).withHour(h).withMinute(m);
             });
             timePicker.show(requireActivity().getSupportFragmentManager(), SnapTimePickerDialog.TAG);
+            orderDto.setOrderedOn(timeOn[0]);
         });
 
-        OrderDto orderDto = new OrderDto();
+
+        //TODO: @shuffle_cap - get корпус из google maps
         orderDto.setBuildingName("Ломо");
         orderDto.setId(20L);
-        orderDto.setMonitorCode(loginRepository.getLoggedUser().getUserId() + "_" + loginRepository.getLoggedUser().getDisplayName() + ":mon");
-        System.out.println(cartDataSource.getAllCart(loginRepository.getLoggedUser().getUserId()).blockingFirst().get(0).getProductId());
+        orderDto.setMonitorCode(loginRepository.getLoggedUser().getDisplayName() + ":mon-" + Random.Default.nextInt(1, 100));
+        orderDto.setPersonalNumber(loginRepository.getLoggedUser().getUserId());
+        orderDto.setStatus("Created");
+
+        ArrayList<Long> productIds = new ArrayList<>();
+        cartDataSource.getAllCart(loginRepository.getLoggedUser().getUserId()).blockingForEach(cart -> {
+            for (CartItem oneCart : cart) {
+                productIds.add(oneCart.getProductId());
+            }
+        });
+        orderDto.setProductIds(productIds);
+
 
         view.findViewById(R.id.finish_order).setOnClickListener(v ->
                 AndroidNetworking.post("http://192.168.0.5:8080/api/order")
