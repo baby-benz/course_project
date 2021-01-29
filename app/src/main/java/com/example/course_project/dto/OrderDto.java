@@ -11,11 +11,11 @@ import lombok.Setter;
 public class OrderDto implements Serializable {
     private static final long serialVersionUID = 8940694154955849897L;
     private Long id;
-    private LocalDateTime orderedOn;
+    private String orderedOn;
     private String monitorCode;
     private String status;
 
     private ArrayList<Long> productIds;
     private String buildingName;
-    private String personalNumber;
+    private String userPersonalNumber;
 }

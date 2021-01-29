@@ -22,12 +22,15 @@ import com.example.course_project.data.db.cart.LocalCartDataSource;
 import com.example.course_project.data.db.login.LoginDataSource;
 import com.example.course_project.data.db.login.LoginRepository;
 import com.example.course_project.dto.OrderDto;
+import com.example.course_project.ui.cart.CartViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import org.json.JSONObject;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.atomic.AtomicReference;
@@ -49,7 +52,6 @@ public class OrderDialogFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final LocalDateTime[] timeOn = {LocalDateTime.now(ZoneId.of("Europe/Moscow"))};
         OrderDto orderDto = new OrderDto();
 
         view.findViewById(R.id.choose_time).setOnClickListener(v -> {
@@ -66,29 +68,28 @@ public class OrderDialogFragment extends BottomSheetDialogFragment {
             timePicker.setListener((h, m) -> {
                 LocalTime orderTime = LocalTime.of(h, m);
                 ((TextView) view.findViewById(R.id.order_time)).setText("Подготовить заказ к " + orderTime);
-                //TODO megabruh: or Atomic?
-                timeOn[0] = LocalDateTime.now(ZoneId.of("Europe/Moscow")).withHour(h).withMinute(m);
+
+                orderDto.setOrderedOn(LocalDateTime.of(LocalDate.now(ZoneId.of("Europe/Moscow")), orderTime).toString());
             });
             timePicker.show(requireActivity().getSupportFragmentManager(), SnapTimePickerDialog.TAG);
-            orderDto.setOrderedOn(timeOn[0]);
         });
 
 
         //TODO: @shuffle_cap - get корпус из google maps
         orderDto.setBuildingName("Ломо");
-        orderDto.setId(20L);
         orderDto.setMonitorCode(loginRepository.getLoggedUser().getDisplayName() + ":mon-" + Random.Default.nextInt(1, 100));
-        orderDto.setPersonalNumber(loginRepository.getLoggedUser().getUserId());
-        orderDto.setStatus("Created");
+        orderDto.setUserPersonalNumber(loginRepository.getLoggedUser().getUserId());
+        orderDto.setStatus("CREATED");
 
         ArrayList<Long> productIds = new ArrayList<>();
-        cartDataSource.getAllCart(loginRepository.getLoggedUser().getUserId()).blockingForEach(cart -> {
+        if (loginRepository.getLoggedUser() != null)
+        cartDataSource.getAllCart(loginRepository.getLoggedUser().getUserId()).forEach(cart -> {
             for (CartItem oneCart : cart) {
                 productIds.add(oneCart.getProductId());
             }
+            orderDto.setProductIds(productIds);
         });
-        orderDto.setProductIds(productIds);
-
+        System.out.println("Ok");
 
         view.findViewById(R.id.finish_order).setOnClickListener(v ->
                 AndroidNetworking.post("http://192.168.0.5:8080/api/order")
@@ -110,4 +111,9 @@ public class OrderDialogFragment extends BottomSheetDialogFragment {
         );
     }
 
+    private long getEpochSecondFromOrderTime(LocalTime orderTime) {
+        LocalDateTime ldt = LocalDateTime.of(LocalDate.now(ZoneId.of("Europe/Moscow")), orderTime);
+        ZonedDateTime zdt = ldt.atZone(ZoneId.of("Europe/Moscow"));
+        return zdt.toEpochSecond();
+    }
 }
