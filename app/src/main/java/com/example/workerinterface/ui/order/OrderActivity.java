@@ -171,13 +171,13 @@ public class OrderActivity extends AppCompatActivity {
     }
 
     @NotNull
-    private static ProductDTO getRequest(int id) {
+    private ProductDTO getRequest(int id) {
         ProductDTO productDTO = new ProductDTO();
 
         HTTPRequest getRequest = new HTTPRequest();
         Thread getData = new Thread(() -> {
 
-            String urlParameters = "?id=";
+            String urlParameters = "?id="+id;
             String receivedData = getRequest.getRequest("product", urlParameters, id);
 
             try {
