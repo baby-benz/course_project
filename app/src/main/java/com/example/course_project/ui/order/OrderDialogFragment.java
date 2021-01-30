@@ -1,5 +1,11 @@
 package com.example.course_project.ui.order;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +13,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
 import com.akexorcist.snaptimepicker.SnapTimePickerDialog;
 import com.akexorcist.snaptimepicker.TimeRange;
 import com.akexorcist.snaptimepicker.TimeValue;
@@ -14,6 +24,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.example.course_project.MainActivity;
 import com.example.course_project.R;
 import com.example.course_project.data.db.cart.CartDataSource;
 import com.example.course_project.data.db.cart.CartDatabase;
@@ -22,7 +33,7 @@ import com.example.course_project.data.db.cart.LocalCartDataSource;
 import com.example.course_project.data.db.login.LoginDataSource;
 import com.example.course_project.data.db.login.LoginRepository;
 import com.example.course_project.dto.OrderDto;
-import com.example.course_project.ui.cart.CartViewModel;
+import com.example.course_project.event.notification.NotificationBox;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import org.json.JSONObject;
 
@@ -33,13 +44,16 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.concurrent.atomic.AtomicReference;
 
 import kotlin.random.Random;
 
 public class OrderDialogFragment extends BottomSheetDialogFragment {
     private final LoginRepository loginRepository = LoginRepository.getInstance(new LoginDataSource());
     private final CartDataSource cartDataSource = new LocalCartDataSource(CartDatabase.getInstance(getContext()).cartDao());
+
+    private NotificationManager mManager;
+    public static final String ANDROID_CHANNEL_ID = "com.example.course_project.ANDROID";
+    public static final String ANDROID_CHANNEL_NAME = "ANDROID CHANNEL";
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -89,7 +103,6 @@ public class OrderDialogFragment extends BottomSheetDialogFragment {
             }
             orderDto.setProductIds(productIds);
         });
-        System.out.println("Ok");
 
         view.findViewById(R.id.finish_order).setOnClickListener(v ->
                 AndroidNetworking.post("http://192.168.0.5:8080/api/order")
@@ -109,11 +122,6 @@ public class OrderDialogFragment extends BottomSheetDialogFragment {
                             }
                         })
         );
-    }
-
-    private long getEpochSecondFromOrderTime(LocalTime orderTime) {
-        LocalDateTime ldt = LocalDateTime.of(LocalDate.now(ZoneId.of("Europe/Moscow")), orderTime);
-        ZonedDateTime zdt = ldt.atZone(ZoneId.of("Europe/Moscow"));
-        return zdt.toEpochSecond();
+        NotificationBox.showNotificationPlease(this.getContext());
     }
 }
