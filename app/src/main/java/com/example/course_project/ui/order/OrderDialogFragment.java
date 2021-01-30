@@ -104,24 +104,23 @@ public class OrderDialogFragment extends BottomSheetDialogFragment {
             orderDto.setProductIds(productIds);
         });
 
-        view.findViewById(R.id.finish_order).setOnClickListener(v ->
-                AndroidNetworking.post("http://192.168.0.5:8080/api/order")
-                        .addApplicationJsonBody(orderDto)
-                        .setTag("test")
-                        .setPriority(Priority.MEDIUM)
-                        .build()
-                        .getAsJSONObject(new JSONObjectRequestListener() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                // do anything with response
-                            }
+        view.findViewById(R.id.finish_order).setOnClickListener(v -> {
+            AndroidNetworking.post("http://192.168.0.5:8080/api/order")
+                    .addApplicationJsonBody(orderDto)
+                    .setTag("test")
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            // do anything with response
+                        }
 
-                            @Override
-                            public void onError(ANError error) {
-                                // handle error
-                            }
-                        })
-        );
-        NotificationBox.showNotificationPlease(this.getContext());
+                        @Override
+                        public void onError(ANError error) {
+                            // handle error
+                        }
+                    });
+        });
     }
 }
