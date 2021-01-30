@@ -31,8 +31,8 @@
                     android:id="@+id/item_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceListItem" android:gravity="center"
-                    android:textSize="12sp"/>
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textSize="12sp" android:maxLines="2"/>
             <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">

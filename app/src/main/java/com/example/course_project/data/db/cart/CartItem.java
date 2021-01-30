@@ -1,5 +1,6 @@
 package com.example.course_project.data.db.cart;
 
+import android.graphics.Bitmap;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -19,6 +20,9 @@ public class CartItem {
 
     @ColumnInfo(name = "product_name")
     private String productName;
+
+    @ColumnInfo(name = "product_image")
+    private byte[] productImage;
 
     @ColumnInfo(name = "product_price")
     private Double productPrice;

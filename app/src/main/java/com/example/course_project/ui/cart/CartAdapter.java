@@ -34,7 +34,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CartItem cartItem = items.get(position);
 
-        /*holder.imageView.setImageBitmap(cartItem.getImage());*/
+        //holder.imageView.setImageBitmap(cartItem.getProductImage());
         holder.nameTextView.setText(cartItem.getProductName());
 
         int productCount = cartItem.getCount();
