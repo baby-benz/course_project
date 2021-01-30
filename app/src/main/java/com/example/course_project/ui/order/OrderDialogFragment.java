@@ -121,7 +121,13 @@ public class OrderDialogFragment extends BottomSheetDialogFragment {
                             try {
                                 Long orderId = ((Integer) response.get("id")).longValue();
                                 NotificationBox.showNotification("Ваш заказ", response.getString("status") + " monitor code:" + response.getString("monitorCode"));
-                                new Thread(() -> new HttpOrderCheckStatus().getStatusOrder(orderId)).start();
+                                new Thread(() -> {
+                                    try {
+                                        new HttpOrderCheckStatus().getStatusOrder(orderId);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }).start();
                             } catch (JSONException e) {
                                 // handle error
                             }
