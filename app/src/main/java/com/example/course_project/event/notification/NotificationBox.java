@@ -16,7 +16,7 @@ import com.example.course_project.MainActivity;
 import com.example.course_project.R;
 
 public class NotificationBox {
-    public static void showNotification() {
+    public static void showNotification(String title, String text) {
         int NOTIFICATION_ID = 234;
         NotificationManager notificationManager = (NotificationManager) Main.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         String CHANNEL_ID = "prepared";
@@ -37,8 +37,8 @@ public class NotificationBox {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(Main.getContext(), CHANNEL_ID)
                 .setSmallIcon(R.drawable.order_notified)
-                .setContentTitle("Ваш заказ")
-                .setContentText("готов!");
+                .setContentTitle(title)
+                .setContentText(text);
 
         Intent resultIntent = new Intent(Main.getContext(), MainActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(Main.getContext());

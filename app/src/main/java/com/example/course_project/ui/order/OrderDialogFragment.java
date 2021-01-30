@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.course_project.MainActivity;
 import com.example.course_project.R;
+import com.example.course_project.controller.HttpOrderCheckStatus;
 import com.example.course_project.data.db.cart.CartDataSource;
 import com.example.course_project.data.db.cart.CartDatabase;
 import com.example.course_project.data.db.cart.CartItem;
@@ -35,6 +37,8 @@ import com.example.course_project.data.db.login.LoginRepository;
 import com.example.course_project.dto.OrderDto;
 import com.example.course_project.event.notification.NotificationBox;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.LocalDate;
@@ -113,7 +117,14 @@ public class OrderDialogFragment extends BottomSheetDialogFragment {
                     .getAsJSONObject(new JSONObjectRequestListener() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            // do anything with response
+                            System.out.println("Get Response:" + response);
+                            try {
+                                Long orderId = ((Integer) response.get("id")).longValue();
+                                NotificationBox.showNotification("Ваш заказ", response.getString("status") + " monitor code:" + response.getString("monitorCode"));
+                                new Thread(() -> new HttpOrderCheckStatus().getStatusOrder(orderId)).start();
+                            } catch (JSONException e) {
+                                // handle error
+                            }
                         }
 
                         @Override
