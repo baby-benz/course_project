@@ -6,8 +6,9 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 public class OrderDTO {
-    public OrderDTO(String orderedOn, String monitorCode, String status, JSONArray productIds,
+    public OrderDTO(int id, String orderedOn, String monitorCode, String status, JSONArray productIds,
                     String nameBuilding, Integer userId) throws JSONException {
+        this.id = id;
         this.orderedOn = orderedOn;
         this.monitorCode = monitorCode;
         this.status = status;
@@ -19,6 +20,7 @@ public class OrderDTO {
         this.userId = userId;
     }
 
+    private int id;
     private String orderedOn;
     private String monitorCode;
     private String status;
@@ -28,13 +30,6 @@ public class OrderDTO {
 
     public String getOrderedOn() {
         return orderedOn;
-    }
-
-    public void getAll() {
-        System.out.println("-----------------------");
-        System.out.println(this.getOrderedOn() + ";" + this.getProductIds() + ";" + this.getMonitorCode() + ";"
-                + this.getNameBuilding() + ";" + this.getStatus() + ";" + this.getUserId());
-        System.out.println("-----------------------");
     }
 
     public void setOrderedOn(String orderedOn) {
@@ -79,5 +74,13 @@ public class OrderDTO {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -16,26 +16,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.example.workerinterface.HTTPRequest;
 import com.example.workerinterface.R;
 import com.example.workerinterface.dto.ProductDTO;
 
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
+@SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
 public class MenuActivity extends AppCompatActivity {
 
     @Override
@@ -47,49 +39,30 @@ public class MenuActivity extends AppCompatActivity {
 
         ArrayList<ProductDTO> productDTOS = new ArrayList<>();
 
+        HTTPRequest getRequest = new HTTPRequest();
+
         Thread getData = new Thread(() -> {
-            HttpURLConnection connection = null;
+            int page = 0;
             try  {
-                String IP = "192.168.1.130:8080";
-                int page = 0;
-                URL producturl;
-
                 while (true) {
-                    producturl = new URL(new URL("http", IP, "/api/product/" + page).toString().replace("[", "").replace("]", ""));
-
-                    connection = (HttpURLConnection) producturl.openConnection();
-                    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                        try {
-                            InputStream in = new BufferedInputStream(connection.getInputStream());
-                            BufferedReader r = new BufferedReader(new InputStreamReader(in));
-                            StringBuilder total = new StringBuilder();
-                            for (String line; (line = r.readLine()) != null; ) {
-                                total.append(line).append('\n');
+                    String receivedData = getRequest.getRequest("product", "", page);
+                    JSONObject jsonObj = new JSONObject(receivedData);
+                    JSONArray jsonarray = jsonObj.getJSONArray("content");
+                    System.out.println(page + ";" + jsonarray.length());
+                    if (jsonarray.length() == 0) break;
+                        for (int i = 0; i < jsonarray.length(); i++) {
+                            productDTOS.add(new ProductDTO(jsonarray.getJSONObject(i).getInt("id"),jsonarray.getJSONObject(i).get("name").toString(), (double) jsonarray.getJSONObject(i).get("price"),
+                                    (Boolean) jsonarray.getJSONObject(i).get("available"), jsonarray.getJSONObject(i).get("description").toString(),
+                                    jsonarray.getJSONObject(i).get("type").toString(), jsonarray.getJSONObject(i).get("image").toString(),
+                                    jsonarray.getJSONObject(i).get("nameBuilding").toString()));
                             }
-                            JSONObject jsonObj = new JSONObject(total.toString());
-                            JSONArray jsonarray = jsonObj.getJSONArray("content");
-
-                            if (jsonarray.length() == 0) break;
-                            for (int i = 0; i < jsonarray.length(); i++) {
-                                productDTOS.add(new ProductDTO(jsonarray.getJSONObject(i).getInt("id"),jsonarray.getJSONObject(i).get("name").toString(), (double) jsonarray.getJSONObject(i).get("price"),
-                                        (Boolean) jsonarray.getJSONObject(i).get("available"), jsonarray.getJSONObject(i).get("description").toString(),
-                                        jsonarray.getJSONObject(i).get("type").toString(), jsonarray.getJSONObject(i).get("image").toString(),
-                                        jsonarray.getJSONObject(i).get("nameBuilding").toString()));
-                            }
-                        } catch (IOException | JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
                     page++;
-                }
+                    }
+
             } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
-                assert connection != null;
-                connection.disconnect();
             }
         });
-
         getData.start();
         try {
             getData.join();
@@ -103,7 +76,7 @@ public class MenuActivity extends AppCompatActivity {
         //находим наш linear который у нас под кнопкой add edittext в activity_main.xml
         final GridLayout table = findViewById(R.id.table);
 
-        AtomicInteger counter = new AtomicInteger();
+        int counter = 0;
         for (int i = 0; i < productDTOS.size(); i++) {
             //берем наш кастомный лейаут находим через него все наши кнопки и едит тексты, задаем нужные данные
             @SuppressLint("InflateParams") final View view = getLayoutInflater().inflate(R.layout.custom_food_menu_item, null);
@@ -118,7 +91,7 @@ public class MenuActivity extends AppCompatActivity {
 
             byte[] imageBytes = productDTOS.get(i).getImage();
             Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-            iv1.setId(counter.get());
+            iv1.setId(counter);
             iv1.setImageBitmap(bitmap);
             iv1.setMinimumWidth(bitmap.getWidth());
             iv1.setMinimumHeight(bitmap.getHeight());
@@ -145,66 +118,26 @@ public class MenuActivity extends AppCompatActivity {
                 TextView available = findViewById(R.id.text_description_availableValue);
                 available.setText(productDTOS.get(iv1.getId()).getAvailable().toString());
 
-                available.setOnClickListener(v2 -> new Thread(() -> {
+                HTTPRequest httpRequest = new HTTPRequest();
 
-                    String USER_AGENT = "Mozilla/5.0";
+                available.setOnClickListener(v2 -> {
+                    Boolean status = productDTOS.get(iv1.getId()).getAvailable();
+                    status = !status;
 
-                    HttpURLConnection con = null;
-                    try {
-                        Boolean status = productDTOS.get(iv1.getId()).getAvailable();
-                        status = !status;
+                    String urlParameters="available="+status.toString();
 
-                        String urlParameters="available="+status.toString();
+                    int id = productDTOS.get(iv1.getId()).getId();
 
-                        int Id = productDTOS.get(iv1.getId()).getId();
-                        String IP = "192.168.1.130:8080";
-                        URL orderurl = new URL(new URL("http", IP, "/api/product/" + Id + "/available?" + urlParameters).toString().replace("[", "").replace("]", ""));
+                    new Thread(() -> httpRequest.patchRequest("product", urlParameters, id)).start();
 
-                        con = (HttpURLConnection) orderurl.openConnection();
-                        con.setRequestMethod("PATCH");
-                        con.setRequestProperty("User-Agent", USER_AGENT);
-
-                        // For POST only - START
-                        con.setDoOutput(true);
-                        OutputStream os = con.getOutputStream();
-                        os.write(urlParameters.getBytes());
-                        os.flush();
-                        os.close();
-                        // For POST only - END
-
-                        int responseCode = con.getResponseCode();
-
-                        if (responseCode == HttpURLConnection.HTTP_OK) { // success
-                            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                            String inputLine;
-                            StringBuffer response = new StringBuffer();
-
-                            while ((inputLine = in.readLine()) != null) {
-                                response.append(inputLine);
-                            }
-                            in.close();
-
-                            if (!status) {
-                                tv1.setTextColor(Color.RED);
-                            } else {
-                                tv1.setTextColor(Color.GRAY);
-                            }
-                            productDTOS.get(iv1.getId()).setAvailable(status);
-                            available.setText(productDTOS.get(iv1.getId()).getAvailable().toString());
-
-                        } else {
-                            System.out.println("PATCH request not worked");
-                        }
-
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-                        assert con != null;
-                        con.disconnect();
+                    if (!status) {
+                        tv1.setTextColor(Color.RED);
+                    } else {
+                        tv1.setTextColor(Color.GRAY);
                     }
-
-                }).start());
+                    productDTOS.get(iv1.getId()).setAvailable(status);
+                    available.setText(productDTOS.get(iv1.getId()).getAvailable().toString());
+                });
 
                 ImageView image = findViewById(R.id.description_image);
                 image.setImageBitmap(bitmap);
@@ -217,10 +150,10 @@ public class MenuActivity extends AppCompatActivity {
 
             });
 
-            tv1.setId(counter.get());
-            tv1.setText(productDTOS.get(counter.get()).getName());
+            tv1.setId(counter);
+            tv1.setText(productDTOS.get(counter).getName());
             tv1.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-            counter.getAndIncrement();
+            counter++;
         }
     }
 }

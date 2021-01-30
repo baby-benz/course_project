@@ -3,6 +3,9 @@ package com.example.workerinterface.dto;
 import java.util.Base64;
 
 public class ProductDTO {
+        public ProductDTO() {
+
+        }
         public ProductDTO(int id, String name, double price, Boolean available, String description, String type, String image, String nameBuilding) {
                 this.id = id;
                 this.name = name;
@@ -67,8 +70,8 @@ public class ProductDTO {
                 return image;
         }
 
-        public void setImage(byte[] image) {
-                this.image = image;
+        public void setImage(String imageString) {
+                this.image = Base64.getDecoder().decode(imageString);
         }
 
         public String getNameBuilding() {
