@@ -11,6 +11,7 @@ import ru.cafeteriaitmo.server.domain.entity.Order;
 import ru.cafeteriaitmo.server.domain.enums.Status;
 import ru.cafeteriaitmo.server.dto.OrderDto;
 import ru.cafeteriaitmo.server.service.OrderService;
+import ru.cafeteriaitmo.server.service.helper.OrderConverter;
 
 @Slf4j
 @RestController
@@ -31,7 +32,6 @@ public class OrderController {
         return orderService.getOrderByMonitorCode(monitorCode);
     }
 
-    @Deprecated
     @GetMapping
     public OrderDto getOrderDto(@RequestParam Long orderId) throws NoEntityException {
         log.info("Get request for {} order id", orderId);
@@ -40,9 +40,9 @@ public class OrderController {
 
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
-    public void createOrder(@RequestBody OrderDto order, HttpServletRequest requestContext) throws NoEntityException {
+    public @ResponseBody OrderDto createOrder(@RequestBody OrderDto order, HttpServletRequest requestContext) throws NoEntityException {
         log.info("Post request for adding order by {}:{}", requestContext.getRemoteAddr(), requestContext.getRemotePort());
-        orderService.addOrderDto(order);
+        return OrderConverter.convertOrderToOrderDto(orderService.addOrderDto(order));
     }
 
     @PatchMapping("{id}")
