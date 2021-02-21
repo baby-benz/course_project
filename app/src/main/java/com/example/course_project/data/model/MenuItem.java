@@ -21,18 +21,18 @@ public class MenuItem {
 
     static {
         for (int i = 1; i <= COUNT; i++) {
-            ITEMS.add(createMenuItem(i, "Блюдо " + i, i, "Item " + i));
+            ITEMS.add(createMenuItem(i, null,"Блюдо " + i, i, "Item " + i));
         }
     }
 
-    private static MenuItem createMenuItem(long id, String name, int price, String description) {
+    private static MenuItem createMenuItem(long id, Bitmap image, String name, int price, String description) {
         Random random = new Random();
         int randomNumber = random.nextInt(price);
-        return new MenuItem(id, name, randomNumber + "₽", description);
+        return new MenuItem(id, image, name, randomNumber + "₽", description);
     }
 
     private final long id;
-    //private final Bitmap image;
+    private final Bitmap image;
     private final String name;
     private final String price;
     private final String description;

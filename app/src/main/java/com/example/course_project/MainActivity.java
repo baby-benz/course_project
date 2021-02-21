@@ -1,10 +1,18 @@
 package com.example.course_project;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentManager;
 import com.androidnetworking.AndroidNetworking;
@@ -13,6 +21,7 @@ import com.example.course_project.data.db.cart.CartDatabase;
 import com.example.course_project.data.db.cart.LocalCartDataSource;
 import com.example.course_project.data.model.Common;
 import com.example.course_project.event.SuccessfulLogin;
+import com.example.course_project.event.notification.NotificationBox;
 import com.example.course_project.ui.cart.CartFragment;
 import com.example.course_project.ui.login.LoginFragment;
 import com.example.course_project.ui.menu.MenuFragment;
@@ -24,12 +33,6 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -112,4 +115,6 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
     }
+
+
 }

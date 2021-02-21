@@ -56,7 +56,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     public void onBindViewHolder(final MenuAdapter.ViewHolder holder, int position) {
         MenuItem menuItem = items.get(position);
 
-        /*holder.imageView.setImageBitmap(menuItem.getImage());*/
+        holder.imageView.setImageBitmap(menuItem.getImage());
         holder.nameTextView.setText(menuItem.getName());
         holder.priceTextView.setText(menuItem.getPrice());
         holder.descriptionTextView.setText(menuItem.getDescription());
